@@ -21,7 +21,7 @@ struct ContentView: View {
                     ScheduledWorkout()
                 }
                 Tab("summary", systemImage: "list.clipboard", value: .summary) {
-                    Text("Summary page to be called")
+                    Text("Summary page to be")
                 }
             }
         }
