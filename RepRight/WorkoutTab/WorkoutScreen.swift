@@ -13,7 +13,10 @@ struct WorkoutScreen: View {
 //                    ScrollView{
             
                 ScheduledWorkout()
+                
                 Custom_Preset()
+            
+                Presets_Bodyparts()
             
 //                    }.scrollIndicators(.hidden)
         }

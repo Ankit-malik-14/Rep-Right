@@ -12,18 +12,19 @@ struct ScheduledWorkout: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing){
             
+
             //Base rectangle
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.background.secondary)
                 .frame(width: .infinity, height: 255)
                 .padding()
-            
+                    
             // for details overlay
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.background.tertiary)
                 .frame(width: .infinity, height: 120)
                 .overlay {
-        
+
                         //Vstack for info part
                         VStack(alignment: .leading, spacing: -20){
                             //HStack for routine and duration
@@ -66,7 +67,8 @@ struct ScheduledWorkout: View {
                             } // end of hstack focus area+button
                             .padding()
                         }
-                    }.padding()
+
+                }.padding()
                 }
     }
 }
