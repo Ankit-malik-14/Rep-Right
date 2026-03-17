@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GaugesView: View {
     
-   @State var value: Double
+   @Binding var value: Double
     
     var body: some View {
         VStack{
@@ -18,7 +18,7 @@ struct GaugesView: View {
                     .frame(height: 350)
                     .padding(.horizontal)
                     .foregroundStyle(.background.secondary)
-                Gauge(value: value, in: 0...100) {
+                Gauge(value:value, in: 0...100) {
                 }
                 .gaugeStyle(.accessoryCircular)
                 .tint(
@@ -44,5 +44,6 @@ struct GaugesView: View {
 
 
 #Preview {
-    GaugesView(value: 30)
+    @Previewable @State var value = 75.0
+    GaugesView(value: $value )
 }
