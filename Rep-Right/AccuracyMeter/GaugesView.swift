@@ -10,6 +10,7 @@ import SwiftUI
 struct GaugesView: View {
     
    @State var value: Double
+    
     var body: some View {
         VStack{
             ZStack{
