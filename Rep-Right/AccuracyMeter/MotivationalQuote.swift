@@ -31,7 +31,7 @@ struct MotivationalQuote: View {
     var body: some View {
         VStack(alignment: .center) {
             Text(quote)
-                .fontWeight(.thin)
+                .fontWeight(.light)
                 .multilineTextAlignment(.center)
                 .padding()
         }

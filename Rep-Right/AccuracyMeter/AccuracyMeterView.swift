@@ -14,9 +14,14 @@ struct AccuracyMeterView: View {
         VStack{
             ScrollView{
                 GaugesView(value: $value)
-                MotivationalQuote(value:$value)
+                    .padding(.vertical)
                 LevelView(value: $value)
+                Divider()
+                MotivationalQuote(value:$value)
+                Divider()
+                    .padding(.vertical)
                 PossibleRisk()
+                    
                 SuggestionView()
             }
         }
@@ -25,5 +30,5 @@ struct AccuracyMeterView: View {
 
 #Preview {
     
-    AccuracyMeterView(value: 82.0)
+    AccuracyMeterView(value: 10.0)
 }
