@@ -18,7 +18,7 @@ struct CustomPresetsListView: View {
                 VStack(alignment: .leading){
                     Text("Custom \(i)")
                         .font(.title2)
-                    Text("Arms-shoulder")
+                    Text("Arms shoulder")
                         .font(.caption)
                 }
             }
