@@ -9,7 +9,7 @@ import Foundation
 
 //MARK: - Data Types
 
-struct Exercise: Identifiable {
+struct Exercise: Identifiable, Hashable {
     var id: UUID = UUID()
     let name: String
     var targetAreas: [String]
@@ -21,12 +21,12 @@ struct Exercise: Identifiable {
     var setData: [SetData]
 }
 
-struct SetData {
+struct SetData: Hashable {
     var sets: Int
     var reps: Int
 }
 
-struct Preset: Identifiable {
+struct Preset: Identifiable, Hashable {
     var id: UUID = UUID()
     var isRestDay: Bool = false
     let name: String
