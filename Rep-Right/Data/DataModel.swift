@@ -226,3 +226,5 @@ class WeeklySchedules{
     var schedules: [Weekday: Preset] = [:]
 }
  
+
+var testing = 0
