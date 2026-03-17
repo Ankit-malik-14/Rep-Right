@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct PossibleRisk: View {
+struct RiskView: View {
     let riskText = "Your Back"
     
     var body: some View {
@@ -39,5 +39,5 @@ struct PossibleRisk: View {
 }
 
 #Preview {
-    PossibleRisk()
+    RiskView()
 }

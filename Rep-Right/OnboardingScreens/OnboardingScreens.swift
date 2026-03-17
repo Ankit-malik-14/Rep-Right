@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-struct AllOnboardingScreens: View {
-    var body: some View {
-        TabView{
-            Tab(){
-                OnboardingScreen1()
-            }
-            Tab(){
-                OnboardingScreen1()
-            }
-        }.tabViewStyle(.page)
-    }
-}
-
 
 struct OnboardingScreen1: View {
     @Environment(\.dismiss) private var dismiss
@@ -45,15 +32,29 @@ struct OnboardingScreen1: View {
     }
 }
 
-struct firstEmptyView: View{
-    @State private var showSheet: Bool = true
-    var body: some View{
+struct OnboardingScreen2: View {
+    var body: some View {
         VStack{
-            Text("hii")
+            Image(systemName: "camera.viewfinder")
+                .font(.largeTitle).bold()
         }
-        .sheet(isPresented: $showSheet){
-            OnboardingScreen1()
+        
+        .padding()
+        VStack{
+            Text("Perfect your Form")
+                .font(.largeTitle)
+                .bold()
+            Text("Helps reduce risk of injuries with instant alerts when your posture needs adjustment.")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+                .padding()
         }
+    }
+}
+
+struct OnboardingScreen3: View{
+    var body: some View{
+        
     }
 }
 

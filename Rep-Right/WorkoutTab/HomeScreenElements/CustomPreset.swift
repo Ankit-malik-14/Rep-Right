@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CustomPreset: View {
+    @Environment(Presets.self) var preset
     var body: some View {
         VStack{
             HStack{
@@ -22,12 +23,12 @@ struct CustomPreset: View {
             
             ScrollView(.horizontal){
                 HStack{
-                    ForEach(1...10,id: \.self){ i in
+                    ForEach(preset.presets){ preset in
                         ZStack{
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundStyle(.background.secondary)
                                 .frame(width: 180,height: 160)
-                            Text("Body part \(i)")
+                            Text(preset.name)
                         }
                     }
                 }
@@ -38,5 +39,7 @@ struct CustomPreset: View {
 }
 
 #Preview {
+    //@Previewable @Environment(Presets.self) var presets
     CustomPreset()
+        .environment(Presets())
 }

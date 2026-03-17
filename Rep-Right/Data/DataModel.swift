@@ -166,6 +166,7 @@ var excercises: [Exercise] = [
     )
 ]
 
+@Observable
 class Presets {
     var presets: [Preset] = [
         Preset(

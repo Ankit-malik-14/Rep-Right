@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PresetsAccordingToBodyParts: View {
+    @Environment(Presets.self) var preset
     var body: some View {
         VStack{
             HStack{
@@ -24,13 +25,13 @@ struct PresetsAccordingToBodyParts: View {
             }
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(0...10, id: \.self) { i in
+                    ForEach(preset.presets) { preset in
                         
                         ZStack{
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width: 165, height: 150)
                                 .foregroundStyle(.background.secondary)
-                            Text("bodypart \(i)")}
+                            Text(preset.name)}
                     }
                 }
             }.scrollIndicators(.hidden)
@@ -41,4 +42,5 @@ struct PresetsAccordingToBodyParts: View {
 
 #Preview {
     PresetsAccordingToBodyParts()
+        .environment(Presets())
 }
