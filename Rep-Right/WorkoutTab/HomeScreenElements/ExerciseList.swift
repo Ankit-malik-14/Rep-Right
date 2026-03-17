@@ -33,8 +33,8 @@ struct ExerciseList: View {
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
-                        Spacer()
-                        isDetectable ? Image(systemName: "camera.viewfinder") : Image(systemName:"")
+//                        Spacer()
+//                        isDetectable ? Image(systemName: "camera.viewfinder") : Image(systemName:"")
                     }
                 }
             }.listRowSpacing(23)
