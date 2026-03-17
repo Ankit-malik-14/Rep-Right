@@ -1,22 +1,24 @@
 //
-//  RiskView.swift
+//  SuggestionView.swift
 //  Rep-Right
 //
 //  Created by GU on 17/03/26.
 //
+
 import SwiftUI
 
-struct PossibleRisk: View {
-    let riskText = "Your Back"
-    
+struct SuggestionView: View {
+    // We have to use State Bindng depends on accuracy 
+    let suggestionText = "Your Back"
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Possible Risk")
+            Text("Suggestion")
                 .font(.headline)
                 .fontWeight(.bold)
             
-            riskRow(text: riskText)
-            riskRow(text: riskText)
+            suggestionRow(text: suggestionText)
+            suggestionRow(text: suggestionText)
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -28,10 +30,10 @@ struct PossibleRisk: View {
     }
     
     @ViewBuilder
-    private func riskRow(text: String) -> some View {
+    private func suggestionRow(text: String) -> some View {
         HStack {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.red)
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(.green)
             Text(text)
                 .font(.subheadline)
         }
@@ -39,5 +41,5 @@ struct PossibleRisk: View {
 }
 
 #Preview {
-    PossibleRisk()
+    SuggestionView()
 }
