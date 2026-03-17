@@ -87,7 +87,7 @@ struct ExercisesView: View {
                             Text("1.")
                                 .fontWeight(.semibold)
                                 //.frame(width: 110, alignment: .leading)
-                            Text("Lower your body by bending knees.")
+                            Text("Lower your body by bending Ghutna.")
                         }
                         HStack(alignment: .top){
                             Text("2.")
