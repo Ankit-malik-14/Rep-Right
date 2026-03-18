@@ -9,7 +9,10 @@ import Foundation
 
 //MARK: - Data Types
 
-struct Exercise: Identifiable {
+struct Exercise: Identifiable,Equatable,Hashable {
+    static func == (lhs: Exercise, rhs: Exercise) -> Bool {
+        lhs.id == rhs.id
+    }
     var id: UUID = UUID()
     let name: String
     var targetAreas: [String]
@@ -21,12 +24,15 @@ struct Exercise: Identifiable {
     var setData: [SetData]
 }
 
-struct SetData {
+struct SetData : Hashable{
     var sets: Int
     var reps: Int
 }
 
-struct Preset: Identifiable {
+struct Preset: Identifiable,Equatable,Hashable {
+    static func == (lhs: Preset, rhs: Preset) -> Bool {
+        lhs.id == rhs.id
+    }
     var id: UUID = UUID()
     var isRestDay: Bool = false
     let name: String
@@ -40,11 +46,12 @@ struct Preset: Identifiable {
 }
 
 struct UserProfile {
+    var profilePicture: String?
     var name: String
     var age: Int
-    var gender: String
+    var gender: Genders
     var weight: Int
-    var height: Int
+    var height: Double
     var modelSensitivity: SensitivityLevels
     var unitSystem: UnitSystem
 }
@@ -67,19 +74,12 @@ enum Genders: String{
 }
 
 enum SensitivityLevels: Int{
-    case low = 0
-    case medium = 1
-    case high = 2
+    case Low = 0
+    case Medium = 1
+    case High = 2
 }
 
 enum UnitSystem: String{
     case metric = "Metric"
     case imperial = "Imperial"
 }
-
-//MARK: - Dummy Data
-
-class WeeklySchedules{
-    var schedules: [Weekday: Preset] = [:]
-}
- 
