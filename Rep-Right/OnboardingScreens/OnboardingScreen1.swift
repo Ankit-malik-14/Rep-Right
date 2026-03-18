@@ -18,6 +18,16 @@ struct OnboardingScreen1: View {
     }
 }
 
+struct tabView: View {
+    var body: some View {
+        TabView {
+            Tab("home", image:"") {
+                
+            }
+        }
+    }
+}
+
 #Preview {
     OnboardingScreen1()
 }
