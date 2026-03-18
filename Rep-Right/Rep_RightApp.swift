@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct Rep_RightApp: App {
+    var presets = Presets()
+
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            WorkoutScreen()
+                .environment(presets)
+                
         }
     }
 }

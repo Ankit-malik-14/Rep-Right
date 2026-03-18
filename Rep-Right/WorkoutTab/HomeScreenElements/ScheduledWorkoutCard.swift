@@ -10,14 +10,10 @@ import SwiftUI
 struct ScheduledWorkoutCard: View {
     var body: some View {
         VStack(alignment: .leading){
-            Text("Workouts")
-                .font(.largeTitle)
-                .bold()
-                .padding()
             ZStack(alignment: .bottomTrailing){
                 
 
-                //Base rectangle
+                //Base rectangle -- IMAGE MASK
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.background.secondary)
                     .frame(width: .infinity, height: 255)
@@ -26,7 +22,7 @@ struct ScheduledWorkoutCard: View {
                 // for details overlay
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.background.tertiary)
-                    .frame(width: .infinity, height: 120)
+                    .frame(width: .infinity, height: 140)
                     .shadow(radius: 5)
                     .overlay {
 
@@ -37,7 +33,7 @@ struct ScheduledWorkoutCard: View {
                                     VStack(alignment: .leading){ //Today's routine + reps
                                         Text("Today's Routine")
                                             .foregroundStyle(.orange)
-                                            .font(.title3)
+                                            .font(.footnote).fontWeight(.heavy)
                                         Text("Back Day")
                                             .font(.title.bold())
                                     } // end of vstack today's routine+reps
@@ -46,9 +42,10 @@ struct ScheduledWorkoutCard: View {
                                     Spacer()
                                     
                                     //vstack for duration + time
-                                    VStack(alignment: .center){
+                                    VStack(alignment: .trailing){
                                         Text("Duration")
                                             .font(.caption)
+                                            .fontWeight(.bold)
                                         Text("45 mins")
                                             .font(.title)
                                     }//end of vstack duration+time
@@ -59,7 +56,8 @@ struct ScheduledWorkoutCard: View {
                                 //HStack 2 for focus area and Button
                                 HStack{
                                     Text("Focus: back and traps")
-                                        .font(.callout)
+                                        .font(.headline)
+                                        .foregroundStyle(.secondary)
                                     
                                     Spacer()
                                     Button {
@@ -74,7 +72,7 @@ struct ScheduledWorkoutCard: View {
                             }
 
                     }.padding()
-                    }
+            }
         }
     }
 }
