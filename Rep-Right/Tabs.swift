@@ -13,6 +13,16 @@ struct Tabs: View {
     }
 }
 
+struct tabView: View {
+    var body: some View {
+        TabView {
+            Tab("home", image:"") {
+                
+            }
+        }
+    }
+}
+
 #Preview {
     Tabs()
 }
