@@ -19,7 +19,8 @@ struct RiskView: View {
             riskRow(text: riskText)
         }
         .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
+        //Leading is used to make it alingment
+        .frame(maxWidth: .infinity, alignment:.leading)
         .background {
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.background.secondary)
