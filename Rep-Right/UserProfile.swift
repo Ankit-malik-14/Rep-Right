@@ -43,21 +43,30 @@ struct UserProfilee: View {
     
     var body: some View {
             Form{
-                HStack(){
-                    Spacer()
-                    VStack{
-                        Image(systemName: "person.circle.fill")
-                            .foregroundStyle(.orange)
-                            .font(.system(size: 180))
-                        Text("UserName")
-                            .font(.title)
-                    }
-                    Spacer()
+                Section{
+                    VStack(alignment: .center) {
+                        Image("UserImage")
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                    }.frame(maxWidth: .infinity)
+                        .padding()
                 }
+                
                 Section("Health Details"){
-                    TextField("First Name", text: $userFirstName)
+                    HStack(){
+                        Text("First Name")
+                        
+                        TextField("Not Set", text: $userFirstName)
+                            .multilineTextAlignment(.trailing)
+                    }
                     
-                    TextField("Last Name", text: $userLastName)
+                    HStack{
+                        Text("Last Name")
+                        
+                        TextField("Not Set", text: $userLastName)
+                            .multilineTextAlignment(.trailing)
+                    }
                     
                     Picker("Sex", selection: $userSex) {
                         ForEach(Sex.allCases, id: \.self) { option in
@@ -67,7 +76,12 @@ struct UserProfilee: View {
                     .pickerStyle(.menu)
                     //height
                     //weight
-                    TextField("Age", text: $userAge)
+                    HStack{
+                        Text("Age")
+                        
+                        TextField("Not Set", text: $userAge)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
                 Section("Preference Detail"){
                     
@@ -106,16 +120,6 @@ struct UserProfilee: View {
                     }
                 }
             }
-            //            Button {
-            //                //delete session
-            //            } label: {
-            //                Text("Delete Recorded Sessions")
-            //            }
-            //            Button {
-            //                // user sign out
-            //            } label: {
-            //                Text("Sign Out")
-            //            }.buttonBorderShape(.roundedRectangle(radius: 5))
     }
 }
 
