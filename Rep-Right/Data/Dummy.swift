@@ -94,7 +94,7 @@ class Exercises{
     ]
 }
 
-
+@Observable
 class Presets {
     var presets: [Preset] = [
         Preset(

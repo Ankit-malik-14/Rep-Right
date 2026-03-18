@@ -20,7 +20,7 @@ struct AccuracyMeterView: View {
                 MotivationalQuote(value:$value)
                 Divider()
                     .padding(.vertical)
-                PossibleRisk()
+                RiskView()
                     
                 SuggestionView()
             }
