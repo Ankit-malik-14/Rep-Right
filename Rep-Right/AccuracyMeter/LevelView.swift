@@ -40,11 +40,14 @@ struct LevelView: View {
             HStack{
                 Text("Accuracy -")
                     .fontWeight(.bold)
+                    .font(.system(size: 30))
                 Text(quote)
-                    .fontWeight(.thin)
+                    .fontWeight(.light)
+                    .font(.system(size: 30))
                     .foregroundStyle(quoteColor)
                     .multilineTextAlignment(.center)
             }
+            
         }
     }
 }
