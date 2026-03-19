@@ -1,19 +1,14 @@
-//
-//  Metrics.swift
-//  Rep-Right
-//
-//  Created by Mayurakshi Das on 16/03/26.
-//
 
 import SwiftUI
 
-struct Metrics: View {
+struct MetricsView: View {
     var body: some View {
-        VStack(alignment: .leading,spacing: 9) {
+        VStack(alignment: .leading, spacing: 15) {
             Text("Metrics")
-                .font(.title)
+                .font(.title3)
                 .bold()
-                .padding(.horizontal)
+                .padding([.horizontal, .top], 20)
+            
             HStack(spacing: 10) {
                 
                 MetricCard(
@@ -37,13 +32,15 @@ struct Metrics: View {
                     change: "+1"
                 )
             }
-            .padding()
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
         }
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.secondary.opacity(0.2))
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .background(Color.white.cornerRadius(15))
         )
-        .padding()
+        .padding(.horizontal)
     }
 }
 
@@ -61,9 +58,12 @@ struct MetricCard: View {
             HStack {
                 Image(systemName: icon)
                     .foregroundStyle(.orange)
+                    .font(.caption)
 
                 Text(title)
-                    .font(.subheadline)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
 
             HStack(alignment: .bottom, spacing: 5) {
@@ -81,10 +81,11 @@ struct MetricCard: View {
         .frame(maxWidth: .infinity,minHeight: 90,maxHeight: 90)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(.secondary.opacity(0.2))
+                .fill(Color.gray.opacity(0.1))
         )
     }
 }
 #Preview {
-    Metrics()
+    MetricsView()
 }
+
