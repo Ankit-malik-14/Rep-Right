@@ -8,18 +8,23 @@
 import SwiftUI
 
 struct CustomPresetsListView: View {
+    @Environment(Presets.self) var preset
     var body: some View {
         List{
-            ForEach(1...5, id: \.self){ i in
+            ForEach(preset.presets){ preset1 in
             HStack{
                 RoundedRectangle(cornerRadius: 10)
                     .frame(width: 80, height: 80)
                     .foregroundStyle(.background.secondary)
                 VStack(alignment: .leading){
-                    Text("Custom \(i)")
-                        .font(.title2)
-                    Text("Arms shoulder")
-                        .font(.caption)
+                    Text(preset1.name)
+                    HStack{
+                        ForEach(preset1.focousArea, id: \.self) { area in
+                            Text(area)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
             }
         }
@@ -30,4 +35,5 @@ struct CustomPresetsListView: View {
 
 #Preview {
     CustomPresetsListView()
+        .environment(Presets())
 }

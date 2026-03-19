@@ -10,7 +10,7 @@ import SwiftUI
 struct CustomPreset: View {
     @Environment(Presets.self) var preset
     var body: some View {
-        VStack{
+        VStack(spacing: 5){
             HStack{
                 Text("Custom")
                     .font(.largeTitle.bold())
@@ -19,7 +19,7 @@ struct CustomPreset: View {
                     //
                 }.buttonStyle(.borderless)
                     .tint(.orange)
-            }.padding()
+            }.padding(.horizontal)
             
             ScrollView(.horizontal){
                 HStack{
@@ -31,7 +31,7 @@ struct CustomPreset: View {
                             Text(preset.name)
                         }
                     }
-                }
+                }.padding(.horizontal)
             }
             .scrollIndicators(.hidden)
         }
