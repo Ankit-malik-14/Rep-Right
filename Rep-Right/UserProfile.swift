@@ -9,71 +9,63 @@ import SwiftUI
 
 struct UserProfilee: View {
     
-    enum Sex: String, CaseIterable {
-        case notSet = "Not Set"
-        case female = "Female"
-        case male = "Male"
-        case other = "Other"
-    }
     
-    enum ModelSenstivity: Double, CaseIterable {
-        case Default = 3.0
-        case Low = 1.5
-        case High = 5.0
-    }
-    
-    enum UnitSystem: String, CaseIterable {
-        case metric = "Metric"
-        case imperial = "Imperial"
-    }
-    
-    enum AppTheme: String, CaseIterable {
-        case Default = "Default"
-        case Dark = "Dark"
-        case Light = "Light"
-    }
+
     
     @State var userFirstName: String = ""
     @State var userLastName: String = ""
-    @State var userSex: Sex = .notSet
+    @State var userSex: Genders = .male
     @State var userAge: String = "18"
-    @State var modelSensitiveness: Double = ModelSenstivity.Default.rawValue
+    @State var modelSensitiveness: Double = SensitivityLevels.Medium.rawValue
     @State var selectedUnitSystem: String = UnitSystem.metric.rawValue
-    @State var appTheme: String = AppTheme.Default.rawValue
+   
     
     var body: some View {
             Form{
-                HStack(){
-                    Spacer()
-                    VStack{
-                        Image(systemName: "person.circle.fill")
-                            .foregroundStyle(.orange)
-                            .font(.system(size: 180))
-                        Text("UserName")
-                            .font(.title)
-                    }
-                    Spacer()
+                Section{
+                    VStack(alignment: .center) {
+                        Image("UserImage")
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                    }.frame(maxWidth: .infinity)
+                        .padding()
                 }
+                
                 Section("Health Details"){
-                    TextField("First Name", text: $userFirstName)
+                    HStack(){
+                        Text("First Name")
+                        
+                        TextField("Not Set", text: $userFirstName)
+                            .multilineTextAlignment(.trailing)
+                    }
                     
-                    TextField("Last Name", text: $userLastName)
+                    HStack{
+                        Text("Last Name")
+                        
+                        TextField("Not Set", text: $userLastName)
+                            .multilineTextAlignment(.trailing)
+                    }
                     
                     Picker("Sex", selection: $userSex) {
-                        ForEach(Sex.allCases, id: \.self) { option in
+                        ForEach(Genders.allCases, id: \.self) { option in
                             Text(option.rawValue).tag(option)
                         }
                     }
                     .pickerStyle(.menu)
                     //height
                     //weight
-                    TextField("Age", text: $userAge)
+                    HStack{
+                        Text("Age")
+                        
+                        TextField("Not Set", text: $userAge)
+                    }
                 }
                 Section("Preference Detail"){
                     
                     Picker("Model Senstivity", selection: $modelSensitiveness) {
-                        ForEach(ModelSenstivity.allCases, id: \.self) { option in
-                            Text("\(option)").tag(option)
+                        ForEach(SensitivityLevels.allCases, id: \.self) { option in
+                            Text(option.description).tag(option)
                         }
                     }
                     .pickerStyle(.menu)
@@ -85,13 +77,7 @@ struct UserProfilee: View {
                     }
                     .pickerStyle(.menu)
                     
-                    Picker("Theme", selection: $appTheme) {
-                        ForEach(AppTheme.allCases, id: \.self) { option in
-                            Text(option.rawValue).tag(option)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    //Notification
+                    
                 }
                 Section {
                     Button(action: {
@@ -106,16 +92,6 @@ struct UserProfilee: View {
                     }
                 }
             }
-            //            Button {
-            //                //delete session
-            //            } label: {
-            //                Text("Delete Recorded Sessions")
-            //            }
-            //            Button {
-            //                // user sign out
-            //            } label: {
-            //                Text("Sign Out")
-            //            }.buttonBorderShape(.roundedRectangle(radius: 5))
     }
 }
 
