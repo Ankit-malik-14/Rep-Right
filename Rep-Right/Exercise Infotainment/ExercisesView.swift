@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ExercisesView: View {
+    @Binding var exercises: Exercise
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -24,7 +25,7 @@ struct ExercisesView: View {
                             .padding(.horizontal)
                     }
                     HStack {
-                        Text("Squat")
+                        Text(exercises.name)
                             .font(.title)
                             .fontWeight(.bold)
                         
@@ -58,7 +59,7 @@ struct ExercisesView: View {
                                 .fontWeight(.semibold)
                                 .frame(width: 110, alignment: .leading)
                             
-                            Text("Quadriceps, Glutes, Hamstrings, Lower Back, Core")
+                            Text("\(exercises.targetAreas)")
                                 .font(.subheadline)
                         }
                         
@@ -67,7 +68,7 @@ struct ExercisesView: View {
                                 .fontWeight(.semibold)
                                 .frame(width: 110, alignment: .leading)
                             
-                            Text("Barbell")
+                            Text("\(exercises.equipments)")
                                 .font(.subheadline)
                         }
                         
@@ -83,18 +84,19 @@ struct ExercisesView: View {
                         .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        HStack(alignment: .top){
-                            Text("1.")
-                                .fontWeight(.semibold)
-                                //.frame(width: 110, alignment: .leading)
-                            Text("Lower your body by bending Ghutna.")
-                        }
-                        HStack(alignment: .top){
-                            Text("2.")
-                                .fontWeight(.semibold)
-                            Text("Return up by pushing through heels.")
-                        }
-                    }
+                        pointView(steps: exercises.executionSteps)
+//                        HStack(alignment: .top){
+//                            Text("1.")
+//                                .fontWeight(.semibold)
+//                                //.frame(width: 110, alignment: .leading)
+//                            Text("\(exercises.executionSteps[0])")
+//                        }
+//                        HStack(alignment: .top){
+//                            Text("2.")
+//                                .fontWeight(.semibold)
+//                            Text("\(exercises.executionSteps[1])")
+//                        }
+//                    }
                     .padding(.horizontal)
                     
                     Text("Tips")
@@ -103,15 +105,16 @@ struct ExercisesView: View {
                         .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        HStack(alignment: .top){
-                            Text("1.")
-                                .fontWeight(.semibold)
-                            Text("Keep your knees in line with your toes throughout the movement.")
-                        }
-                        HStack(alignment: .top){
-                            Text("2.")
-                                .fontWeight(.semibold)
-                            Text("Engage your core to maintain balance and protect your lower back.")
+                        pointView(steps: exercises.tips)
+//                        HStack(alignment: .top){
+//                            Text("1.")
+//                                .fontWeight(.semibold)
+//                            Text("Keep your knees in line with your toes throughout the movement.")
+//                        }
+//                        HStack(alignment: .top){
+//                            Text("2.")
+//                                .fontWeight(.semibold)
+//                            Text("Engage your core to maintain balance and protect your lower back.")
                         }
                         
                     }
@@ -157,6 +160,39 @@ struct ExercisesView: View {
     }
 }
 #Preview {
-    ExercisesView()
+    @Previewable @State var exercise = Exercise(
+        name: "Push-Up",
+        targetAreas: ["Chest", "Triceps", "Shoulders", "Core"],
+        equipments: ["Bodyweight"],
+        executionSteps: [
+            "Start in a high plank with hands slightly wider than shoulder-width.",
+            "Brace your core and keep a straight line from head to heels.",
+            "Lower your chest toward the floor by bending your elbows.",
+            "Press through your palms to return to the starting position."
+        ],
+        tips: [
+            "Keep elbows at ~45° from your torso.",
+            "Do not let hips sag; maintain a neutral spine.",
+            "Inhale on the way down, exhale as you press up."
+        ],
+        assistanceAvailable: true,
+        demoVideo: URL(string: "https://example.com/videos/pushup.mp4"),
+        setData: [
+            SetData(sets: 3, reps: 12),
+            SetData(sets: 1, reps: 10)
+        ]
+    )
+    ExercisesView(exercises: $exercise)
 }
 
+@ViewBuilder
+func pointView(steps: [String]) -> some View {
+    ForEach(steps,id: \.self){ step in
+        HStack(alignment: .top){
+            Text(steps.firstIndex(of: step )! + 1,format: .number)
+                .fontWeight(.semibold)
+            Text(step)
+        }
+    }
+}
+   

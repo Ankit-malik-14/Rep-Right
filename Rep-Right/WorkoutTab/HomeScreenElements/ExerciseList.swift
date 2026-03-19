@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ExerciseList: View {
-    @State private var isDetectable: Bool = false
     var body: some View {
         VStack(alignment: .leading){
             HStack{
@@ -21,23 +20,24 @@ struct ExerciseList: View {
                 }.tint(.orange)
                 .padding()
             }
-            List{
-                ForEach(0...7, id: \.self){ i in
-                    HStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 100, height: 100)
-                            .foregroundStyle(.background.secondary)
-                        VStack(alignment: .leading){
-                            Text("Exercise name")
-                            Text("Description")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
+                List{
+                        ForEach(0...7, id: \.self){ i in
+                            HStack(alignment: .center){
+                                RoundedRectangle(cornerRadius: 10)
+                                    .frame(width: 70, height: 70)
+                                    .foregroundStyle(.background.secondary)
+                                VStack(alignment: .leading){
+                                    Text("Exercise name")
+                                        .font(.title2)
+                                    Text("Description")
+                                        .font(.footnote)
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                            }
                         }
-//                        Spacer()
-//                        isDetectable ? Image(systemName: "camera.viewfinder") : Image(systemName:"")
-                    }
-                }
-            }.listRowSpacing(23)
+                    
+                }.listRowSpacing(10)
         }
     }
 }

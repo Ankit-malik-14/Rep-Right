@@ -10,7 +10,7 @@ import SwiftUI
 struct PresetsAccordingToBodyParts: View {
     @Environment(Presets.self) var preset
     var body: some View {
-        VStack{
+        VStack(spacing: 5){
             HStack{
                 Text("Presets")
                     .font(.largeTitle)
@@ -21,8 +21,9 @@ struct PresetsAccordingToBodyParts: View {
                     //
                 }.buttonStyle(.automatic)
                 .tint(.orange)
-                .padding()
-            }
+//                .padding()
+            }.padding(.horizontal)
+            
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(preset.presets) { preset in
@@ -33,9 +34,10 @@ struct PresetsAccordingToBodyParts: View {
                                 .foregroundStyle(.background.secondary)
                             Text(preset.name)}
                     }
-                }
-            }.scrollIndicators(.hidden)
-                .navigationTitle("Presets")
+                }.padding(.horizontal)
+            }
+            .scrollIndicators(.hidden)
+//                .navigationTitle("Presets")
         }
     }
 }

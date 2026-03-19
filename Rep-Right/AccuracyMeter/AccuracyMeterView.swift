@@ -30,5 +30,5 @@ struct AccuracyMeterView: View {
 
 #Preview {
     
-    AccuracyMeterView(value: 10.0)
+    AccuracyMeterView(value: 90.0)
 }
