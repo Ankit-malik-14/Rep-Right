@@ -12,17 +12,22 @@ struct AccuracyMeterView: View {
     
     var body: some View {
         VStack{
-            ScrollView{
-                GaugesView(value: $value)
-                    .padding(.vertical)
-                LevelView(value: $value)
-                Divider()
-                MotivationalQuote(value:$value)
-                Divider()
-                    .padding(.vertical)
-                RiskView()
+            NavigationStack{
+                ScrollView{
+                    GaugesView(value: $value)
+                        .padding(.vertical)
+                    LevelView(value: $value)
+                    Divider()
+                    MotivationalQuote(value:$value)
+                    Divider()
+                        .padding(.vertical)
+                    RiskView()
                     
-                SuggestionView()
+                    SuggestionView()
+                }
+                .navigationTitle("Exercise Name")
+                .font(.system(size: 20, weight: .bold, design: .default))
+                .navigationBarTitleDisplayMode(.inline)
             }
         }
     }
@@ -30,5 +35,5 @@ struct AccuracyMeterView: View {
 
 #Preview {
     
-    AccuracyMeterView(value: 90.0)
+    AccuracyMeterView(value: 10.0)
 }
