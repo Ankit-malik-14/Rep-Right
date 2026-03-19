@@ -68,18 +68,25 @@ enum Weekday: String, CaseIterable{
     case saturday = "Saturday"
 }
 
-enum Genders: String{
+enum Genders: String, CaseIterable{
     case male = "Male"
     case female = "Female"
 }
 
-enum SensitivityLevels: Int{
+enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible{
+    var description: String{
+        switch self {
+            case .Low: return "Low"
+        case .Medium: return "Medium"
+        case .High: return "High"
+        }
+    }
     case Low = 0
     case Medium = 1
     case High = 2
 }
 
-enum UnitSystem: String{
+enum UnitSystem: String, CaseIterable{
     case metric = "Metric"
     case imperial = "Imperial"
 }
