@@ -13,7 +13,7 @@ struct MetricsView: View {
                 
                 MetricCard(
                     icon: "dumbbell.fill",
-                    title: "Exercises",
+                    title: "Exercise",
                     value: "14",
                     change: "+2"
                 )
