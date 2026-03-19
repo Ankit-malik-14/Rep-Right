@@ -12,7 +12,7 @@ struct PresetHeaderCardView: View {
         ZStack {
             Color(UIColor.systemGray6)
             
-            // Placeholder for the muscular back image
+            // Placeholder for the muscle image
             Image(systemName: "figure.mind.and.body")
                 .resizable()
                 .scaledToFit()

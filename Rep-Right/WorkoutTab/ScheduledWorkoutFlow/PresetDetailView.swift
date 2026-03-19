@@ -73,7 +73,6 @@ struct WorkoutDetailView: View {
         }
         .navigationTitle("Back")
         .navigationBarTitleDisplayMode(.inline)
-        // No local navigationDestination here; all routes resolved at the root
     }
 }
 
