@@ -79,3 +79,7 @@ struct WorkoutDetailView: View {
                 }
     }
 }
+
+#Preview{
+    WorkoutDetailView()
+}

@@ -9,12 +9,21 @@ import SwiftUI
 
 struct RunningWorkoutView: View {
     var body: some View {
-        //timer,progress,calories
-        
-        
+//        ScrollView{
+            VStack {
+                //Labels
+                DataLabels()
+                ImageAndInfoCard()
+                RunningWorkoutInfo()
+            }
+//            .frame(maxWidth: .infinity, alignment: .leading)
+//            .padding(.horizontal, 16)
+//            .padding(.vertical, 12)
+//        }.scrollIndicators(.hidden)
     }
 }
 
 #Preview {
     RunningWorkoutView()
+        
 }
