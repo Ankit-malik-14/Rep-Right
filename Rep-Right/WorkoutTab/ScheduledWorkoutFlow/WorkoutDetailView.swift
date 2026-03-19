@@ -25,11 +25,9 @@ struct PresetDetailView: View {
                 }
                 .padding(.horizontal)
                 
-                // 2. Warmup Section (value-based, type-safe)
-                NavigationLink(value: Route.warmup) {
+                // 2. Warmup Section
                     WarmUpCardView()
                         .padding(.horizontal)
-                }
                 
                 // 3. Start Workout Button
                 Button(action: {
@@ -72,7 +70,6 @@ struct PresetDetailView: View {
         }
         .navigationTitle("Back")
         .navigationBarTitleDisplayMode(.inline)
-        // No local navigationDestination here; all routes resolved at the root
     }
 }
 

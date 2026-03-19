@@ -24,7 +24,6 @@ struct ScheduledPresetView: View {
                     .fontWeight(.bold)
                     .padding(.bottom, 20)
                 
-                // type-safe NavigationLink using Route enum
                 NavigationLink(value: Route.workoutDetail) {
                     Text("Go to Back Workout")
                         .font(.headline)

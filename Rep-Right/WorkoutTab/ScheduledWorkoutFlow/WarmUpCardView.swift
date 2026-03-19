@@ -31,15 +31,16 @@ struct WarmUpCardView: View {
                 }
             }
             
-            // Styled label to look like a button; actual navigation is provided by parent NavigationLink
-            Text("Start Warmup")
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundColor(.orange)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color(UIColor.systemGray5))
-                .cornerRadius(10)
+            NavigationLink(value: Route.warmup) {
+                Text("Start Warmup")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.orange)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color(UIColor.systemGray5))
+                    .cornerRadius(10)
+            }
         }
         .padding(16)
         .background(Color(UIColor.systemGray6))
