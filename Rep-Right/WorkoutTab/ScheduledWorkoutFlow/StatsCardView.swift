@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// Stats Grid View showing Calories, Time, Equipment, and Target
 struct StatsCardView: View {
     var body: some View {
         VStack(spacing: 20) {
@@ -47,7 +46,6 @@ struct StatsCardView: View {
     }
 }
 
-/// Helper view for individual stat items in the Grid
 struct StatItemView: View {
     let icon: String
     let title: String
