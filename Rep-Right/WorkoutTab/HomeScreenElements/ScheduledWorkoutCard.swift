@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ScheduledWorkoutCard: View {
+    @Environment(Presets.self) var preset
     var body: some View {
         VStack(alignment: .leading){
             ZStack(alignment: .bottomTrailing){
@@ -31,10 +32,11 @@ struct ScheduledWorkoutCard: View {
                                 //HStack for routine and duration
                                 HStack{
                                     VStack(alignment: .leading){ //Today's routine + reps
-                                        Text("Today's Routine")
+                
+                                        Text("Today's Routine") //hardcoded
                                             .foregroundStyle(.orange)
                                             .font(.footnote).fontWeight(.heavy)
-                                        Text("Back Day")
+                                        Text("\(preset.presets[0].name)")
                                             .font(.title.bold())
                                     } // end of vstack today's routine+reps
                                     .padding()
@@ -46,7 +48,7 @@ struct ScheduledWorkoutCard: View {
                                         Text("Duration")
                                             .font(.caption)
                                             .fontWeight(.bold)
-                                        Text("45 mins")
+                                        Text("\(preset.presets[0].estTime) mins")
                                             .font(.title)
                                     }//end of vstack duration+time
                                     .padding()
@@ -55,7 +57,7 @@ struct ScheduledWorkoutCard: View {
                                 
                                 //HStack 2 for focus area and Button
                                 HStack{
-                                    Text("Focus: back and traps")
+                                    Text("Focus Area: \(preset.presets[0].focousArea)")
                                         .font(.headline)
                                         .foregroundStyle(.secondary)
                                     
@@ -79,4 +81,5 @@ struct ScheduledWorkoutCard: View {
 
 #Preview {
     ScheduledWorkoutCard()
+        .environment(Presets())
 }
