@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct PresetDetailView: View {
+struct WorkoutDetailView: View {
     let exercises = Presets().presets[0].exercises
 //    let exercises = [
 //        Exercise(name: "Deadlift", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
@@ -64,7 +64,8 @@ struct PresetDetailView: View {
                         NavigationLink(value: Route.exercise(exercise)) {
                             ExerciseCardView(exercise: exercise)
                         }
-                        .buttonStyle(.plain)                    }
+                        .buttonStyle(.plain) // Prevents standard blue highlight
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -77,5 +78,5 @@ struct PresetDetailView: View {
 }
 
 #Preview {
-    PresetDetailView()
+    WorkoutDetailView()
 }

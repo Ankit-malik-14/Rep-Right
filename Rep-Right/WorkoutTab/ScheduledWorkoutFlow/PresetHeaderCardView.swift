@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HeaderAnatomyView: View {
+struct PresetHeaderCardView: View {
     var body: some View {
         ZStack {
             Color(UIColor.systemGray6)
@@ -24,4 +24,8 @@ struct HeaderAnatomyView: View {
         .frame(height: 260)
         .cornerRadius(20)
     }
+}
+
+#Preview{
+    PresetHeaderCardView()
 }
