@@ -25,3 +25,7 @@ struct HeaderAnatomyView: View {
         .cornerRadius(20)
     }
 }
+
+#Preview {
+    HeaderAnatomyView()
+}

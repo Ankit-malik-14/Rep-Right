@@ -8,58 +8,76 @@
 import SwiftUI
 
 struct ScheduledWorkoutCard: View {
-    @Environment(Presets.self) var preset
+    @Environment(WeeklySchedules.self) var weeklySchedules
+    func focousPrinter(areas : [String])-> String{
+        var result = ""
+        for i in areas{
+            result.append(i)
+            if areas.last != i{
+                result = result + ", "
+            }
+        }
+        return result
+    }
+    var todaysSchedule: Preset? {
+        let day = Calendar.current.component(.weekday, from: Date())
+        let pair = weeklySchedules.schedules.first(where: {$0.key.rawValue == day} )
+        if let value = pair?.value{
+            return value
+        }
+        return nil
+    }
     var body: some View {
-        VStack(alignment: .leading){
-            ZStack(alignment: .bottomTrailing){
-                
-
-                //Base rectangle -- IMAGE MASK
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.background.secondary)
-                    .frame(width: .infinity, height: 255)
-                    .padding()
-                        
-                // for details overlay
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.background.tertiary)
-                    .frame(width: .infinity, height: 140)
-                    .shadow(radius: 5)
-                    .overlay {
-
+        if let todaysSchedule = todaysSchedule{
+            VStack{
+                ZStack(alignment: .bottom){
+                    //Base rectangle -- IMAGE MASK
+                    RoundedRectangle(cornerRadius: 20)
+                        .foregroundStyle(.background.secondary)
+                        .frame(width:.infinity, height: 255)
+                        .padding()
+                    
+                    // for details overlay
+                    UnevenRoundedRectangle(bottomLeadingRadius: 20,bottomTrailingRadius: 20)
+                        .foregroundStyle(.background.tertiary)
+                        .frame(width: .infinity, height: 140)
+                        .shadow(radius: 5)
+                        .overlay {
+                            
                             //Vstack for info part
                             VStack(alignment: .leading, spacing: -20){
-                                //HStack for routine and duration
                                 HStack{
-                                    VStack(alignment: .leading){ //Today's routine + reps
-                
-                                        Text("Today's Routine") //hardcoded
+                                    VStack(alignment: .leading){
+                                        
+                                        Text("Today's Routine")
                                             .foregroundStyle(.orange)
                                             .font(.footnote).fontWeight(.heavy)
-                                        Text("\(preset.presets[0].name)")
-                                            .font(.title.bold())
-                                    } // end of vstack today's routine+reps
+                                        Text(todaysSchedule.name)
+                                            .font(.title3.bold())
+                                        Text(focousPrinter(areas: todaysSchedule.focousArea))
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
                                     .padding()
                                     
                                     Spacer()
                                     
-                                    //vstack for duration + time
+                                    
                                     VStack(alignment: .trailing){
                                         Text("Duration")
                                             .font(.caption)
                                             .fontWeight(.bold)
-                                        Text("\(preset.presets[0].estTime) mins")
-                                            .font(.title)
-                                    }//end of vstack duration+time
+                                        Text("\(todaysSchedule.estTime) min")
+                                            .font(.title2)
+                                        
+                                    }
                                     .padding()
-                                } //end of hstack1
+                                }
                                 
                                 
-                                //HStack 2 for focus area and Button
+                                
                                 HStack{
-                                    Text("Focus Area: \(preset.presets[0].focousArea)")
-                                        .font(.headline)
-                                        .foregroundStyle(.secondary)
+                                    
                                     
                                     Spacer()
                                     Button {
@@ -72,8 +90,9 @@ struct ScheduledWorkoutCard: View {
                                 } // end of hstack focus area+button
                                 .padding()
                             }
-
-                    }.padding()
+                            
+                        }.padding()
+                }
             }
         }
     }
@@ -81,5 +100,5 @@ struct ScheduledWorkoutCard: View {
 
 #Preview {
     ScheduledWorkoutCard()
-        .environment(Presets())
+        .environment(WeeklySchedules())
 }
