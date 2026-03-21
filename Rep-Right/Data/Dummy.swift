@@ -5,6 +5,7 @@
 //  Created by Ankit Malik on 2026-03-17.
 //
 import Foundation
+@Observable
 class Exercises{
     var exerciseList: [Exercise] = [
         Exercise(
@@ -103,7 +104,6 @@ class Presets {
             isWarmpUp: false,
             scheduledFor: .monday,
             estTime: 45,
-            focousArea: ["Full Body"],
             equipments: ["Bodyweight", "Dumbbell", "Bench"],
             calories: 450
         ),
@@ -113,7 +113,6 @@ class Presets {
             isWarmpUp: false,
             scheduledFor: .wednesday,
             estTime: 35,
-            focousArea: ["Chest", "Back", "Arms"],
             equipments: ["Bodyweight", "Dumbbell", "Bench"],
             calories: 380
         ),
@@ -123,7 +122,6 @@ class Presets {
             isWarmpUp: false,
             scheduledFor: .friday,
             estTime: 30,
-            focousArea: ["Core", "Shoulders"],
             equipments: ["Mat", "Bodyweight"],
             calories: 300
         ),
@@ -134,7 +132,6 @@ class Presets {
             isWarmpUp: true,
             scheduledFor: .sunday,
             estTime: 20,
-            focousArea: ["Mobility", "Recovery"],
             equipments: [],
             calories: 120
         ),
@@ -144,7 +141,6 @@ class Presets {
             isWarmpUp: false,
             scheduledFor: .thursday,
             estTime: 40,
-            focousArea: ["Legs", "Glutes"],
             equipments: ["Bodyweight", "Mat"],
             calories: 420
         )
@@ -154,8 +150,18 @@ class Presets {
 class DummyUserProfiles {
     var user = UserProfile(profilePicture: "UserImage", name: "Ankit Malik", age: 21, gender: .male , weight: 71, height: 1.73, modelSensitivity: .Medium, unitSystem: .metric)
 }
-
+@Observable
 class WeeklySchedules{
-    var schedules: [Weekday: Preset] = [:]
+    var schedules: [Weekday: Preset] = [.thursday:Preset(
+        name: "Full Body Starter",
+        exercises: Exercises().exerciseList,
+        isWarmpUp: false,
+        scheduledFor: .monday,
+        estTime: 45,
+        /*focousArea: ["Full Body"],*/
+        equipments: ["Bodyweight", "Dumbbell", "Bench"],
+        calories: 450
+    )]
 }
+
 
