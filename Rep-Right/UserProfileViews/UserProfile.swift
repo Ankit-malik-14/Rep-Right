@@ -9,9 +9,6 @@ import SwiftUI
 
 struct UserProfilee: View {
     
-    
-
-    
     @State var userFirstName: String = ""
     @State var userLastName: String = ""
     @State var userSex: Genders = .male

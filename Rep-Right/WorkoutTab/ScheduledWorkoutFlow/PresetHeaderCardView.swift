@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct HeaderAnatomyView: View {
+struct PresetHeaderCardView: View {
     var body: some View {
         ZStack {
             Color(UIColor.systemGray6)
             
-            // Placeholder for the muscular back image
+            // Placeholder for the muscle image
             Image(systemName: "figure.mind.and.body")
                 .resizable()
                 .scaledToFit()
@@ -26,6 +26,8 @@ struct HeaderAnatomyView: View {
     }
 }
 
-#Preview{
-    HeaderAnatomyView()
+
+#Preview {
+    PresetHeaderCardView()
+
 }

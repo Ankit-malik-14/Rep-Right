@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Recommended Warm Up Section
+
 struct WarmUpCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -31,8 +31,7 @@ struct WarmUpCardView: View {
                 }
             }
             
-            // Button is now a NavigationLink using a String value
-            NavigationLink(value: "WarmUpView") {
+            NavigationLink(value: Route.warmup) {
                 Text("Start Warmup")
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -47,4 +46,8 @@ struct WarmUpCardView: View {
         .background(Color(UIColor.systemGray6))
         .cornerRadius(16)
     }
+}
+
+#Preview {
+    WarmUpCardView()
 }
