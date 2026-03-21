@@ -8,11 +8,7 @@ import SwiftUI
 
 struct PresetDetailView: View {
     let exercises = Presets().presets[0].exercises
-//    let exercises = [
-//        Exercise(name: "Deadlift", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
-//        Exercise(name: "Squat", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
-//        Exercise(name: "Zercher Squat", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional")
-//    ]
+
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -75,7 +71,6 @@ struct PresetDetailView: View {
         // No local navigationDestination here; all routes resolved at the root
     }
 }
-
-#Preview {
-    PresetDetailView()
+#Preview{
+        WorkoutDetailView()
 }
