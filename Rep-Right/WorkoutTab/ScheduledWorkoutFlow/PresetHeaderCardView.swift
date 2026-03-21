@@ -28,6 +28,6 @@ struct PresetHeaderCardView: View {
 
 
 #Preview {
-    HeaderAnatomyView()
+    PresetHeaderCardView()
 
 }
