@@ -8,7 +8,7 @@ struct OnboardingScreenView1: View {
                     .fill(Color.gray.opacity(0.2))
                     .ignoresSafeArea(edges: .top)
                     .overlay(
-                        Image(systemName: "dog.fill")
+                        Image(systemName: "person.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 740, height: 140)
