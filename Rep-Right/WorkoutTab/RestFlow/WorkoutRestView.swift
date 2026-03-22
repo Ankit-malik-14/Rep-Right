@@ -9,7 +9,13 @@ import SwiftUI
 
 struct WorkoutRestView: View {
     
+    //user clicks finish set, since the running workout will have the current exercise info we will compute the last set logic inside the  parent running workout view and pass the values here.
+    
+    // Required values 1) isLastSet of current running execise.
+    // 2) next exercise info for passing info to NextExerciseCard
+    
     @State var isSetFinished: Bool = false
+    @State var isLastSet: Bool = true
     
     var body: some View {
         ZStack{
@@ -26,7 +32,7 @@ struct WorkoutRestView: View {
             .padding()
             .background(.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
             .sheet(isPresented: $isSetFinished){
-                RestCardView(dismissSheet: $isSetFinished, isLastSet: true)
+                RestCardView(dismissSheet: $isSetFinished, isLastSet: $isLastSet)
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
             }
