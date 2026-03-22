@@ -40,7 +40,22 @@ struct Preset: Identifiable,Equatable,Hashable {
     var isWarmpUp: Bool
     var scheduledFor: Weekday?
     var estTime: Int
-    var focousArea: [String]
+    var focousArea: [String] {
+        // Compute the top 3 most frequent target areas across all exercises in this preset
+        let allAreas = exercises.flatMap { $0.targetAreas }
+        guard !allAreas.isEmpty else { return [] }
+        var counts: [String: Int] = [:]
+        for area in allAreas {
+            counts[area, default: 0] += 1
+        }
+        let sorted = counts.sorted {
+            if $0.value == $1.value {
+                return $0.key < $1.key
+            }
+            return $0.value > $1.value
+        }
+        return Array(sorted.prefix(3).map { $0.key })
+    }
     var equipments: [String]
     var calories: Int
 }
@@ -58,14 +73,14 @@ struct UserProfile {
 
 //MARK: - Enums
 
-enum Weekday: String, CaseIterable{
-    case sunday = "Sunday"
-    case monday = "Monday"
-    case tuesday = "Tuesday"
-    case wednesday = "Wednesday"
-    case thursday = "Thrursday"
-    case friday = "Friday"
-    case saturday = "Saturday"
+enum Weekday: Int, CaseIterable{
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
 }
 
 enum Genders: String, CaseIterable{
@@ -90,4 +105,3 @@ enum UnitSystem: String, CaseIterable{
     case metric = "Metric"
     case imperial = "Imperial"
 }
-

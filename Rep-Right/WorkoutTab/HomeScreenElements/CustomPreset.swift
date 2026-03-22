@@ -39,7 +39,7 @@ struct CustomPreset: View {
 }
 
 #Preview {
-    //@Previewable @Environment(Presets.self) var presets
+    @Previewable @Environment(Presets.self) var preset
     CustomPreset()
-        .environment(Presets())
+        .environment(preset)
 }
