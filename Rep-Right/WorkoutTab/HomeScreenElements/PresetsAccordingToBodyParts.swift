@@ -43,7 +43,7 @@ struct PresetsAccordingToBodyParts: View {
 }
 
 #Preview {
-    @Previewable @Environment(Presets.self) var preset
+//    @Previewable @Environment(Presets.self) var preset
     PresetsAccordingToBodyParts()
         .environment(Presets())
 }
