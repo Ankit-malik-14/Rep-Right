@@ -26,8 +26,9 @@ struct WorkoutRestView: View {
             .padding()
             .background(.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
             .sheet(isPresented: $isSetFinished){
-                RestCardView(dismissSheet: $isSetFinished, isLastSet: false)
+                RestCardView(dismissSheet: $isSetFinished, isLastSet: true)
                     .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
             }
             
         }
