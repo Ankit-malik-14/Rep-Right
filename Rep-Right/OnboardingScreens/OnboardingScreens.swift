@@ -4,7 +4,7 @@
 //
 //  Created by Mayurakshi Das on 17/03/26.
 //
-
+/*
 import SwiftUI
 
 
@@ -61,3 +61,4 @@ struct OnboardingScreen3: View{
 #Preview {
     OnboardingScreen1()
 }
+*/
