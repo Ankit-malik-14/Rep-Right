@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct MetricsView: View {
@@ -7,10 +6,10 @@ struct MetricsView: View {
             Text("Metrics")
                 .font(.title3)
                 .bold()
-                .padding([.horizontal, .top], 20)
+                .foregroundStyle(.black)
+                .padding(20)
             
             HStack(spacing: 10) {
-                
                 MetricCard(
                     icon: "dumbbell.fill",
                     title: "Exercise",
@@ -35,26 +34,21 @@ struct MetricsView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                .background(Color.white.cornerRadius(15))
-        )
+        .background(Color.white)
+        .clipShape(.rect(cornerRadius: 20))
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
         .padding(.horizontal)
     }
 }
 
 struct MetricCard: View {
-
     var icon: String
     var title: String
     var value: String
     var change: String
 
     var body: some View {
-
         VStack(alignment: .leading, spacing: 5) {
-
             HStack {
                 Image(systemName: icon)
                     .foregroundStyle(.orange)
@@ -62,15 +56,16 @@ struct MetricCard: View {
 
                 Text(title)
                     .font(.caption)
+                    .foregroundStyle(.gray)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
 
             HStack(alignment: .bottom, spacing: 5) {
-
                 Text(value)
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(.black)
 
                 Text(change)
                     .foregroundStyle(.orange)
@@ -78,14 +73,15 @@ struct MetricCard: View {
             }
         }
         .padding()
-        .frame(maxWidth: .infinity,minHeight: 90,maxHeight: 90)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.gray.opacity(0.1))
-        )
+        .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
+        .background(Color(white: 0.97))
+        .clipShape(.rect(cornerRadius: 12))
     }
 }
-#Preview {
-    MetricsView()
-}
 
+#Preview {
+    ZStack {
+        Color(white: 0.95).ignoresSafeArea()
+        MetricsView()
+    }
+}
