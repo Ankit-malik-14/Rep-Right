@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DataLabels: View {
+    @Environment(Presets.self) var preset
     var body: some View {
         LazyHGrid(rows: [GridItem(.flexible())], alignment: .center, spacing: 20) {
             //timer
@@ -21,6 +22,7 @@ struct DataLabels: View {
             .background(.secondary.opacity(0.2))
             .clipShape(.capsule)
             
+    
             //Progress
             Label {
                 Text("75 %")
@@ -34,7 +36,7 @@ struct DataLabels: View {
             
             //Calories
             Label {
-                Text("346")
+                Text("\(preset.presets[1].calories)")
             } icon: {
                 Image(systemName: "flame.fill")
                     .foregroundStyle(.orange)
@@ -49,4 +51,5 @@ struct DataLabels: View {
 
 #Preview {
     DataLabels()
+        .environment(Presets())
 }

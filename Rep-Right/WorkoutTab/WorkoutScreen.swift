@@ -36,11 +36,11 @@ struct WorkoutScreen: View {
 }
 
 #Preview {
-    @Previewable @Environment(WeeklySchedules.self) var weeklySchedules
-    @Previewable @Environment(Presets.self) var preset
-    @Previewable @Environment(Exercises.self) var exercises
+//    @Previewable @Environment(WeeklySchedules.self) var weeklySchedules
+//    @Previewable @Environment(Presets.self) var preset
+//    @Previewable @Environment(Exercises.self) var exercises
     WorkoutScreen()
-        .environment(weeklySchedules)
-        .environment(preset)
-        .environment(exercises)
+        .environment(WeeklySchedules())
+        .environment(Presets())
+        .environment(Exercises())
 }
