@@ -68,5 +68,5 @@ struct totalTimeExerciseView: View {
 
 #Preview {
     totalTimeExerciseView()
-        .preferredColorScheme(.dark)
+       // .preferredColorScheme(.dark)
 }

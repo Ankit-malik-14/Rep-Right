@@ -57,7 +57,7 @@ struct ExerciseRingView: View {
                             Text("Total")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            Text("\(Int(totalSolved))")
+                            Text(totalSolved,format: .number)
                                 .font(.system(size: 38, weight: .bold, design: .rounded))
                         }
                         .position(x: frame.midX, y: frame.midY)
@@ -71,5 +71,5 @@ struct ExerciseRingView: View {
 
 #Preview {
     ExerciseRingView()
-        .preferredColorScheme(.dark)
+        //.preferredColorScheme(.dark)
 }
