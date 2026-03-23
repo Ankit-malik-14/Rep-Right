@@ -19,6 +19,7 @@ struct ScheduledWorkoutCard: View {
         }
         return result
     }
+    
     var todaysSchedule: Preset? {
         let day = Calendar.current.component(.weekday, from: Date())
         let pair = weeklySchedules.schedules.first(where: {$0.key.rawValue == day} )
@@ -27,6 +28,7 @@ struct ScheduledWorkoutCard: View {
         }
         return nil
     }
+    
     var body: some View {
         if let todaysSchedule = todaysSchedule{
             VStack{

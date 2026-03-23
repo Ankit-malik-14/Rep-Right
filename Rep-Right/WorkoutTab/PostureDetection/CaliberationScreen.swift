@@ -15,7 +15,7 @@ struct CaliberationScreen: View {
         }
         .sheet(isPresented: $showSheet){
             CaliberationSheetView()
-                .presentationDetents([.custom(CustomDetents.self)])
+                .presentationDetents([.medium, .custom(CustomDetents.self)])
         }
     }
 }
@@ -77,6 +77,7 @@ struct CaliberationSheetView: View{
                     Text("6-8 feet")
                         .font(.callout.bold())
                 }
+                .padding()
             }
 //            .padding()
             
@@ -91,12 +92,12 @@ struct CaliberationSheetView: View{
                 Text("For this exercise place camera facing front")
             }
             
-            .padding()
+            .padding(10)
             
             Text("Scanning Environment...")
                 .bold()
             
-                .padding(30)
+                .padding(10)
             
             Button("Start Calliberation") {
                 //
@@ -104,7 +105,7 @@ struct CaliberationSheetView: View{
             .buttonStyle(.borderedProminent)
             .tint(.orange)
             
-            .padding(25)
+            .padding(10)
             
             Button("Cancel", role: .cancel) {
                 //

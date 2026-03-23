@@ -4,12 +4,12 @@ struct SummaryTabView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(spacing: 10) {
                 CalendarView()
                 MetricsView()
-                FormAccuracyReportView()
                 WeeklyCalorieBurnView()
                 FormInsightView()
+                FormAccuracyReportView()// needs navigation link
             }
             .padding(.vertical)
             }

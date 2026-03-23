@@ -25,5 +25,4 @@ struct RunningWorkoutView: View {
 
 #Preview {
     RunningWorkoutView()
-        
 }
