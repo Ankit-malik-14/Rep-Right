@@ -19,17 +19,19 @@ struct FormInsightView: View {
                     .bold()
                 
                 Text("Your depth on Barbell Squats improved by 12% in the last session. Keep hitting those 90° angles.")
-                    .font(.subheadline)
+                    .font(.caption)
+                    .fontWeight(.medium)
                     .foregroundColor(.gray)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.gray.opacity(0.1))
-        )
+        .background(.gray.opacity(0.2) ,in: RoundedRectangle(cornerRadius: 15))
+//        .background(
+//            RoundedRectangle(cornerRadius: 15)
+//                .fill(Color.gray.opacity(0.1))
+//        )
         .padding(.horizontal)
     }
 }

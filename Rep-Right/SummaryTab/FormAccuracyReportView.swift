@@ -13,6 +13,7 @@ struct FormAccuracyReportView: View {
                     
                     Text("Your form accuracy based on previous sessions")
                         .font(.caption)
+                        .fontWeight(.medium)
                         .foregroundColor(.gray)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -31,6 +32,7 @@ struct FormAccuracyReportView: View {
                 .tint(.orange)
                 .scaleEffect(1.5) // Scale it up to match the previous size
                 .frame(width: 70, height: 70)
+                .padding(.trailing, 15)
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)

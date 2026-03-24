@@ -3,16 +3,18 @@ import SwiftUI
 struct SummaryTabView: View {
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 10) {
-                CalendarView()
-                MetricsView()
-                WeeklyCalorieBurnView()
-                FormInsightView()
-                FormAccuracyReportView()// needs navigation link
+            ScrollView{
+                VStack(spacing: 20) {
+                    CalendarView()
+                    MetricsView()
+                    WeeklyCalorieBurnView()
+                    FormInsightView()
+                    FormAccuracyReportView()
+                    
+                }
+            .padding(.bottom)
             }
-            .padding(.vertical)
-            }
+
             .navigationTitle("Summary")
             .toolbar {
                 ToolbarItem(placement: .automatic) {
