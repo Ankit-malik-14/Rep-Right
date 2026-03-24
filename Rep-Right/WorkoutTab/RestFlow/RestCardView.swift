@@ -39,7 +39,8 @@ struct RestCardView: View {
 
     var body: some View {
         VStack(spacing: 15) {
-            RestTimerView(timeRemaining: $restTime)
+            RestTimerView2(timeRemaining: $restTime, isRunning: $isRunning)
+                .padding(.top,30)
 
             HStack {
                 Button {
@@ -64,7 +65,7 @@ struct RestCardView: View {
                                 .fontWeight(.heavy)
                                 .foregroundStyle(.black)
                         }
-                        Text("-1 MIN")
+                        Text("1 MIN")
                             .font(.footnote)
                             .fontWeight(.black)
                             .foregroundStyle(.black)
@@ -79,13 +80,13 @@ struct RestCardView: View {
                             .frame(width: 85, height: 85)
                             .foregroundStyle(.orange)
                         Image(systemName: isRunning ? "pause" : "play.fill")  //needs ternary play pause logic
-                            .padding(20)
+                            //.padding(20)
                             .font(.largeTitle)
                             .fontWeight(.heavy)
                             .foregroundStyle(.black)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
 
                 Button {
                     restTime = restTime + 60
@@ -100,7 +101,7 @@ struct RestCardView: View {
                                 .fontWeight(.heavy)
                                 .foregroundStyle(.black)
                         }
-                        Text("+1 MIN")
+                        Text("1 MIN")
                             .font(.footnote)
                             .fontWeight(.black)
                             .foregroundStyle(.black)
@@ -113,8 +114,6 @@ struct RestCardView: View {
             //ternary-type logic for next exercise card
             if isLastSet {
                 NextExerciseCardView()
-            } else {
-                Spacer(minLength: 60)
             }
 
             Button {
@@ -124,7 +123,7 @@ struct RestCardView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .frame(width: .infinity, height: 60)
                         .foregroundStyle(.orange.opacity(0.2))
-                        .padding()
+                        //.padding(.horizontal)
                     HStack {
                         Text("Skip Rest")
                         Image(systemName: "chevron.right.2")
@@ -133,6 +132,7 @@ struct RestCardView: View {
                     .fontWeight(.bold)
                 }
             }
+            .padding(.horizontal)
 
         }
     }
