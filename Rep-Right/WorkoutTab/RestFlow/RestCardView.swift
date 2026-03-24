@@ -78,7 +78,7 @@ struct RestCardView: View {
                         Circle()
                             .frame(width: 85, height: 85)
                             .foregroundStyle(.orange)
-                        Image(systemName: isRunning ? "pause" : "play.fill")  //needs tertiary play pause logic
+                        Image(systemName: isRunning ? "pause" : "play.fill")  //needs ternary play pause logic
                             .padding(20)
                             .font(.largeTitle)
                             .fontWeight(.heavy)
@@ -110,7 +110,7 @@ struct RestCardView: View {
 
             }
 
-            //tertiary logic for next exercise card
+            //ternary-type logic for next exercise card
             if isLastSet {
                 NextExerciseCardView()
             } else {

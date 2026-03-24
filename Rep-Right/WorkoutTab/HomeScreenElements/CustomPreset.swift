@@ -20,15 +20,14 @@ struct CustomPreset: View {
                 }.buttonStyle(.borderless)
                     .tint(.orange)
             }.padding(.horizontal)
-            
             ScrollView(.horizontal){
                 HStack{
-                    ForEach(preset.presets){ preset in
+                    ForEach(0..<min(preset.presets.count, 3),id: \.self){ idx in
                         ZStack{
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundStyle(.background.secondary)
                                 .frame(width: 180,height: 160)
-                            Text(preset.name)
+                            Text(preset.presets[idx].name)
                         }
                     }
                 }.padding(.horizontal)
