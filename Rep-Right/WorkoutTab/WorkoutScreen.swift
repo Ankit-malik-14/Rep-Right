@@ -31,6 +31,10 @@ struct WorkoutScreen: View {
                     ExerciseListView()
                 }
             }.navigationTitle("Workouts")
+        }.toolbar {
+            ToolbarItem {
+                Image(systemName: "person.circle")
+            }
         }
     }
 }
@@ -39,8 +43,10 @@ struct WorkoutScreen: View {
 //    @Previewable @Environment(WeeklySchedules.self) var weeklySchedules
 //    @Previewable @Environment(Presets.self) var preset
 //    @Previewable @Environment(Exercises.self) var exercises
-    WorkoutScreen()
-        .environment(WeeklySchedules())
-        .environment(Presets())
-        .environment(Exercises())
+    NavigationStack{
+        WorkoutScreen()
+            .environment(WeeklySchedules())
+            .environment(Presets())
+            .environment(Exercises())
+    }
 }

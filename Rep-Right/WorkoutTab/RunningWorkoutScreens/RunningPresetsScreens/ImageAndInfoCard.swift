@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ImageAndInfoCard: View {
+    @Environment(Presets.self) var preset
     var body: some View {
-        @Environment(Presets.self) var preset
         ZStack(alignment: .bottom) {
             
             // Background image area

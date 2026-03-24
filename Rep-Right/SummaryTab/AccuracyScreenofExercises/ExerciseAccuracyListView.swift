@@ -9,6 +9,7 @@ struct ExerciseModel: Identifiable {
 
 struct ExerciseAccuracyListView: View {
     //@Binding var value : value = .AccuracyMeterView
+    
     @State private var exercises: [ExerciseModel] = [
         ExerciseModel(name: "Deadlift", targetMuscle: "Back", timeAgo: "Yesterday", accuracy: 32)
     ]
@@ -66,4 +67,5 @@ struct ExerciseAccuracyListView: View {
 
 #Preview {
     ExerciseAccuracyListView()
+        
 }
