@@ -7,6 +7,7 @@ struct OnboardingScreenView3: View {
             
             Spacer()
             //Add over here the schedule part one
+            
             VStack(spacing: 8) {
                 Text("Plan Your Success")
                     .font(.system(size: 28, weight: .bold))
