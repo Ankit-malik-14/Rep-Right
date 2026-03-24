@@ -41,7 +41,7 @@ struct RestCardView: View {
         VStack(spacing: 15) {
             RestTimerView(timeRemaining: $restTime)
 
-            HStack(spacing: 60) {
+            HStack {
                 Button {
                     if restTime > 60 {
                         restTime = restTime - 60
@@ -69,7 +69,7 @@ struct RestCardView: View {
                             .fontWeight(.black)
                             .foregroundStyle(.black)
                     }
-                }
+                }.padding()
 
                 Button {
                     isRunning.toggle()
@@ -85,6 +85,7 @@ struct RestCardView: View {
                             .foregroundStyle(.black)
                     }
                 }
+                .padding()
 
                 Button {
                     restTime = restTime + 60
@@ -105,6 +106,7 @@ struct RestCardView: View {
                             .foregroundStyle(.black)
                     }
                 }
+                .padding()
 
             }
 
@@ -138,6 +140,6 @@ struct RestCardView: View {
 
 #Preview {
     @Previewable @State var showSheet = false
-    @Previewable @State var isLastSet = true
+    @Previewable @State var isLastSet = false
     RestCardView(dismissSheet: $showSheet, isLastSet: $isLastSet)
 }

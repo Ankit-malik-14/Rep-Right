@@ -7,17 +7,19 @@
 
 import SwiftUI
 
-struct UserProfilee: View {
-    
+struct UserProfileView: View {
+    @State var isDisabled: Bool = true
     @State var userFirstName: String = ""
-    @State var userLastName: String = ""
     @State var userSex: Genders = .male
-    @State var userAge: String = "18"
+    @State var userAge: Int = 0
     @State var modelSensitiveness: Double = SensitivityLevels.Medium.rawValue
     @State var selectedUnitSystem: String = UnitSystem.metric.rawValue
-   
+    @State var weight: Double = 0.0
+    @State var height: Double = 0.0
     
     var body: some View {
+        VStack{
+            
             Form{
                 Section{
                     VStack(alignment: .center) {
@@ -29,19 +31,13 @@ struct UserProfilee: View {
                         .padding()
                 }
                 
-                Section("Health Details"){
+                Section("Preference Detail"){
                     HStack(){
-                        Text("First Name")
+                        Text("Name")
                         
                         TextField("Not Set", text: $userFirstName)
                             .multilineTextAlignment(.trailing)
-                    }
-                    
-                    HStack{
-                        Text("Last Name")
-                        
-                        TextField("Not Set", text: $userLastName)
-                            .multilineTextAlignment(.trailing)
+                            .disabled(isDisabled)
                     }
                     
                     Picker("Sex", selection: $userSex) {
@@ -50,30 +46,43 @@ struct UserProfilee: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    //height
-                    //weight
+                    .disabled(isDisabled)
+                    HStack{
+                        Text("Weight")
+                        TextField("Not Set", value: $weight, format: .number)
+                            .multilineTextAlignment(.trailing)
+                            .disabled(isDisabled)
+                    }
+                    HStack{
+                        Text("Height")
+                        TextField("Not Set", value: $height, format: .number)
+                            .multilineTextAlignment(.trailing)
+                            .disabled(isDisabled)
+                    }
                     HStack{
                         Text("Age")
                         
-                        TextField("Not Set", text: $userAge)
+                        TextField("Not Set", value: $userAge, format: .number)
+                            .multilineTextAlignment(.trailing)
+                            .disabled(isDisabled)
                     }
                 }
-                Section("Preference Detail"){
+                Section("Preferences"){
                     
                     Picker("Model Senstivity", selection: $modelSensitiveness) {
                         ForEach(SensitivityLevels.allCases, id: \.self) { option in
-                            Text(option.description).tag(option)
+                            Text(option.description).tag(option.rawValue)
                         }
                     }
                     .pickerStyle(.menu)
-                    
+                    .disabled(isDisabled)
                     Picker("Units", selection: $selectedUnitSystem) {
                         ForEach(UnitSystem.allCases, id: \.self) { option in
-                            Text(option.rawValue).tag(option)
+                            Text(option.rawValue).tag(option.rawValue)
                         }
                     }
                     .pickerStyle(.menu)
-                    
+                    .disabled(isDisabled)
                     
                 }
                 Section {
@@ -89,9 +98,19 @@ struct UserProfilee: View {
                     }
                 }
             }
+            .toolbar {
+                ToolbarItem(id: "Save", placement: .topBarTrailing) {
+                    Button(isDisabled ? "Edit" : "Save") {
+                        isDisabled.toggle()
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    UserProfilee()
+    NavigationStack{
+        UserProfileView()
+    }
 }

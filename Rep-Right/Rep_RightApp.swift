@@ -18,8 +18,7 @@ struct Rep_RightApp: App {
     
     var body: some Scene {
         WindowGroup {
-            IndividualRunningExerciseView()
-//            ImageAndInfoCard()
+            UserProfileView()
                 .environment(presets)
                 .environment(exercises)
                 .environment(weeklySchedules)
