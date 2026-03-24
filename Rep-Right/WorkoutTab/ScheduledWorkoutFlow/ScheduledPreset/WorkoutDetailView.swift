@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct PresetDetailView: View {
+    
+    
+    
     let exercises = Presets().presets[0].exercises
 
     
