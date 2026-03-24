@@ -51,3 +51,8 @@ struct ExerciseCardView: View {
         .cornerRadius(16)
     }
 }
+
+#Preview {
+    ExerciseCardView(exercise: Presets().presets[0].exercises[0])
+}
+//fetch from environment

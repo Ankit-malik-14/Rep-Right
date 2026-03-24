@@ -11,9 +11,10 @@ import Combine
 struct RestTimerView: View {
     @Binding var timeRemaining: Int
         //publisher that fires every second
-        let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+//    let time = Timer
     var body: some View {
+
         Text(timeString(from: timeRemaining))
             .font(.system(size: 100))
             .fontWeight(.bold)

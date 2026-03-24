@@ -4,10 +4,11 @@ struct MetricsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Metrics")
-                .font(.title3)
+                .font(.title2)
                 .bold()
                 .foregroundStyle(.black)
-                .padding(20)
+                .padding(.horizontal, 20)
+                .padding(.top)
             
             HStack(spacing: 10) {
                 MetricCard(
@@ -56,6 +57,7 @@ struct MetricCard: View {
 
                 Text(title)
                     .font(.caption)
+                    .fontWeight(.medium)
                     .foregroundStyle(.gray)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)

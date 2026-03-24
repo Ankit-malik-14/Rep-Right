@@ -13,7 +13,6 @@ struct ExercisesView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    
                     ZStack{
                         Image(systemName: "person.fill")
                             .resizable()
@@ -21,7 +20,7 @@ struct ExercisesView: View {
                         
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color.gray.opacity(0.15))
-                            .frame(height: 180)
+                            .frame(height: 300)
                             .padding(.horizontal)
                     }
                     HStack {
@@ -30,25 +29,7 @@ struct ExercisesView: View {
                             .fontWeight(.bold)
                         
                         Spacer()
-                        HStack {
-                            //Button If Ai Assistance is Available
-                            Button(action: {}) {
-                                
-                                HStack(spacing: 6) {
-                                    Image(systemName: "camera.fill")
-                                        .font(.caption)
-                                    
-                                    Text("AI Assistance")
-                                        .font(.caption)
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color.orange.opacity(0.2))
-                                .foregroundColor(.orange)
-                                .cornerRadius(12)
-                                
-                            }
-                        }
+                        assisstanceAvailablityTag(type: .iconAndText)
                     }
                     .padding(.horizontal)
                     
@@ -59,7 +40,7 @@ struct ExercisesView: View {
                                 .fontWeight(.semibold)
                                 .frame(width: 110, alignment: .leading)
                             
-                            Text("\(exercises.targetAreas)")
+                            Text(arrayToString(arrayOfStrings: exercises.targetAreas))
                                 .font(.subheadline)
                         }
                         
@@ -68,7 +49,7 @@ struct ExercisesView: View {
                                 .fontWeight(.semibold)
                                 .frame(width: 110, alignment: .leading)
                             
-                            Text("\(exercises.equipments)")
+                            Text(arrayToString(arrayOfStrings: exercises.equipments))
                                 .font(.subheadline)
                         }
                         
@@ -85,20 +66,9 @@ struct ExercisesView: View {
                     
                     VStack(alignment: .leading, spacing: 10) {
                         pointView(steps: exercises.executionSteps)
-//                        HStack(alignment: .top){
-//                            Text("1.")
-//                                .fontWeight(.semibold)
-//                                //.frame(width: 110, alignment: .leading)
-//                            Text("\(exercises.executionSteps[0])")
-//                        }
-//                        HStack(alignment: .top){
-//                            Text("2.")
-//                                .fontWeight(.semibold)
-//                            Text("\(exercises.executionSteps[1])")
-//                        }
-//                    }
                     .padding(.horizontal)
-                    
+                    }
+                    .padding(.horizontal)
                     Text("Tips")
                         .font(.title3)
                         .fontWeight(.bold)
@@ -106,22 +76,10 @@ struct ExercisesView: View {
                     
                     VStack(alignment: .leading, spacing: 10) {
                         pointView(steps: exercises.tips)
-//                        HStack(alignment: .top){
-//                            Text("1.")
-//                                .fontWeight(.semibold)
-//                            Text("Keep your knees in line with your toes throughout the movement.")
-//                        }
-//                        HStack(alignment: .top){
-//                            Text("2.")
-//                                .fontWeight(.semibold)
-//                            Text("Engage your core to maintain balance and protect your lower back.")
+                            .padding(.horizontal)
                         }
-                        
-                    }
                     .padding(.horizontal)
-                    
-                    
-                    Spacer(minLength: 20)
+                        
                     
                     HStack(spacing: 12) {
                         
@@ -151,8 +109,6 @@ struct ExercisesView: View {
                         }
                         
                     }
-                    .padding()
-                    
                 }
             }
         }
@@ -185,14 +141,7 @@ struct ExercisesView: View {
     ExercisesView(exercises: $exercise)
 }
 
-@ViewBuilder
-func pointView(steps: [String]) -> some View {
-    ForEach(steps,id: \.self){ step in
-        HStack(alignment: .top){
-            Text(steps.firstIndex(of: step )! + 1,format: .number)
-                .fontWeight(.semibold)
-            Text(step)
-        }
-    }
-}
+
+
+
    

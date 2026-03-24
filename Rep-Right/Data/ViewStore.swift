@@ -1,0 +1,64 @@
+//
+//  ViewStore.swift
+//  Rep-Right
+//
+//  Created by Ankit Malik on 2026-03-23.
+//
+
+import SwiftUI
+
+//MARK: - Data types
+enum assistanceTagType{
+    case icon
+    case text
+    case iconAndText
+}
+
+
+//MARK: - Views
+
+@ViewBuilder
+func assisstanceAvailablityTag(type: assistanceTagType) -> some View{
+    switch type{
+    case .icon:
+        ZStack{
+            Circle()
+                .frame(width: 30)
+                .foregroundStyle(.orange.opacity(0.8))
+            Image(systemName: "camera.viewfinder")
+                .foregroundStyle(.white)
+        }
+    case .text:
+        Text("AI Assistance")
+            .font(.footnote)
+            .padding(8)
+            .bold()
+            .foregroundStyle(.white)
+            .background {
+                Capsule()
+                    .foregroundStyle(.orange)
+            }
+    case .iconAndText:
+        HStack{
+            Image(systemName: "camera.viewfinder")
+            Text("AI Assistance")
+                .font(.footnote)
+                .bold()
+        }.foregroundStyle(.white)
+            .padding(8)
+            .background(Capsule().foregroundStyle(.orange))
+    }
+}
+
+
+
+//MARK: - View Testing
+struct ViewStore: View {
+    var body: some View {
+        assisstanceAvailablityTag(type: .icon)
+    }
+}
+
+#Preview {
+    ViewStore()
+}

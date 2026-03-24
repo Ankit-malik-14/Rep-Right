@@ -41,7 +41,7 @@ struct RestCardView: View {
         VStack(spacing: 15) {
             RestTimerView(timeRemaining: $restTime)
 
-            HStack(spacing: 60) {
+            HStack {
                 Button {
                     if restTime > 60 {
                         restTime = restTime - 60
@@ -69,7 +69,7 @@ struct RestCardView: View {
                             .fontWeight(.black)
                             .foregroundStyle(.black)
                     }
-                }
+                }.padding()
 
                 Button {
                     isRunning.toggle()
@@ -78,13 +78,14 @@ struct RestCardView: View {
                         Circle()
                             .frame(width: 85, height: 85)
                             .foregroundStyle(.orange)
-                        Image(systemName: isRunning ? "pause" : "play.fill")  //needs tertiary play pause logic
+                        Image(systemName: isRunning ? "pause" : "play.fill")  //needs ternary play pause logic
                             .padding(20)
                             .font(.largeTitle)
                             .fontWeight(.heavy)
                             .foregroundStyle(.black)
                     }
                 }
+                .padding()
 
                 Button {
                     restTime = restTime + 60
@@ -105,10 +106,11 @@ struct RestCardView: View {
                             .foregroundStyle(.black)
                     }
                 }
+                .padding()
 
             }
 
-            //tertiary logic for next exercise card
+            //ternary-type logic for next exercise card
             if isLastSet {
                 NextExerciseCardView()
             } else {
@@ -136,7 +138,8 @@ struct RestCardView: View {
     }
 }
 
-//#Preview {
-//    var showSheet = false
-//    RestCardView(dismissSheet: $showSheet)
-//}
+#Preview {
+    @Previewable @State var showSheet = false
+    @Previewable @State var isLastSet = false
+    RestCardView(dismissSheet: $showSheet, isLastSet: $isLastSet)
+}
