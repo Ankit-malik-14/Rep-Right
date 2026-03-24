@@ -28,6 +28,10 @@ struct ExerciseListView: View {
                                     .font(.footnote)
                                     .foregroundStyle(.secondary)
                             }
+                            Spacer()
+                            if exercise.assistanceAvailable{
+                                assisstanceAvailablityTag(type: .icon).padding(.horizontal)
+                            }
                             
                         }
                     }.padding(.horizontal)
