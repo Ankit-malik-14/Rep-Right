@@ -152,7 +152,7 @@ class DummyUserProfiles {
 }
 @Observable
 class WeeklySchedules{
-    var schedules: [Weekday: Preset] = [.monday:Preset(
+    var schedules: [Weekday: Preset] = [.tuesday:Preset(
         name: "Full Body Starter",
         exercises: Exercises().exerciseList,
         isWarmpUp: false,
