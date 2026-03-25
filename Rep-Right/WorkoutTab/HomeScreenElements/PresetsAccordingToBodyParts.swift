@@ -26,13 +26,13 @@ struct PresetsAccordingToBodyParts: View {
             
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(preset.presets) { preset in
+                    ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
                         
                         ZStack{
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width: 165, height: 150)
                                 .foregroundStyle(.background.secondary)
-                            Text(preset.name)}
+                            Text(preset.presets[idx].name)}
                     }
                 }.padding(.horizontal)
             }
