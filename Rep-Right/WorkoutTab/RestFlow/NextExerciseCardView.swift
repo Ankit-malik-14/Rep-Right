@@ -41,8 +41,8 @@ struct NextExerciseCardView: View {
                         .foregroundStyle(.orange)
             }
             .padding()
-//            .padding(.horizontal)
         }
+        .padding(.horizontal)
     }
 }
 
