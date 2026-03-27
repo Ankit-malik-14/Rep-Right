@@ -14,9 +14,6 @@ struct ExerciseListView: View {
             ScrollView(.vertical){
                 ForEach(exercises.exerciseList){ exercise in
                     NavigationLink(value: exercise) {
-                        //                        ZStack(alignment:.leading){
-                        //                            RoundedRectangle(cornerRadius: 20)
-                        //                                .foregroundStyle(.background.secondary)
                         HStack(alignment: .center){
                             RoundedRectangle(cornerRadius: 16)
                             
@@ -37,7 +34,6 @@ struct ExerciseListView: View {
                             }
                             
                         }.background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background.secondary)).padding(.horizontal)
-                        //                        }.padding(.horizontal)
                     }.buttonStyle(.plain)
                     
                 }.navigationDestination(for: Exercise.self) { exercise in
@@ -49,7 +45,6 @@ struct ExerciseListView: View {
 }
 
 #Preview {
-//    @Previewable @Environment(Exercises.self) var exercises
     ExerciseListView()
         .environment(Exercises())
 }

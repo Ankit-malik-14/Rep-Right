@@ -8,25 +8,23 @@
 import SwiftUI
 
 struct CustomPreset: View {
-    @Environment(Presets.self) var preset
-    
+    var preset: CustomPresetsDumyData
     var body: some View {
         VStack(spacing: 5){
             HStack{
                 Text("Custom")
-                    .font(.largeTitle.bold())
+                    .font(.title.bold())
                 Spacer()
-                Button("See all") {
-                    //
-                }.buttonStyle(.borderless)
-                    .tint(.orange)
+                NavigationLink(value: ExpandedViews.customPresets){
+                    Text("See all")
+                }.tint(.orange)
             }.padding(.horizontal)
             ScrollView(.horizontal){
                 HStack{
-                    ForEach(0..<min(preset.presets.count, 3),id: \.self){ idx in
-                        
-                        PresetTileViewType(preset: preset.presets[idx], type: .large)
-                        
+                    ForEach(0..<min(preset.customPresets.count, 3),id: \.self){ idx in
+                        NavigationLink(value: CustomPresetsDumyData().customPresets[idx]) {
+                            PresetTileViewType(preset: preset.customPresets[idx], type: .large)
+                        }.buttonStyle(.plain)
                     }
                 }.padding(.horizontal)
             }
@@ -37,6 +35,6 @@ struct CustomPreset: View {
 
 #Preview {
 //    @Previewable @Environment(Presets.self) var preset
-    CustomPreset()
-        .environment(Presets())
+    CustomPreset(preset: CustomPresetsDumyData())
+        .environment(CustomPresetsDumyData())
 }

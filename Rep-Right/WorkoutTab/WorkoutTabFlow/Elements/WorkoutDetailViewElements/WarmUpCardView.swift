@@ -31,16 +31,16 @@ struct WarmUpCardView: View {
                 }
             }
             
-            NavigationLink(value: Route.warmup) {
-                Text("Start Warmup")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.orange)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color(UIColor.systemGray5))
-                    .cornerRadius(10)
-            }
+//            NavigationLink(value: Route.warmup) {
+//                Text("Start Warmup")
+//                    .font(.subheadline)
+//                    .fontWeight(.semibold)
+//                    .foregroundColor(.orange)
+//                    .frame(maxWidth: .infinity)
+//                    .padding(.vertical, 12)
+//                    .background(Color(UIColor.systemGray5))
+//                    .cornerRadius(10)
+//            }
         }
         .padding(16)
         .background(Color(UIColor.systemGray6))

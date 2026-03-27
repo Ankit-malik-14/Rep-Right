@@ -29,7 +29,7 @@ struct SetData : Hashable{
     var reps: Int
 }
 
-struct Preset: Identifiable,Equatable,Hashable {
+struct Preset: Identifiable, Equatable, Hashable {
     static func == (lhs: Preset, rhs: Preset) -> Bool {
         lhs.id == rhs.id
     }
