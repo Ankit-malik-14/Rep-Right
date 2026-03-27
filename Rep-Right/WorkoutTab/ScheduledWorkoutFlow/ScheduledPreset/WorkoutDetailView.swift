@@ -72,5 +72,5 @@ struct PresetDetailView: View {
     }
 }
 #Preview{
-        WorkoutDetailView()
+//        WorkoutDetailView()
 }

@@ -25,4 +25,5 @@ struct RunningWorkoutView: View {
 
 #Preview {
     RunningWorkoutView()
+        .environment(Presets())
 }
