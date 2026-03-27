@@ -20,7 +20,8 @@ struct RestTimerView2: View {
         Text(timeString(from: timeRemaining))
             .font(.system(size: 100))
             .fontWeight(.bold)
-            .foregroundStyle(.orange)
+            
+            .foregroundStyle(.primary)
             .onAppear {
                 if isRunning { startTimer() }
             }
@@ -31,6 +32,9 @@ struct RestTimerView2: View {
                     stopTimer()
                 }
             }
+            //.padding(.horizontal)
+            //.background(Capsule())
+            
     }
     
     private func startTimer() {
@@ -60,7 +64,7 @@ struct RestTimerView2: View {
 }
 
 #Preview {
-    @Previewable @State var someTime = 300
+    @Previewable @State var someTime = 10
     @Previewable @State var runStat = true
     RestTimerView2(timeRemaining: $someTime, isRunning: $runStat)
 }
