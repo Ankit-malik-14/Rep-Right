@@ -7,13 +7,8 @@
 import SwiftUI
 
 struct WorkoutDetailView: View {
-    let exercises = Presets().presets[0].exercises
-//    let exercises = [
-//        Exercise(name: "Deadlift", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
-//        Exercise(name: "Squat", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
-//        Exercise(name: "Zercher Squat", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional")
-//    ]
-    
+    var preset: Preset
+  
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -26,10 +21,8 @@ struct WorkoutDetailView: View {
                 .padding(.horizontal)
                 
                 // 2. Warmup Section (value-based, type-safe)
-                NavigationLink(value: Route.warmup) {
-                    WarmUpCardView()
-                        .padding(.horizontal)
-                }
+                WarmUpCardView()
+                    .padding(.horizontal)
                 
                 // 3. Start Workout Button
                 Button(action: {
@@ -55,12 +48,12 @@ struct WorkoutDetailView: View {
                             .font(.title2)
                             .bold()
                         Spacer()
-                        Text("\(exercises.count) total")
+                        Text("\(preset.exercises.count) total")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                     
-                    ForEach(exercises) { exercise in
+                    ForEach(preset.exercises) { exercise in
                         NavigationLink(value: Route.exercise(exercise)) {
                             ExerciseCardView(exercise: exercise)
                         }
@@ -77,5 +70,5 @@ struct WorkoutDetailView: View {
 }
 
 #Preview {
-    WorkoutDetailView()
+    WorkoutDetailView(preset: Presets().presets[0])
 }

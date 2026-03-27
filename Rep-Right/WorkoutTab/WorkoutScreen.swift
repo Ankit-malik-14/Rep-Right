@@ -7,8 +7,15 @@
 
 import SwiftUI
 
+enum nums: Int{
+    case first = 1
+    case second = 2
+    case thirds = 3
+}
+
 struct WorkoutScreen: View {
     var body: some View {
+        
         NavigationStack{
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading){
@@ -17,23 +24,27 @@ struct WorkoutScreen: View {
                     
                     CustomPreset()
                     
-                    PresetsAccordingToBodyParts()
+                    DefaultPresets()
                     HStack{
                         Text("Exercises")
                             .font(.largeTitle.bold())
-                            .padding()
+                            .padding(.horizontal)
                         Spacer()
                         Button("See all") {
                             //
                         }.tint(.orange)
-                        .padding()
+                            .padding(.horizontal)
                     }
                     ExerciseListView()
                 }
-            }.navigationTitle("Workouts")
-        }.toolbar {
+            }.navigationDestination(for: Preset.self, destination: { preset in
+                
+            })
+            .navigationTitle("Workouts")
+        }
+        .toolbar{
             ToolbarItem {
-                Image(systemName: "person.circle")
+                    Image(systemName: "person.circle")
             }
         }
     }

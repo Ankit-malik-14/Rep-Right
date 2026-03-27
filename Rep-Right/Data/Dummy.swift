@@ -11,7 +11,7 @@ class Exercises{
         Exercise(
             name: "Push-Up",
             targetAreas: ["Chest", "Triceps", "Shoulders", "Core"],
-            equipments: ["Bodyweight"],
+            equipments: [],
             executionSteps: [
                 "Start in a high plank with hands slightly wider than shoulder-width.",
                 "Brace your core and keep a straight line from head to heels.",
@@ -33,7 +33,7 @@ class Exercises{
         Exercise(
             name: "Bodyweight Squat",
             targetAreas: ["Quads", "Glutes", "Hamstrings", "Core"],
-            equipments: ["Bodyweight"],
+            equipments: [],
             executionSteps: [
                 "Stand with feet shoulder-width apart and toes slightly out.",
                 "Sit your hips back and down while keeping your chest up.",
