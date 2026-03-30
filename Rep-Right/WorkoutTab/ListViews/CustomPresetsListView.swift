@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct CustomPresetsListView: View {
-    //needs toolbar 
-    @Environment(Presets.self) var preset
+    var preset: CustomPresetsDumyData
     var body: some View {
        
             List{
-                ForEach(preset.presets){ preset1 in
+                ForEach(preset.customPresets){ preset1 in
                     HStack{
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 80, height: 80)
@@ -50,7 +49,7 @@ struct CustomPresetsListView: View {
 
 #Preview {
     NavigationStack{
-        CustomPresetsListView()
-            .environment(Presets())
+        CustomPresetsListView(preset: CustomPresetsDumyData())
+            .environment(CustomPresetsDumyData())
     }
 }

@@ -7,27 +7,29 @@
 
 import SwiftUI
 
-enum nums: Int{
-    case first = 1
-    case second = 2
-    case thirds = 3
+enum ExpandedViews{
+    case customPresets
+    case defaultPresets
+    case ExerciseList
 }
 
 struct WorkoutScreen: View {
+    @Environment(Exercises.self) var exercises
+    @Environment(Presets.self) var preset
+    @Environment(CustomPresetsDumyData.self) var customPresets
     var body: some View {
-        
         NavigationStack{
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading){
                     
                     ScheduledWorkoutCard()
                     
-                    CustomPreset()
+                    CustomPreset(preset: customPresets)
                     
-                    DefaultPresets()
+                    DefaultPresets(preset: preset)
                     HStack{
                         Text("Exercises")
-                            .font(.largeTitle.bold())
+                            .font(.title.bold())
                             .padding(.horizontal)
                         Spacer()
                         Button("See all") {
@@ -38,7 +40,17 @@ struct WorkoutScreen: View {
                     ExerciseListView()
                 }
             }.navigationDestination(for: Preset.self, destination: { preset in
-                
+                WorkoutDetailView(preset: preset)
+            })
+            .navigationDestination(for: ExpandedViews.self, destination: { view in
+                switch view {
+                case .ExerciseList:
+                    ExerciseListView()
+                case .customPresets:
+                    CustomPresetsListView(preset: customPresets)
+                case .defaultPresets:
+                    DefaultPresetListView(presets: preset)
+                }
             })
             .navigationTitle("Workouts")
         }
@@ -51,11 +63,9 @@ struct WorkoutScreen: View {
 }
 
 #Preview {
-//    @Previewable @Environment(WeeklySchedules.self) var weeklySchedules
-//    @Previewable @Environment(Presets.self) var preset
-//    @Previewable @Environment(Exercises.self) var exercises
     NavigationStack{
         WorkoutScreen()
+            .environment(CustomPresetsDumyData())
             .environment(WeeklySchedules())
             .environment(Presets())
             .environment(Exercises())
