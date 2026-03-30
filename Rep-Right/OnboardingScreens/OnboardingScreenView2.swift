@@ -4,8 +4,14 @@ struct OnboardingScreenView2: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .center) {
-                UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30)
-                    .fill(Color(red: 0.98, green: 0.92, blue: 0.86))
+                // Replaced solid fill with a clipped image
+                Image(.AI)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 450) // Constrains the image so it scales correctly
+                    .clipShape(
+                        UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30)
+                    )
                     .ignoresSafeArea(edges: .top)
             }
             .frame(height: 450)

@@ -9,7 +9,7 @@ struct SignUpView: View {
             
             Spacer()
             
-            Text("Sign In")
+            Text("Sign Up")
                 .font(.system(size: 40, weight: .bold, design: .rounded))
                 .padding(.bottom, 20)
             
@@ -36,7 +36,7 @@ struct SignUpView: View {
                         .foregroundColor(.gray)
                         .frame(width: 30)
                     
-                    SecureField("Password", text: $password)
+                    SecureField("Create Password", text: $password)
                 }
                 .padding()
                 .background(Color(UIColor.systemGray6))
@@ -61,13 +61,13 @@ struct SignUpView: View {
             .padding(.top, 10)
             
             
-            Button("Forgot Password?") {
+           /* Button("Forgot Password?") {
                 // Action here
             }
             .font(.footnote)
             .foregroundColor(.secondary)
             .padding(.top, 8)
-            
+            */
             Spacer()
             Spacer()
         }
