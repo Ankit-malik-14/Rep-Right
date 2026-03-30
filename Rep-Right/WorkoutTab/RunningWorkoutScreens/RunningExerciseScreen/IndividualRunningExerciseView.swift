@@ -26,7 +26,7 @@ struct IndividualRunningExerciseView: View {
                 VStack(alignment: .center,spacing: 15){
                     
                     //Exercise card
-                   
+                    
                         //exercise card base rectangle
                         RoundedRectangle(cornerRadius: 30)
                         .glassEffect(.regular, in: .rect(cornerRadius: 30))

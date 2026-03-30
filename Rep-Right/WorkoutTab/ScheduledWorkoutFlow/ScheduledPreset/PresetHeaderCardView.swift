@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PresetHeaderCardView: View {
+    
     var body: some View {
         ZStack {
             Color(UIColor.systemGray6)// needs shape fixing, UIColor is not prefered in SwiftUi

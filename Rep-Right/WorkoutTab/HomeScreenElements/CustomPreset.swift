@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CustomPreset: View {
     @Environment(Presets.self) var preset
+    
     var body: some View {
         VStack(spacing: 5){
             HStack{
@@ -23,12 +24,9 @@ struct CustomPreset: View {
             ScrollView(.horizontal){
                 HStack{
                     ForEach(0..<min(preset.presets.count, 3),id: \.self){ idx in
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundStyle(.background.secondary)
-                                .frame(width: 180,height: 160)
-                            Text(preset.presets[idx].name)
-                        }
+                        
+                        PresetTileViewType(preset: preset.presets[idx], type: .large)
+                        
                     }
                 }.padding(.horizontal)
             }
