@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct DefaultPresets: View {
-    @Environment(Presets.self) var preset
+    var preset: Presets
     var body: some View {
         VStack(spacing: 5){
             HStack{
                 Text("Presets")
-                    .font(.largeTitle)
+                    .font(.title)
                     .bold()
 
                 Spacer()
-                NavigationLink(value: Presets().presets) {
+                NavigationLink(value: ExpandedViews.defaultPresets) {
                     Text("See all")
                 }.tint(.orange)
             }.padding(.horizontal)
@@ -25,8 +25,10 @@ struct DefaultPresets: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
+                        NavigationLink(value: Presets().presets[idx]) {
+                            PresetTileViewType(preset: preset.presets[idx], type: .large)
+                        }.buttonStyle(.plain)
                         
-                        PresetTileViewType(preset: preset.presets[idx], type: .large)
                     }
                 }.padding(.horizontal)
             }
@@ -42,6 +44,6 @@ struct DefaultPresets: View {
 
 #Preview {
 //    @Previewable @Environment(Presets.self) var preset
-    DefaultPresets()
+    DefaultPresets(preset: Presets())
         .environment(Presets())
 }

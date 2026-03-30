@@ -6,9 +6,8 @@
 //
 import SwiftUI
 
-struct WorkoutDetailView: View {
-    var preset: Preset
-  
+struct PresetDetailView: View {
+    let exercises = Presets().presets[0].exercises
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -20,9 +19,9 @@ struct WorkoutDetailView: View {
                 }
                 .padding(.horizontal)
                 
-                // 2. Warmup Section (value-based, type-safe)
-                WarmUpCardView()
-                    .padding(.horizontal)
+                // 2. Warmup Section
+                    WarmUpCardView()
+                        .padding(.horizontal)
                 
                 // 3. Start Workout Button
                 Button(action: {
@@ -48,16 +47,17 @@ struct WorkoutDetailView: View {
                             .font(.title2)
                             .bold()
                         Spacer()
-                        Text("\(preset.exercises.count) total")
+                        Text("\(exercises.count) total")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                     
-                    ForEach(preset.exercises) { exercise in
-                        NavigationLink(value: Route.exercise(exercise)) {
-                            ExerciseCardView(exercise: exercise)
-                        }
-                        .buttonStyle(.plain) // Prevents standard blue highlight
+                    ForEach(exercises) { exercise in
+                        ExerciseCardView(exercise: exercise)
+
+//                        NavigationLink(value: Route.exercise(exercise)) {
+//                        }
+//                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal)
@@ -68,7 +68,6 @@ struct WorkoutDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-#Preview {
-    WorkoutDetailView(preset: Presets().presets[0])
+#Preview{
+        PresetDetailView()
 }

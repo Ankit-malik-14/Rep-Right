@@ -6,13 +6,8 @@
 //
 import SwiftUI
 
-struct PresetDetailView: View {
-    
-    
-    
-    let exercises = Presets().presets[0].exercises
-
-    
+struct WorkoutDetailView: View {
+    var preset: Preset
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -24,9 +19,9 @@ struct PresetDetailView: View {
                 }
                 .padding(.horizontal)
                 
-                // 2. Warmup Section
-                    WarmUpCardView()
-                        .padding(.horizontal)
+                // 2. Warmup Section (value-based, type-safe)
+                WarmUpCardView()
+                    .padding(.horizontal)
                 
                 // 3. Start Workout Button
                 Button(action: {
@@ -52,25 +47,29 @@ struct PresetDetailView: View {
                             .font(.title2)
                             .bold()
                         Spacer()
-                        Text("\(exercises.count) total")
+                        Text("\(preset.exercises.count) total")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                     
-                    ForEach(exercises) { exercise in
-                        NavigationLink(value: Route.exercise(exercise)) {
-                            ExerciseCardView(exercise: exercise)
-                        }
-                        .buttonStyle(.plain)                    }
+                    ForEach(preset.exercises) { exercise in
+                        ExerciseCardView(exercise: exercise)
+//                        NavigationLink(value: Route.exercise(exercise)) {
+//
+//                        }
+//                        .buttonStyle(.plain) // Prevents standard blue highlight
+                    }
                 }
                 .padding(.horizontal)
             }
+            .navigationTitle(preset.name)
             .padding(.bottom, 40)
         }
-        .navigationTitle("Back")
+        .navigationTitle(preset.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-#Preview{
-//        WorkoutDetailView()
+
+#Preview {
+    WorkoutDetailView(preset: Presets().presets[0])
 }

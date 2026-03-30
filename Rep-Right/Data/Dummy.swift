@@ -147,12 +147,55 @@ class Presets {
     ]
 }
 
+@Observable
+class CustomPresetsDumyData{
+    var customPresets: [Preset] = [
+        Preset(
+            name: "Full body ",
+            exercises: Array(Exercises().exerciseList.prefix(3)),
+            isWarmpUp: false,
+            scheduledFor: .tuesday,
+            estTime: 25,
+            equipments: ["Bodyweight"],
+            calories: 260
+        ),
+        Preset(
+            name: "Push + Core",
+            exercises: Exercises().exerciseList.filter { ["Push-Up", "Plank"].contains($0.name) },
+            isWarmpUp: false,
+            scheduledFor: .thursday,
+            estTime: 20,
+            equipments: ["Bodyweight", "Mat"],
+            calories: 220
+        ),
+        Preset(
+            name: "Back Focus",
+            exercises: Exercises().exerciseList.filter { ["Dumbbell Row", "Plank"].contains($0.name) },
+            isWarmpUp: false,
+            scheduledFor: .saturday,
+            estTime: 25,
+            equipments: ["Dumbbell", "Bench", "Mat"],
+            calories: 250
+        ),
+        Preset(
+            isRestDay: true,
+            name: "Recovery + Mobility",
+            exercises: [],
+            isWarmpUp: true,
+            scheduledFor: .sunday,
+            estTime: 15,
+            equipments: ["Mat"],
+            calories: 100
+        )
+    ]
+}
+
 class DummyUserProfiles {
     var user = UserProfile(profilePicture: "UserImage", name: "Ankit Malik", age: 21, gender: .male , weight: 71, height: 1.73, modelSensitivity: .Medium, unitSystem: .metric)
 }
 @Observable
 class WeeklySchedules{
-    var schedules: [Weekday: Preset] = [.tuesday:Preset(
+    var schedules: [Weekday: Preset] = [.friday:Preset(
         name: "Full Body Starter",
         exercises: Exercises().exerciseList,
         isWarmpUp: false,
@@ -163,5 +206,4 @@ class WeeklySchedules{
         calories: 450
     )]
 }
-
 

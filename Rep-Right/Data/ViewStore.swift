@@ -83,7 +83,7 @@ struct PresetTileViewType: View {
 //MARK: - View Testing
 struct ViewStore: View {
     var body: some View {
-        assisstanceAvailablityTag(type: .iconAndText)
+        assisstanceAvailablityTag(type: .icon)
         PresetTileViewType(preset: Presets().presets[0], type: .large)
     }
 }
