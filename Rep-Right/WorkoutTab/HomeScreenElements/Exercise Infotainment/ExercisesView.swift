@@ -85,7 +85,7 @@ struct ExercisesView: View {
                     
                     HStack(spacing: 12) {
                         
-                        Button(action: {
+                        /*Button(action: {
                             
                         }) {
                             Text("Done")
@@ -95,7 +95,7 @@ struct ExercisesView: View {
                                 .foregroundColor(.black)
                                 .cornerRadius(25)
                         }
-                        
+                        */
                         Button(action: {
                             
                         }) {

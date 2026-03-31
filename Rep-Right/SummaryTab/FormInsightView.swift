@@ -27,7 +27,7 @@ struct FormInsightView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.gray.opacity(0.2) ,in: RoundedRectangle(cornerRadius: 15))
+        .background(.ultraThinMaterial.opacity(0.5),in: RoundedRectangle(cornerRadius: 20))
 //        .background(
 //            RoundedRectangle(cornerRadius: 15)
 //                .fill(Color.gray.opacity(0.1))

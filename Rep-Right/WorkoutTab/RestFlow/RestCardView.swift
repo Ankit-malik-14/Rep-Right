@@ -39,9 +39,9 @@ struct RestCardView: View {
 
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 20)
-                .frame(maxWidth: .infinity,maxHeight: 400)
-                .foregroundStyle(.ultraThinMaterial.opacity(0.5))
+           // RoundedRectangle(cornerRadius: 20)
+                //.frame(maxWidth: .infinity,maxHeight: 400)
+               // .foregroundStyle(.ultraThinMaterial.opacity(0.5))
             
         
         VStack(spacing: 15) {
@@ -65,7 +65,7 @@ struct RestCardView: View {
                         ZStack {
                             Circle()
                                 .frame(width: 70, height: 70)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(.gray.opacity(0.3))
                             Image(systemName: "minus")
                                 .padding(20)
                                 .fontWeight(.heavy)
@@ -85,7 +85,7 @@ struct RestCardView: View {
                         //.padding(20)
                             .font(.largeTitle)
                             .fontWeight(.heavy)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                     }
                 }
                 .padding(.horizontal)
@@ -97,7 +97,7 @@ struct RestCardView: View {
                         ZStack {
                             Circle()
                                 .frame(width: 70, height: 70)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(.gray.opacity(0.3))
                             Image(systemName: "plus")
                                 .padding(20)
                                 .fontWeight(.heavy)
@@ -117,7 +117,7 @@ struct RestCardView: View {
                 dismissSheet.toggle()
             }) {
                 Text("Skip")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                 //.foregroundStyle(.primary)
                 //.background(.primary)
                     .frame(maxWidth: .infinity)
@@ -128,9 +128,10 @@ struct RestCardView: View {
                     .clipShape(.rect(cornerRadius: 30))
             }
             .padding(.horizontal,20)
+            
             .buttonStyle(.glass)
+            
             /*
-             
              Button {
              dismissSheet.toggle()
              } label: {

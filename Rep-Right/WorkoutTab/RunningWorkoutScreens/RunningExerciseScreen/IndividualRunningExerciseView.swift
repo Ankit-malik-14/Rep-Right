@@ -76,11 +76,12 @@ struct IndividualRunningExerciseView: View {
                                     .frame(width: 100, height: 55)
                                     .foregroundStyle(.background.tertiary)
                                 HStack{ //pause + image
-                                    Image(systemName: "pause.fill")
-                                        .foregroundStyle(.orange)
                                     Text("Pause")
                                         .foregroundStyle(.orange)
                                         .font(.subheadline.bold())
+                                    //Image(systemName: "pause.fill")
+                                       // .foregroundStyle(.orange)
+                                    
                                 }
                             }
                         }
@@ -93,12 +94,14 @@ struct IndividualRunningExerciseView: View {
                                     .frame(width: 100, height: 55)
                                     .foregroundStyle(.background.tertiary)
                                 HStack{ //pause + image
-                                    Image(systemName: "chevron.right.2")
-                                        .bold()
-                                        .foregroundStyle(.orange)
+                                    
                                     Text("Skip")
                                         .foregroundStyle(.orange)
                                         .font(.subheadline.bold())
+                                   // Image(systemName: "chevron.right")
+                                        //.bold()
+                                       // .foregroundStyle(.orange)
+                                
                                 }
                             }
                         }
@@ -112,12 +115,12 @@ struct IndividualRunningExerciseView: View {
                                     .frame(width: 105, height: 55)
                                     .foregroundStyle(.background.tertiary)
                                 HStack{ //pause + image
-                                    Image(systemName: "checkmark")
-                                        .bold()
-                                        .foregroundStyle(.orange)
                                     Text("Finish Set")
                                         .foregroundStyle(.orange)
                                         .font(.subheadline.bold())
+                                    //Image(systemName: "checkmark")
+                                       // .bold()
+                                        //.foregroundStyle(.orange)
                                     
                                 }
                             }
@@ -141,7 +144,9 @@ struct IndividualRunningExerciseView: View {
                                     .foregroundStyle(.white)
                             }
                         }
-                    }.tint(.orange)
+                        
+                    }
+                    .tint(.orange)
 
                 }
 //                .frame(maxHeight:200)
@@ -154,13 +159,20 @@ struct IndividualRunningExerciseView: View {
         Button {
             //end session
         } label: {
-            ZStack{
-                RoundedRectangle(cornerRadius: 10)
-                    .frame(width: 340, height: 55)
-                Text("End Session")
-                    .foregroundStyle(.white)
-            }
-        }.tint(.orange)
+//            ZStack{
+//                RoundedRectangle(cornerRadius: 20)
+//                    .frame(width: 340, height: 55)
+//                Text("End Session")
+//                    //.foregroundStyle(.primary)
+//            }
+            Text("End Session")
+                .padding()
+                .frame(maxWidth: .infinity)
+                
+        }
+        .buttonStyle(.glass)
+        .padding(.horizontal)
+        
     }
 }
 #Preview {
