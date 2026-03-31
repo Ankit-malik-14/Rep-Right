@@ -6,14 +6,8 @@
 //
 import SwiftUI
 
-struct WorkoutDetailView: View {
+struct PresetDetailView: View {
     let exercises = Presets().presets[0].exercises
-//    let exercises = [
-//        Exercise(name: "Deadlift", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
-//        Exercise(name: "Squat", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional"),
-//        Exercise(name: "Zercher Squat", subtitle: "4 sets 10 reps", systemImage: "figure.strengthtraining.traditional")
-//    ]
-    
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -25,11 +19,9 @@ struct WorkoutDetailView: View {
                 }
                 .padding(.horizontal)
                 
-                // 2. Warmup Section (value-based, type-safe)
-                NavigationLink(value: Route.warmup) {
+                // 2. Warmup Section
                     WarmUpCardView()
                         .padding(.horizontal)
-                }
                 
                 // 3. Start Workout Button
                 Button(action: {
@@ -61,10 +53,11 @@ struct WorkoutDetailView: View {
                     }
                     
                     ForEach(exercises) { exercise in
-                        NavigationLink(value: Route.exercise(exercise)) {
-                            ExerciseCardView(exercise: exercise)
-                        }
-                        .buttonStyle(.plain) // Prevents standard blue highlight
+                        ExerciseCardView(exercise: exercise)
+
+//                        NavigationLink(value: Route.exercise(exercise)) {
+//                        }
+//                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal)
@@ -75,7 +68,6 @@ struct WorkoutDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-#Preview {
-    WorkoutDetailView()
+#Preview{
+        PresetDetailView()
 }

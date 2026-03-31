@@ -13,17 +13,17 @@ struct ExerciseListView: View {
         VStack(alignment: .leading){
             ScrollView(.vertical){
                 ForEach(exercises.exerciseList){ exercise in
-                    ZStack(alignment:.leading){
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundStyle(.background.secondary)
+                    NavigationLink(value: exercise) {
                         HStack(alignment: .center){
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width: 70, height: 70)
+                            RoundedRectangle(cornerRadius: 16)
+                            
+                                .frame(width: 67, height: 64)
+                                .shadow(radius: 100)
                                 .foregroundStyle(.background.tertiary)
                                 .padding(6)
                             VStack(alignment: .leading){
                                 Text(exercise.name)
-                                    .font(.title2)
+                                    .font(.headline)
                                 Text(exercise.targetAreas[0])
                                     .font(.footnote)
                                     .foregroundStyle(.secondary)
@@ -33,8 +33,11 @@ struct ExerciseListView: View {
                                 assisstanceAvailablityTag(type: .icon).padding(.horizontal)
                             }
                             
-                        }
-                    }.padding(.horizontal)
+                        }.background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background.secondary)).padding(.horizontal)
+                    }.buttonStyle(.plain)
+                    
+                }.navigationDestination(for: Exercise.self) { exercise in
+                    ExercisesView(exercise: exercise)
                 }
             }
         }
@@ -42,7 +45,6 @@ struct ExerciseListView: View {
 }
 
 #Preview {
-//    @Previewable @Environment(Exercises.self) var exercises
     ExerciseListView()
         .environment(Exercises())
 }

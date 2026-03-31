@@ -15,12 +15,12 @@ struct WorkoutRestView: View {
     // 2) next exercise info for passing info to NextExerciseCard
     
     @State var isSetFinished: Bool = false
-    @State var isLastSet: Bool = true
+    @State var isLastSet: Bool = false
     
     var body: some View {
         ZStack{
-            Color.blue
-                .ignoresSafeArea()
+            //Color.blue
+                //.ignoresSafeArea()
             //Text("Will be acting as sheet View for rest day")
             Button {
                 isSetFinished.toggle()

@@ -1,5 +1,5 @@
 //
-//  PresetsAccordingToBodyParts.swift
+//  DefaultPresets.swift
 //  Rep-Right
 //
 //  Created by Mayurakshi Das on 16/03/26.
@@ -7,32 +7,28 @@
 
 import SwiftUI
 
-struct PresetsAccordingToBodyParts: View {
-    @Environment(Presets.self) var preset
+struct DefaultPresets: View {
+    var preset: Presets
     var body: some View {
         VStack(spacing: 5){
             HStack{
                 Text("Presets")
-                    .font(.largeTitle)
+                    .font(.title)
                     .bold()
-                    .padding()
+
                 Spacer()
-                Button("See all") {
-                    //
-                }.buttonStyle(.automatic)
-                .tint(.orange)
-//                .padding()
+                NavigationLink(value: ExpandedViews.defaultPresets) {
+                    Text("See all")
+                }.tint(.orange)
             }.padding(.horizontal)
             
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
+                        NavigationLink(value: Presets().presets[idx]) {
+                            PresetTileViewType(preset: preset.presets[idx], type: .large)
+                        }.buttonStyle(.plain)
                         
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width: 165, height: 150)
-                                .foregroundStyle(.background.secondary)
-                            Text(preset.presets[idx].name)}
                     }
                 }.padding(.horizontal)
             }
@@ -42,8 +38,12 @@ struct PresetsAccordingToBodyParts: View {
     }
 }
 
+
+ 
+
+
 #Preview {
 //    @Previewable @Environment(Presets.self) var preset
-    PresetsAccordingToBodyParts()
+    DefaultPresets(preset: Presets())
         .environment(Presets())
 }

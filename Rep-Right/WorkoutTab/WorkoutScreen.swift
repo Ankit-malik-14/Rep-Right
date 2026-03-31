@@ -7,7 +7,16 @@
 
 import SwiftUI
 
+enum ExpandedViews{
+    case customPresets
+    case defaultPresets
+    case ExerciseList
+}
+
 struct WorkoutScreen: View {
+    @Environment(Exercises.self) var exercises
+    @Environment(Presets.self) var preset
+    @Environment(CustomPresetsDumyData.self) var customPresets
     var body: some View {
         NavigationStack{
             ScrollView(.vertical, showsIndicators: false) {
@@ -15,36 +24,48 @@ struct WorkoutScreen: View {
                     
                     ScheduledWorkoutCard()
                     
-                    CustomPreset()
+                    CustomPreset(preset: customPresets)
                     
-                    PresetsAccordingToBodyParts()
+                    DefaultPresets(preset: preset)
                     HStack{
                         Text("Exercises")
-                            .font(.largeTitle.bold())
-                            .padding()
+                            .font(.title.bold())
+                            .padding(.horizontal)
                         Spacer()
                         Button("See all") {
                             //
                         }.tint(.orange)
-                        .padding()
+                            .padding(.horizontal)
                     }
                     ExerciseListView()
                 }
-            }.navigationTitle("Workouts")
-        }.toolbar {
+            }.navigationDestination(for: Preset.self, destination: { preset in
+                WorkoutDetailView(preset: preset)
+            })
+            .navigationDestination(for: ExpandedViews.self, destination: { view in
+                switch view {
+                case .ExerciseList:
+                    ExerciseListView()
+                case .customPresets:
+                    CustomPresetsListView(preset: customPresets)
+                case .defaultPresets:
+                    DefaultPresetListView(presets: preset)
+                }
+            })
+            .navigationTitle("Workouts")
+        }
+        .toolbar{
             ToolbarItem {
-                Image(systemName: "person.circle")
+                    Image(systemName: "person.circle")
             }
         }
     }
 }
 
 #Preview {
-//    @Previewable @Environment(WeeklySchedules.self) var weeklySchedules
-//    @Previewable @Environment(Presets.self) var preset
-//    @Previewable @Environment(Exercises.self) var exercises
     NavigationStack{
         WorkoutScreen()
+            .environment(CustomPresetsDumyData())
             .environment(WeeklySchedules())
             .environment(Presets())
             .environment(Exercises())

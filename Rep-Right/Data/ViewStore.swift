@@ -13,9 +13,12 @@ enum assistanceTagType{
     case text
     case iconAndText
 }
+enum PresetViewType {
+    case large
+    case small
+}
 
-
-//MARK: - Views
+//MARK: - Assistance Availability Indicator
 
 @ViewBuilder
 func assisstanceAvailablityTag(type: assistanceTagType) -> some View{
@@ -50,12 +53,38 @@ func assisstanceAvailablityTag(type: assistanceTagType) -> some View{
     }
 }
 
+//MARK: - Preset View maker
+
+struct PresetTileViewType: View {
+    var preset: Preset
+    var type: PresetViewType
+    var body: some View {
+        switch type {
+        case .large:
+            ZStack(alignment: .topLeading){
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 160, height: 185)
+                    .foregroundStyle(.background.secondary)
+                Text(preset.name).padding()
+            }
+        case .small:
+            ZStack(alignment: .topLeading){
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 160, height: 185)
+                    .foregroundStyle(.background.secondary)
+                Text(preset.name).padding()
+            }
+        }
+        
+    }
+}
 
 
 //MARK: - View Testing
 struct ViewStore: View {
     var body: some View {
         assisstanceAvailablityTag(type: .icon)
+        PresetTileViewType(preset: Presets().presets[0], type: .large)
     }
 }
 

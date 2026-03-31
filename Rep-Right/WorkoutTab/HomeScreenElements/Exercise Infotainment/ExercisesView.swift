@@ -8,50 +8,52 @@
 import SwiftUI
 
 struct ExercisesView: View {
-    @Binding var exercises: Exercise
+    var exercise: Exercise
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    ZStack{
-                        Image(systemName: "person.fill")
-                            .resizable()
-                            .frame(width: 100,height: 100)
-                        
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.gray.opacity(0.15))
-                            .frame(height: 300)
-                            .padding(.horizontal)
+                    ZStack(alignment: .topLeading){
+                        assisstanceAvailablityTag(type: .iconAndText).padding().offset(x:13)
+                        ZStack{
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .frame(width: 100,height: 100)
+                            
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.gray.opacity(0.15))
+                                .frame(height: 300)
+                                .padding(.horizontal)
+                        }
                     }
                     HStack {
-                        Text(exercises.name)
+                        Text(exercise.name)
                             .font(.title)
                             .fontWeight(.bold)
                         
                         Spacer()
-                        assisstanceAvailablityTag(type: .iconAndText)
-                    }
+                                            }
                     .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 3) {
                         
                         HStack(alignment: .top) {
                             Text("Focus Area :")
-                                .fontWeight(.semibold)
-                                .frame(width: 110, alignment: .leading)
+                                .font(.footnote)
+                                .fontWeight(.bold)
                             
-                            Text(arrayToString(arrayOfStrings: exercises.targetAreas))
-                                .font(.subheadline)
-                        }
+                            Text(arrayToString(arrayOfStrings: exercise.targetAreas))
+                                .font(.footnote)
+                        }.padding([.bottom],5)
                         
                         HStack {
                             Text("Equipment :")
-                                .fontWeight(.semibold)
-                                .frame(width: 110, alignment: .leading)
+                                .font(.footnote)
+                                .fontWeight(.bold)
                             
-                            Text(arrayToString(arrayOfStrings: exercises.equipments))
-                                .font(.subheadline)
-                        }
+                            Text(arrayToString(arrayOfStrings: exercise.equipments))
+                                .font(.footnote)
+                        }.padding([.bottom],5)
                         
                     }
                     .padding(.horizontal)
@@ -65,7 +67,7 @@ struct ExercisesView: View {
                         .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        pointView(steps: exercises.executionSteps)
+                        pointView(steps: exercise.executionSteps)
                     .padding(.horizontal)
                     }
                     .padding(.horizontal)
@@ -75,7 +77,7 @@ struct ExercisesView: View {
                         .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        pointView(steps: exercises.tips)
+                        pointView(steps: exercise.tips)
                             .padding(.horizontal)
                         }
                     .padding(.horizontal)
@@ -83,7 +85,7 @@ struct ExercisesView: View {
                     
                     HStack(spacing: 12) {
                         
-                        Button(action: {
+                        /*Button(action: {
                             
                         }) {
                             Text("Done")
@@ -93,7 +95,7 @@ struct ExercisesView: View {
                                 .foregroundColor(.black)
                                 .cornerRadius(25)
                         }
-                        
+                        */
                         Button(action: {
                             
                         }) {
@@ -108,7 +110,7 @@ struct ExercisesView: View {
                             .cornerRadius(25)
                         }
                         
-                    }
+                    }.padding()
                 }
             }
         }
@@ -116,10 +118,10 @@ struct ExercisesView: View {
     }
 }
 #Preview {
-    @Previewable @State var exercise = Exercise(
+    @Previewable var exercise = Exercise(
         name: "Push-Up",
         targetAreas: ["Chest", "Triceps", "Shoulders", "Core"],
-        equipments: ["Bodyweight"],
+        equipments: [],
         executionSteps: [
             "Start in a high plank with hands slightly wider than shoulder-width.",
             "Brace your core and keep a straight line from head to heels.",
@@ -138,7 +140,7 @@ struct ExercisesView: View {
             SetData(sets: 1, reps: 10)
         ]
     )
-    ExercisesView(exercises: $exercise)
+    ExercisesView(exercise: exercise)
 }
 
 
