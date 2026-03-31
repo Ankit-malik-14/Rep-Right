@@ -8,7 +8,7 @@ struct OnboardingScreenView1: View {
                 UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30)
                     .fill(Color.gray.opacity(0.2))
                     .overlay(
-                        Image(.deadlift)
+                        Image(.aIassistance)
                             .resizable()
                             .scaledToFill() // Changed from .scaledToFit()
                     )

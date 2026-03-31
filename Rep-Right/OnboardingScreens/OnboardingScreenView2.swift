@@ -3,20 +3,18 @@ import SwiftUI
 struct OnboardingScreenView2: View {
     var body: some View {
         VStack(spacing: 0) {
-            ZStack(alignment: .center) {
-                // Replaced solid fill with a clipped image
-                Image(.AI)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 450) // Constrains the image so it scales correctly
-                    .clipShape(
-                        UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30)
-                    )
-                    .ignoresSafeArea(edges: .top)
-            }
-            .frame(height: 450)
-            .padding(.bottom, 32)
             
+            Image(.deadlift)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 500)
+                .clipShape(
+                    UnevenRoundedRectangle(bottomLeadingRadius: 50, bottomTrailingRadius: 50)
+                )
+                .ignoresSafeArea(edges: .top)
+                .padding(.bottom, 32)
+            
+            // Text Section
             VStack(spacing: 16) {
                 Text("Perfect your form")
                     .font(.system(size: 30, weight: .bold))
