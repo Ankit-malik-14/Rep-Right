@@ -26,7 +26,7 @@ struct AccuracyMeterView: View {
                     SuggestionView()
                 }
                 .navigationTitle("Exercise Name")
-                .font(.system(size: 20, weight: .bold, design: .default))
+                //.font(.system(size: 20, weight: .bold, design: .default))
                 .navigationBarTitleDisplayMode(.inline)
             }
         }

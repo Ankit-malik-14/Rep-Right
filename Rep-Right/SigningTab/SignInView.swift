@@ -11,7 +11,9 @@ struct SignInView: View {
             
             
             Text("Sign In")
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .fontDesign(.rounded)
                 .padding(.bottom, 20)
             
             
@@ -19,7 +21,7 @@ struct SignInView: View {
                 
                 HStack {
                     Image(systemName: "envelope.fill")
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .frame(width: 30)
                     TextField("Email", text: $email)
                         .keyboardType(.emailAddress)
@@ -27,18 +29,18 @@ struct SignInView: View {
                         .autocorrectionDisabled(true)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.gray.opacity(0.3))
                 .cornerRadius(12)
                 
                
                 HStack {
                     Image(systemName: "lock.fill")
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .frame(width: 30)
                     SecureField("Password", text: $password)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.gray.opacity(0.3))
                 .cornerRadius(12)
             }
             .padding(.horizontal, 24)
@@ -50,7 +52,7 @@ struct SignInView: View {
             }) {
                 Text("Sign In")
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(.orange)
@@ -64,7 +66,7 @@ struct SignInView: View {
                 // Action here
             }
             .font(.footnote)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
             .padding(.top, 8)
             
             Spacer()

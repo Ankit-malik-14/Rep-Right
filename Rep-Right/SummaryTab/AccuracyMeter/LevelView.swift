@@ -37,13 +37,13 @@ struct LevelView: View {
 
     var body: some View {
         VStack(alignment: .center) {
-            HStack{
-                Text("Accuracy -")
+            HStack(spacing: 20){
+                Text("Accuracy")
                     .fontWeight(.bold)
-                    .font(.system(size: 30))
+                    .font(.title2)
                 Text(quote)
                     .fontWeight(.light)
-                    .font(.system(size: 30))
+                    .font(.title2)
                     .foregroundStyle(quoteColor)
                     .multilineTextAlignment(.center)
             }

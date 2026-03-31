@@ -12,7 +12,7 @@ struct RiskView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Possible Risk")
-                .font(.headline)
+                .font(.body)
                 .fontWeight(.bold)
             
             riskRow(text: riskText)

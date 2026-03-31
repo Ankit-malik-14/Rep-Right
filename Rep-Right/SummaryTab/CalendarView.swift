@@ -33,12 +33,14 @@ struct CalendarView: View {
                 }) {
                     HStack(spacing: 4) {
                         Text(displayedMonthYear)
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.black)
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.black)
                         
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.orange)
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.orange)
                             // Optional: Rotate chevron when pressed
                             .rotationEffect(.degrees(showMonthCalendar ? 90 : 0))
                             .animation(.easeInOut, value: showMonthCalendar)
@@ -54,8 +56,9 @@ struct CalendarView: View {
                         generateWeek()
                     }) {
                         Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.orange)
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.orange)
                     }
                     
                     Button(action: {
@@ -63,8 +66,9 @@ struct CalendarView: View {
                         generateWeek()
                     }) {
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.orange)
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.orange)
                     }
                 }
             }
@@ -85,7 +89,7 @@ struct CalendarView: View {
         }
         .padding(.top, 20)
         .padding(.bottom, 10)
-        .background(Color.white)
+        .background(.white)
         .onAppear {
             generateWeek() // Generate initial week on load
         }
@@ -178,12 +182,14 @@ struct DayView: View {
     var body: some View {
         VStack(spacing: 12) {
             Text(day.name)
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(.gray)
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundStyle(.gray)
             
             Text(day.number)
-                .font(.system(size: 20, weight: .medium))
-                .foregroundColor(textColor)
+                .font(.title3)
+                .fontWeight(.medium)
+                .foregroundStyle(textColor)
                 .frame(width: 44, height: 44)
                 .background(backgroundColor)
                 .clipShape(Circle())
@@ -200,7 +206,7 @@ struct DayView: View {
     
     var backgroundColor: Color {
         switch day.status {
-        case .streak: return Color.orange.opacity(0.15)
+        case .streak: return .orange.opacity(0.15)
         case .current: return .orange
         case .missed, .future: return .clear
         }

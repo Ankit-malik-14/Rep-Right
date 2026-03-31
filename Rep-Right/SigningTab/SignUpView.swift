@@ -10,7 +10,9 @@ struct SignUpView: View {
             Spacer()
             
             Text("Sign In")
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .fontDesign(.rounded)
                 .padding(.bottom, 20)
             
             
@@ -18,7 +20,7 @@ struct SignUpView: View {
                
                 HStack {
                     Image(systemName: "envelope.fill")
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .frame(width: 30) // Keeps icons aligned
                     
                     TextField("Email", text: $email)
@@ -27,19 +29,19 @@ struct SignUpView: View {
                         .autocorrectionDisabled(true)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.gray.opacity(0.3))
                 .cornerRadius(12)
                 
               
                 HStack {
                     Image(systemName: "lock.fill")
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                         .frame(width: 30)
                     
                     SecureField("Password", text: $password)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.gray.opacity(0.3))
                 .cornerRadius(12)
             }
             .padding(.horizontal, 24)
@@ -51,7 +53,7 @@ struct SignUpView: View {
             }) {
                 Text("Sign In")
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(.orange)
@@ -65,7 +67,7 @@ struct SignUpView: View {
                 // Action here
             }
             .font(.footnote)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
             .padding(.top, 8)
             
             Spacer()

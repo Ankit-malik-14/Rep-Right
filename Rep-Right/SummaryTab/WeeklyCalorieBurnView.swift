@@ -96,7 +96,7 @@ struct WeeklyCalorieBurnView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .stroke(.gray.opacity(0.3), lineWidth: 1)
                 .background(Color.white.cornerRadius(15))
         )
         .padding(.horizontal)

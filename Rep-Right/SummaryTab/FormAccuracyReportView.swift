@@ -46,7 +46,7 @@ struct FormAccuracyReportView: View {
                     .foregroundColor(.orange)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(Color.gray.opacity(0.1))
+                    .background(.gray.opacity(0.1))
                     .cornerRadius(10)
             }
             .padding(.horizontal, 20)
@@ -54,7 +54,7 @@ struct FormAccuracyReportView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .stroke(.gray.opacity(0.3), lineWidth: 1)
                 .background(Color.white.cornerRadius(15))
         )
         .padding(.horizontal)

@@ -24,9 +24,9 @@ struct GaugesView: View {
                     .fill(.ultraThinMaterial)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                            .stroke(.white.opacity(0.4), lineWidth: 1)
                     )
-                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                    .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 5)
                     .frame(height: 250)
                     .padding(.horizontal)
                 Gauge(value:value, in: 0...100) {
@@ -44,7 +44,7 @@ struct GaugesView: View {
                 Text("\(Int(value))")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(valueColor)
+                    .foregroundStyle(valueColor)
                 
             }
 

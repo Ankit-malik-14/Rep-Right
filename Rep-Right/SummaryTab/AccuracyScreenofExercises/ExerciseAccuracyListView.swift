@@ -1,4 +1,5 @@
 import SwiftUI
+
 struct ExerciseModel: Identifiable {
     let id = UUID()
     let name: String
@@ -9,9 +10,14 @@ struct ExerciseModel: Identifiable {
 
 struct ExerciseAccuracyListView: View {
     //@Binding var value : value = .AccuracyMeterView
-    
+
     @State private var exercises: [ExerciseModel] = [
-        ExerciseModel(name: "Deadlift", targetMuscle: "Back", timeAgo: "Yesterday", accuracy: 32)
+        ExerciseModel(
+            name: "Deadlift",
+            targetMuscle: "Back",
+            timeAgo: "Yesterday",
+            accuracy: 32
+        )
     ]
 
     var body: some View {
@@ -25,8 +31,8 @@ struct ExerciseAccuracyListView: View {
                                     Text(exercise.name)
                                         .font(.title3)
                                         .fontWeight(.bold)
-                                        .foregroundColor(.primary)
-                                    
+                                        .foregroundStyle(.primary)
+
                                     HStack(spacing: 12) {
                                         Text(exercise.targetMuscle)
                                         Text(exercise.timeAgo)
@@ -34,9 +40,9 @@ struct ExerciseAccuracyListView: View {
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                                 }
-                                
+
                                 Spacer()
-                                
+
                                 Text("\(exercise.accuracy)%")
                                     .font(.headline)
                                     .foregroundStyle(.orange)
@@ -45,7 +51,9 @@ struct ExerciseAccuracyListView: View {
                                     .font(.subheadline.weight(.semibold))
                             }
                             .padding(.vertical, 4)
-                            NavigationLink(destination: AccuracyMeterView(value: 32.0)) {
+                            NavigationLink(
+                                destination: AccuracyMeterView(value: 32.0)
+                            ) {
                                 EmptyView()
                             }
                             .opacity(0.01)
@@ -67,5 +75,5 @@ struct ExerciseAccuracyListView: View {
 
 #Preview {
     ExerciseAccuracyListView()
-        
+
 }

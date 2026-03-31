@@ -14,7 +14,7 @@ struct SuggestionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Suggestion")
-                .font(.headline)
+                .font(.body)
                 .fontWeight(.bold)
             
             suggestionRow(text: suggestionText)

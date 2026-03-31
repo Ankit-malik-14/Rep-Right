@@ -35,9 +35,9 @@ struct MetricsView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(Color.white)
+        .background(.white)
         .clipShape(.rect(cornerRadius: 20))
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
         .padding(.horizontal)
     }
 }
@@ -76,7 +76,8 @@ struct MetricCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
-        .background(Color(white: 0.97))
+        //.background(Color(white: 0.97))
+        .background(.gray.opacity(0.1))
         .clipShape(.rect(cornerRadius: 12))
     }
 }

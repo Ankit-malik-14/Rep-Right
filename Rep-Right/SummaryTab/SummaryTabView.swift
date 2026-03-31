@@ -23,7 +23,7 @@ struct SummaryTabView: View {
                     }) {
                         Image(systemName: "person.crop.circle")
                             .font(.title2)
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                     }
                 }
             }

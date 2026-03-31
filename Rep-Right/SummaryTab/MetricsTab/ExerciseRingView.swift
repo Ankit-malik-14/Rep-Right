@@ -30,7 +30,7 @@ struct ExerciseRingView: View {
             
             Text("Total Exercises")
                 .font(.headline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
             
