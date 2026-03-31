@@ -148,7 +148,7 @@ class Presets {
 }
 
 @Observable
-class CustomPresetsDumyData{
+class CustomPresetsDummyData{
     var customPresets: [Preset] = [
         Preset(
             name: "Full body ",
@@ -195,7 +195,7 @@ class DummyUserProfiles {
 }
 @Observable
 class WeeklySchedules{
-    var schedules: [Weekday: Preset] = [.friday:Preset(
+    var schedules: [Weekday: Preset] = [.tuesday:Preset(
         name: "Full Body Starter",
         exercises: Exercises().exerciseList,
         isWarmpUp: false,

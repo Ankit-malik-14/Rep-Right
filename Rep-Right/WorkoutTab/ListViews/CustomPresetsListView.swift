@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomPresetsListView: View {
-    var preset: CustomPresetsDumyData
+    var preset: CustomPresetsDummyData
     var body: some View {
        
             List{
@@ -49,7 +49,7 @@ struct CustomPresetsListView: View {
 
 #Preview {
     NavigationStack{
-        CustomPresetsListView(preset: CustomPresetsDumyData())
-            .environment(CustomPresetsDumyData())
+        CustomPresetsListView(preset: CustomPresetsDummyData())
+            .environment(CustomPresetsDummyData())
     }
 }

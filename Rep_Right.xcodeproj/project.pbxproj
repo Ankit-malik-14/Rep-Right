@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		1F50D7922F68005100A7755C /* Rep-Right.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rep-Right.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F50D7922F68005100A7755C /* Rep_Right.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rep_Right.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		1F50D7932F68005100A7755C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F50D7922F68005100A7755C /* Rep-Right.app */,
+				1F50D7922F68005100A7755C /* Rep_Right.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1F50D7912F68005100A7755C /* Rep-Right */ = {
+		1F50D7912F68005100A7755C /* Rep_Right */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F50D79D2F68005200A7755C /* Build configuration list for PBXNativeTarget "Rep-Right" */;
+			buildConfigurationList = 1F50D79D2F68005200A7755C /* Build configuration list for PBXNativeTarget "Rep_Right" */;
 			buildPhases = (
 				1F50D78E2F68005100A7755C /* Sources */,
 				1F50D78F2F68005100A7755C /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				1F50D7942F68005100A7755C /* Rep-Right */,
 			);
-			name = "Rep-Right";
+			name = Rep_Right;
 			packageProductDependencies = (
 			);
 			productName = "Rep-Right";
-			productReference = 1F50D7922F68005100A7755C /* Rep-Right.app */;
+			productReference = 1F50D7922F68005100A7755C /* Rep_Right.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1F50D78D2F68005100A7755C /* Build configuration list for PBXProject "Rep-Right" */;
+			buildConfigurationList = 1F50D78D2F68005100A7755C /* Build configuration list for PBXProject "Rep_Right" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1F50D7912F68005100A7755C /* Rep-Right */,
+				1F50D7912F68005100A7755C /* Rep_Right */,
 			);
 		};
 /* End PBXProject section */
@@ -313,7 +313,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F50D78D2F68005100A7755C /* Build configuration list for PBXProject "Rep-Right" */ = {
+		1F50D78D2F68005100A7755C /* Build configuration list for PBXProject "Rep_Right" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F50D79B2F68005200A7755C /* Debug */,
@@ -322,7 +322,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F50D79D2F68005200A7755C /* Build configuration list for PBXNativeTarget "Rep-Right" */ = {
+		1F50D79D2F68005200A7755C /* Build configuration list for PBXNativeTarget "Rep_Right" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F50D79E2F68005200A7755C /* Debug */,

@@ -36,7 +36,7 @@ struct ScheduledWorkoutCard: View {
                     //Base rectangle -- IMAGE MASK
                     RoundedRectangle(cornerRadius: 20)
                         .foregroundStyle(.background.secondary)
-                        .frame(width:.infinity, height: 255)
+                        .frame(width: .infinity, height: 255)
                         .padding()
                     
                     // for details overlay
