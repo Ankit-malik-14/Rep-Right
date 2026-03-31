@@ -14,19 +14,20 @@ struct ImageAndInfoCard: View {
             
             // Background image area
             RoundedRectangle(cornerRadius: 35)
-                .frame(maxWidth: .infinity, maxHeight: 280)
+                .frame(maxWidth: .infinity, maxHeight: 250)
                 .padding(.horizontal)
+                .foregroundStyle(.background.secondary)
 
             // Info card with embedded content
             RoundedRectangle(cornerRadius: 35)
-                .glassEffect(.regular,in: .rect(cornerRadius: 35))
-                .frame(maxHeight: 150)
-                
-                .foregroundStyle(.background.secondary)
+//                .glassEffect(.regular,in: .rect(cornerRadius: 35))
+                .frame(maxHeight: 128)
+                .shadow(radius: 10)
+                .foregroundStyle(.background.tertiary)
                 .overlay(
                     VStack(alignment: .leading, spacing: 8) {
                         Text("\(preset.presets[0].name)")
-                            .font(.largeTitle)
+                            .font(.title)
                             .bold()
 
                         HStack {
@@ -36,7 +37,7 @@ struct ImageAndInfoCard: View {
                                     .font(.callout.bold())
                                     .foregroundStyle(.secondary)
                                 Text("3/4")
-                                    .font(.title.bold())
+                                    .font(.title2.bold())
                             }
 
                             Spacer()
@@ -47,7 +48,7 @@ struct ImageAndInfoCard: View {
                                     .font(.callout.bold())
                                     .foregroundStyle(.secondary)
                                 Text("60 kg")
-                                    .font(.title.bold())
+                                    .font(.title2.bold())
                             }
                         }
                     }

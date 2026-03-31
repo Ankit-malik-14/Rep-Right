@@ -33,17 +33,21 @@ struct CustomPresetsListView: View {
                 .navigationTitle("Custom")
                 
 
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    //
-                } label: {
-                    Text("Edit")
-                }.buttonStyle(.bordered)
-                    .foregroundStyle(.orange)
-
-            }
-    }
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        Button(role: .destructive){
+                            //
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                        Button{
+                            //
+                        }
+                        label: {
+                            Image(systemName: "square.and.pencil")
+                        }
+                    }
+                }
     }
 }
 
