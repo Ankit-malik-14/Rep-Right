@@ -10,9 +10,8 @@ struct OnboardingScreenView1: View {
                     .overlay(
                         Image(.aIassistance)
                             .resizable()
-                            .scaledToFill() // Changed from .scaledToFit()
+                            .scaledToFill() 
                     )
-                    // Clip the filled image so it doesn't overflow the rounded corners
                     .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30))
                     .ignoresSafeArea(edges: .top)
                 

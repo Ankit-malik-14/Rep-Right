@@ -27,7 +27,7 @@ struct WeeklyCalorieBurnView: View {
                 
                 Text("Daily metabolic output trend")
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.primary)
             }
             .padding([.horizontal, .top], 20)
             .padding(.bottom, 30)
@@ -37,9 +37,9 @@ struct WeeklyCalorieBurnView: View {
                     x: .value("Day", item.day),
                     y: .value("Calories", item.calories)
                 )
-                .interpolationMethod(.catmullRom)
+                //.interpolationMethod(.catmullRom)
                 .foregroundStyle(.orange)
-                .lineStyle(StrokeStyle(lineWidth: 3))
+                //.lineStyle(StrokeStyle(lineWidth: 3))
                 
                 AreaMark(
                     x: .value("Day", item.day),
@@ -63,7 +63,7 @@ struct WeeklyCalorieBurnView: View {
                             Text(String(dayStr.prefix(1)))
                                 .font(.caption2)
                                 .fontWeight(.bold)
-                                .foregroundColor(.gray)
+                                .foregroundStyle(.primary)
                         }
                     }
                 }
@@ -89,7 +89,7 @@ struct WeeklyCalorieBurnView: View {
                 
                 Text("80% of Weekly Calorie Target")
                     .font(.caption2)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.primary)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
@@ -97,7 +97,7 @@ struct WeeklyCalorieBurnView: View {
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                .background(Color.white.cornerRadius(15))
+                //.background(Color.white.cornerRadius(15))
         )
         .padding(.horizontal)
     }

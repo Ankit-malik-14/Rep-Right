@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SuggestionView: View {
     // We have to use State Bindng depends on accuracy 
-    let suggestionText = "Your Back"
+    let suggestionText = "Brace core tightly to protect spine."
+    let suggestionText2 = "Hinge hips while keeping back flat."
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -18,14 +19,14 @@ struct SuggestionView: View {
                 .fontWeight(.bold)
             
             suggestionRow(text: suggestionText)
-            suggestionRow(text: suggestionText)
+            suggestionRow(text: suggestionText2)
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
+        .background (
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.background.secondary)
-        }
+        )
         .padding(.horizontal)
     }
     

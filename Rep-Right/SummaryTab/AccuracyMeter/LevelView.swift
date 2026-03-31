@@ -52,6 +52,6 @@ struct LevelView: View {
     }
 }
 #Preview {
-    @Previewable @State var value = 40.0
+    @Previewable @State var value = 30.0
     LevelView(value: $value)
 }

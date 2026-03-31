@@ -11,7 +11,7 @@ struct SignInView: View {
             
             
             Text("Sign In")
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(.system(size: 40, weight: .bold))
                 .padding(.bottom, 20)
             
             
@@ -19,26 +19,26 @@ struct SignInView: View {
                 
                 HStack {
                     Image(systemName: "envelope.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.primary)
                         .frame(width: 30)
                     TextField("Email", text: $email)
                         .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled(true)
+                       // .textInputAutocapitalization(.never)
+                        //.autocorrectionDisabled(true)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.quaternary)
                 .cornerRadius(12)
                 
                
                 HStack {
                     Image(systemName: "lock.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.primary)
                         .frame(width: 30)
                     SecureField("Password", text: $password)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.quaternary)
                 .cornerRadius(12)
             }
             .padding(.horizontal, 24)
@@ -66,7 +66,6 @@ struct SignInView: View {
             .font(.footnote)
             .foregroundColor(.secondary)
             .padding(.top, 8)
-            
             Spacer()
             Spacer()
         }

@@ -22,7 +22,6 @@ struct AccuracyMeterView: View {
                     Divider()
                         .padding(.vertical)
                     RiskView()
-                    
                     SuggestionView()
                 }
                 .navigationTitle("Exercise Name")
@@ -34,5 +33,5 @@ struct AccuracyMeterView: View {
 }
 
 #Preview {
-    AccuracyMeterView(value: 60.0)
+    AccuracyMeterView(value: 30.0)
 }
