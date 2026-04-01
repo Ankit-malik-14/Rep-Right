@@ -2,17 +2,17 @@ import SwiftUI
 
 struct OnboardingScreenView2: View {
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
             
-            Image(.deadlift)
+            Image("deadliftForOnboarding")
                 .resizable()
                 .scaledToFill()
-                .frame(height: 500)
+                .frame(maxWidth: .infinity, maxHeight: 650)
                 .clipShape(
-                    UnevenRoundedRectangle(bottomLeadingRadius: 50, bottomTrailingRadius: 50)
+                    UnevenRoundedRectangle(bottomLeadingRadius: 40, bottomTrailingRadius: 40)
                 )
-                .ignoresSafeArea(edges: .top)
-                .padding(.bottom, 32)
+               
+//                .padding(.bottom, 32)
             
             // Text Section
             VStack(spacing: 16) {
@@ -30,6 +30,7 @@ struct OnboardingScreenView2: View {
             
             Spacer()
         }
+        .ignoresSafeArea(.all, edges: .top)
     }
 }
 

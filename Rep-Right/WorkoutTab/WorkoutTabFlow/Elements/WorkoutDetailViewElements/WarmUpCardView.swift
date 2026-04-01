@@ -31,7 +31,7 @@ struct WarmUpCardView: View {
                 }
             }
             
-//            NavigationLink(value: Route.warmup) {
+//            NavigationLink(value: ) {
 //                Text("Start Warmup")
 //                    .font(.subheadline)
 //                    .fontWeight(.semibold)

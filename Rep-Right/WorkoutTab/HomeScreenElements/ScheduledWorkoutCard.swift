@@ -32,68 +32,78 @@ struct ScheduledWorkoutCard: View {
     var body: some View {
         if let todaysSchedule = todaysSchedule{
             VStack{
-                ZStack(alignment: .bottom){
+                ZStack(alignment: .topLeading){
                     //Base rectangle -- IMAGE MASK
                     RoundedRectangle(cornerRadius: 20)
                         .foregroundStyle(.background.secondary)
-                        .frame(width:.infinity, height: 255)
+                        .frame(width: .infinity, height: 255)
                         .padding()
+
                     
-                    // for details overlay
-                    UnevenRoundedRectangle(bottomLeadingRadius: 20,bottomTrailingRadius: 20)
-                        .foregroundStyle(.background.tertiary)
-                        .frame(width: .infinity, height: 140)
-                        .shadow(radius: 5)
-                        .overlay {
-                            
-                            //Vstack for info part
-                            VStack(alignment: .leading, spacing: -20){
-                                HStack{
-                                    VStack(alignment: .leading){
-                                        
-                                        Text("Today's Routine")
-                                            .foregroundStyle(.orange)
-                                            .font(.footnote).fontWeight(.heavy)
-                                        Text(todaysSchedule.name)
-                                            .font(.title3.bold())
-                                        Text(focousPrinter(areas: todaysSchedule.focousArea))
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding()
-                                    
+                        RoundedRectangle(cornerRadius: 20)
+                            .foregroundStyle(.background.secondary)
+                            .frame(width:.infinity, height: 255)
+                            .overlay{
+                                VStack(alignment: .leading){
+                                    assisstanceAvailablityTag(type: .iconAndText)
+                                        .padding()
                                     Spacer()
-                                    
-                                    
-                                    VStack(alignment: .trailing){
-                                        Text("Duration")
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                        Text("\(todaysSchedule.estTime) min")
-                                            .font(.title2)
-                                        
-                                    }
-                                    .padding()
+                                    UnevenRoundedRectangle(bottomLeadingRadius: 20,bottomTrailingRadius: 20)
+                                        .foregroundStyle(.background.tertiary)
+                                        .frame(width: .infinity, height: 120)
+                                        .shadow(radius: 5)
+                                        .overlay {
+                                            
+                                            //Vstack for info part
+                                            VStack(alignment: .leading, spacing: -20){
+                                                HStack{
+                                                    VStack(alignment: .leading){
+                                                        
+                                                        Text("Today's Routine")
+                                                            .foregroundStyle(.orange)
+                                                            .font(.footnote).fontWeight(.heavy)
+                                                        Text(todaysSchedule.name)
+                                                            .font(.title3.bold())
+                                                        
+                                                    }
+                                                    .padding()
+                                                    
+                                                    Spacer()
+                                                    
+                                                    
+                                                    VStack(alignment: .trailing){
+                                                        Text("Duration")
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                        Text("\(todaysSchedule.estTime) min")
+                                                            .font(.caption)
+                                                            
+                                                        
+                                                    }
+                                                    .padding()
+                                                }
+        
+                                                HStack{
+                                                    
+                                                    Text(focousPrinter(areas: todaysSchedule.focousArea))
+                                                        .font(.subheadline)
+                                                        .foregroundStyle(.secondary)
+                                                    Spacer()
+                                                    Button {
+                                                        //
+                                                    } label: {
+                                                        Text("Start Workout")
+                                                    }.buttonStyle(.borderedProminent)
+                                                        .tint(.orange)
+                                                    
+                                                } // end of hstack focus area+button
+                                                .padding()
+                                            }
+                                            
+                                        }
                                 }
-                                
-                                
-                                
-                                HStack{
-                                    
-                                    
-                                    Spacer()
-                                    Button {
-                                        //
-                                    } label: {
-                                        Text("Start Workout")
-                                    }.buttonStyle(.borderedProminent)
-                                        .tint(.orange)
-                                    
-                                } // end of hstack focus area+button
-                                .padding()
                             }
-                            
-                        }.padding()
+                            .padding()
                 }
             }
         }

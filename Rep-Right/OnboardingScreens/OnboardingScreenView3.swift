@@ -50,6 +50,12 @@ struct OnboardingScreenView3: View {
             }
             
             Spacer()
+            Button {
+                //
+            } label: {
+                continueButtonView()
+            }
+
         }
     }
 }

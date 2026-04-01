@@ -40,3 +40,17 @@ func pointView(steps: [String]) -> some View {
         }
     }
 }
+
+//MARK: - CONTINUE BUTTON
+@ViewBuilder
+func continueButtonView() -> some View {
+    ZStack{
+        Capsule()
+            .frame(width: 350, height: 50)
+            .foregroundColor(.orange)
+            .padding(10)
+        Text("Continue")
+            .font(.system(size: 16, weight: .bold, design: .rounded))
+            .foregroundColor(.white)
+    }
+}

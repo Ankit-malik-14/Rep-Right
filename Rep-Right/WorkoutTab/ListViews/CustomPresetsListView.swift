@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomPresetsListView: View {
-    var preset: CustomPresetsDumyData
+    var preset: CustomPresetsDummyData
     var body: some View {
        
             List{
@@ -33,23 +33,27 @@ struct CustomPresetsListView: View {
                 .navigationTitle("Custom")
                 
 
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    //
-                } label: {
-                    Text("Edit")
-                }.buttonStyle(.bordered)
-                    .foregroundStyle(.orange)
-
-            }
-    }
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        Button(role: .destructive){
+                            //
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                        Button{
+                            //
+                        }
+                        label: {
+                            Image(systemName: "square.and.pencil")
+                        }
+                    }
+                }
     }
 }
 
 #Preview {
     NavigationStack{
-        CustomPresetsListView(preset: CustomPresetsDumyData())
-            .environment(CustomPresetsDumyData())
+        CustomPresetsListView(preset: CustomPresetsDummyData())
+            .environment(CustomPresetsDummyData())
     }
 }

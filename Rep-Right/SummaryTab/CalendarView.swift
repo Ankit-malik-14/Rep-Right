@@ -45,9 +45,9 @@ struct CalendarView: View {
 
             HStack {
                 ForEach(weekData) { day in
-                    Spacer()
+                    
                     DayView(day: day)
-                    Spacer()
+                  
                 }
             }
 
