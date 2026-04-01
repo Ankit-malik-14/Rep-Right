@@ -8,10 +8,10 @@ struct AppNameScreenView: View {
         Image("RepRightIcon")
             .resizable()
             .scaledToFit()
-            .frame(width: 300,height: 300,alignment: .center)
+            .frame(width: 200,height: 200,alignment: .center)
             .foregroundStyle(.orange)
             .clipShape(RoundedRectangle(cornerRadius: 40))
-            .shadow(radius: 20)
+            .shadow(radius: 10)
     }
 }
 #Preview {

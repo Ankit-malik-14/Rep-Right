@@ -15,7 +15,7 @@ struct CaliberationScreen: View {
         }
         .sheet(isPresented: $showSheet){
             CaliberationSheetView()
-                .presentationDetents([.medium, .custom(CustomDetents.self)])
+                .presentationDetents([.custom(CustomDetents.self), .large])
         }
     }
 }
@@ -100,13 +100,6 @@ struct CaliberationSheetView: View{
                 .padding(10)
                 ContinueButton()
             
-//            Button("Start Calliberation") {
-//                //CalibrationScreen2()
-//            }
-//            .buttonStyle(.borderedProminent)
-//            .tint(.orange)
-            
-//            .padding(10)
             
             Button("Cancel", role: .cancel) {
                 //
