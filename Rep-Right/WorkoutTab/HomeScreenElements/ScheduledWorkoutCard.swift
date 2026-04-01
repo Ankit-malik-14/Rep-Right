@@ -8,77 +8,109 @@
 import SwiftUI
 
 struct ScheduledWorkoutCard: View {
+    @Environment(WeeklySchedules.self) var weeklySchedules
+    func focousPrinter(areas : [String])-> String{
+        var result = ""
+        for i in areas{
+            result.append(i)
+            if areas.last != i{
+                result = result + ", "
+            }
+        }
+        return result
+    }
+    
+    var todaysSchedule: Preset? {
+        let day = Calendar.current.component(.weekday, from: Date())
+        let pair = weeklySchedules.schedules.first(where: {$0.key.rawValue == day} )
+        if let value = pair?.value{
+            return value
+        }
+        return nil
+    }
+    
     var body: some View {
-        VStack(alignment: .leading){
-            Text("Workouts")
-                .font(.largeTitle)
-                .bold()
-                .padding()
-            ZStack(alignment: .bottomTrailing){
-                
+        if let todaysSchedule = todaysSchedule{
+            VStack{
+                ZStack(alignment: .topLeading){
+                    //Base rectangle -- IMAGE MASK
+                    RoundedRectangle(cornerRadius: 20)
+                        .foregroundStyle(.background.secondary)
+                        .frame(width: .infinity, height: 255)
+                        .padding()
 
-                //Base rectangle
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.background.secondary)
-                    .frame(width: .infinity, height: 255)
-                    .padding()
-                        
-                // for details overlay
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.background.tertiary)
-                    .frame(width: .infinity, height: 120)
-                    .shadow(radius: 5)
-                    .overlay {
-
-                            //Vstack for info part
-                            VStack(alignment: .leading, spacing: -20){
-                                //HStack for routine and duration
-                                HStack{
-                                    VStack(alignment: .leading){ //Today's routine + reps
-                                        Text("Today's Routine")
-                                            .foregroundStyle(.orange)
-                                            .font(.title3)
-                                        Text("Back Day")
-                                            .font(.title.bold())
-                                    } // end of vstack today's routine+reps
-                                    .padding()
-                                    
+                    
+                        RoundedRectangle(cornerRadius: 20)
+                            .foregroundStyle(.background.secondary)
+                            .frame(width:.infinity, height: 255)
+                            .overlay{
+                                VStack(alignment: .leading){
+                                    assisstanceAvailablityTag(type: .iconAndText)
+                                        .padding()
                                     Spacer()
-                                    
-                                    //vstack for duration + time
-                                    VStack(alignment: .center){
-                                        Text("Duration")
-                                            .font(.caption)
-                                        Text("45 mins")
-                                            .font(.title)
-                                    }//end of vstack duration+time
-                                    .padding()
-                                } //end of hstack1
-                                
-                                
-                                //HStack 2 for focus area and Button
-                                HStack{
-                                    Text("Focus: back and traps")
-                                        .font(.callout)
-                                    
-                                    Spacer()
-                                    Button {
-                                        //
-                                    } label: {
-                                        Text("Start Workout")
-                                    }.buttonStyle(.borderedProminent)
-                                        .tint(.orange)
-                                    
-                                } // end of hstack focus area+button
-                                .padding()
+                                    UnevenRoundedRectangle(bottomLeadingRadius: 20,bottomTrailingRadius: 20)
+                                        .foregroundStyle(.background.tertiary)
+                                        .frame(width: .infinity, height: 120)
+                                        .shadow(radius: 5)
+                                        .overlay {
+                                            
+                                            //Vstack for info part
+                                            VStack(alignment: .leading, spacing: -20){
+                                                HStack{
+                                                    VStack(alignment: .leading){
+                                                        
+                                                        Text("Today's Routine")
+                                                            .foregroundStyle(.orange)
+                                                            .font(.footnote).fontWeight(.heavy)
+                                                        Text(todaysSchedule.name)
+                                                            .font(.title3.bold())
+                                                        
+                                                    }
+                                                    .padding()
+                                                    
+                                                    Spacer()
+                                                    
+                                                    
+                                                    VStack(alignment: .trailing){
+                                                        Text("Duration")
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                        Text("\(todaysSchedule.estTime) min")
+                                                            .font(.caption)
+                                                            
+                                                        
+                                                    }
+                                                    .padding()
+                                                }
+        
+                                                HStack{
+                                                    
+                                                    Text(focousPrinter(areas: todaysSchedule.focousArea))
+                                                        .font(.subheadline)
+                                                        .foregroundStyle(.secondary)
+                                                    Spacer()
+                                                    Button {
+                                                        //
+                                                    } label: {
+                                                        Text("Start Workout")
+                                                    }.buttonStyle(.borderedProminent)
+                                                        .tint(.orange)
+                                                    
+                                                } // end of hstack focus area+button
+                                                .padding()
+                                            }
+                                            
+                                        }
+                                }
                             }
-
-                    }.padding()
-                    }
+                            .padding()
+                }
+            }
         }
     }
 }
 
 #Preview {
     ScheduledWorkoutCard()
+        .environment(WeeklySchedules())
 }

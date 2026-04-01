@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct Rep_RightApp: App {
+    var presets = Presets()
+    var exercises = Exercises()
+    var weeklySchedules = WeeklySchedules()
+    var customPresetData = CustomPresetsDummyData()
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            Tabs()
+                .environment(presets)
+                .environment(customPresetData)
+                .environment(exercises)
+                .environment(weeklySchedules)
         }
     }
 }
