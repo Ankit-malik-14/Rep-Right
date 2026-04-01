@@ -34,7 +34,11 @@ struct ScheduledWorkoutCard: View {
             VStack{
                 ZStack(alignment: .topLeading){
                     //Base rectangle -- IMAGE MASK
-                    //for assistance button
+                    RoundedRectangle(cornerRadius: 20)
+                        .foregroundStyle(.background.secondary)
+                        .frame(width: .infinity, height: 255)
+                        .padding()
+
                     
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.background.secondary)

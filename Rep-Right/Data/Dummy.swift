@@ -148,7 +148,7 @@ class Presets {
 }
 
 @Observable
-class CustomPresetsDumyData{
+class CustomPresetsDummyData{
     var customPresets: [Preset] = [
         Preset(
             name: "Full body ",

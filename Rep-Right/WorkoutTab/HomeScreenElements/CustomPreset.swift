@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomPreset: View {
-    var preset: CustomPresetsDumyData
+    var preset: CustomPresetsDummyData
     var body: some View {
         VStack(spacing: 5){
             HStack{
@@ -22,7 +22,7 @@ struct CustomPreset: View {
             ScrollView(.horizontal){
                 HStack{
                     ForEach(0..<min(preset.customPresets.count, 3),id: \.self){ idx in
-                        NavigationLink(value: CustomPresetsDumyData().customPresets[idx]) {
+                        NavigationLink(value: CustomPresetsDummyData().customPresets[idx]) {
                             PresetTileViewType(preset: preset.customPresets[idx], type: .large)
                         }.buttonStyle(.plain)
                     }
@@ -35,6 +35,6 @@ struct CustomPreset: View {
 
 #Preview {
 //    @Previewable @Environment(Presets.self) var preset
-    CustomPreset(preset: CustomPresetsDumyData())
-        .environment(CustomPresetsDumyData())
+    CustomPreset(preset: CustomPresetsDummyData())
+        .environment(CustomPresetsDummyData())
 }
