@@ -10,7 +10,8 @@ struct SignUpView: View {
             Spacer()
             
             Text("Sign Up")
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(.system(size: 40, weight: .bold))
+                .foregroundStyle(.primary)
                 .padding(.bottom, 20)
             
             
@@ -18,28 +19,27 @@ struct SignUpView: View {
                
                 HStack {
                     Image(systemName: "envelope.fill")
-                        .foregroundColor(.gray)
-                        .frame(width: 30) // Keeps icons aligned
-                    
+                        .foregroundColor(.primary)
+                        .frame(width: 30)
                     TextField("Email", text: $email)
                         .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled(true)
+                        //.textInputAutocapitalization(.never)
+                        //.autocorrectionDisabled(true)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.quaternary)
                 .cornerRadius(12)
                 
               
                 HStack {
                     Image(systemName: "lock.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.primary)
                         .frame(width: 30)
                     
                     SecureField("Create Password", text: $password)
                 }
                 .padding()
-                .background(Color(UIColor.systemGray6))
+                .background(.quaternary)
                 .cornerRadius(12)
             }
             .padding(.horizontal, 24)
@@ -49,7 +49,7 @@ struct SignUpView: View {
                 
                 print("Attempting to sign in with: \(email)")
             }) {
-                Text("Sign In")
+                Text("Sign Up")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -58,16 +58,6 @@ struct SignUpView: View {
                     .cornerRadius(12)
             }
             .padding(.horizontal, 24)
-            .padding(.top, 10)
-            
-            
-           /* Button("Forgot Password?") {
-                // Action here
-            }
-            .font(.footnote)
-            .foregroundColor(.secondary)
-            .padding(.top, 8)
-            */
             Spacer()
             Spacer()
         }

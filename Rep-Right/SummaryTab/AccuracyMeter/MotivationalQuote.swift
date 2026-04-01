@@ -39,6 +39,6 @@ struct MotivationalQuote: View {
 }
 
 #Preview {
-    @Previewable @State var value = 40.0
+    @Previewable @State var value = 30.0
     MotivationalQuote(value: $value)
 }
