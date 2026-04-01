@@ -60,7 +60,7 @@ struct Preset: Identifiable, Equatable, Hashable {
     var calories: Int
 }
 
-struct UserProfile {
+struct UserProfile:Hashable {
     var profilePicture: String?
     var name: String
     var age: Int
@@ -83,12 +83,12 @@ enum Weekday: Int, CaseIterable{
     case saturday = 7
 }
 
-enum Genders: String, CaseIterable{
+enum Genders: String, CaseIterable,Hashable{
     case male = "Male"
     case female = "Female"
 }
 
-enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible{
+enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible,Hashable{
     var description: String{
         switch self {
             case .Low: return "Low"
@@ -101,7 +101,7 @@ enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible{
     case High = 2
 }
 
-enum UnitSystem: String, CaseIterable{
+enum UnitSystem: String, CaseIterable,Hashable{
     case metric = "Metric"
     case imperial = "Imperial"
 }

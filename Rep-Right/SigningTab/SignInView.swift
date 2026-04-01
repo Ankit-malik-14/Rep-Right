@@ -3,6 +3,7 @@ import SwiftUI
 struct SignInView: View {
     @State private var email = ""
     @State private var password = ""
+    @State private var pass = false
     
     var body: some View {
         VStack(spacing: 24) {
@@ -32,17 +33,33 @@ struct SignInView: View {
                 
                
                 HStack {
+                    
                     Image(systemName: "lock.fill")
                         .foregroundColor(.primary)
                         .frame(width: 30)
-                    SecureField("Password", text: $password)
+                    if pass {
+                            TextField("Password", text: $password)
+                        } else {
+                            SecureField("Password", text: $password)
+                        }
+                    Button {
+                        pass.toggle()
+                    } label: {
+                        //TextField("",text: $password)
+                        if pass {
+                            Image(systemName: "eye.fill")
+                            
+                            } else {
+                            Image(systemName: "eye.slash.fill")
+                            }
+                    }.foregroundStyle(.primary)
                 }
                 .padding()
                 .background(.quaternary)
                 .cornerRadius(12)
+                
             }
             .padding(.horizontal, 24)
-            
             
             Button(action: {
                 

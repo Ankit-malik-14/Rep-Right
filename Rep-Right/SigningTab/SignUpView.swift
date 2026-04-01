@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @State private var email = ""
+    @State private var pass = false
     @State private var password = ""
     
     var body: some View {
@@ -32,15 +33,33 @@ struct SignUpView: View {
                 
               
                 HStack {
+                    
                     Image(systemName: "lock.fill")
                         .foregroundColor(.primary)
                         .frame(width: 30)
+                    if pass {
+                            TextField("Create Password", text: $password)
+                        } else {
+                            SecureField("Create Password", text: $password)
+                        }
+                    Button {
+                        pass.toggle()
+                    } label: {
+                        //TextField("",text: $password)
+                        if pass {
+                            Image(systemName: "eye.fill")
+                            
+                            } else {
+                            Image(systemName: "eye.slash.fill")
+                            }
+                    }.foregroundStyle(.primary)
+
                     
-                    SecureField("Create Password", text: $password)
                 }
                 .padding()
                 .background(.quaternary)
                 .cornerRadius(12)
+                
             }
             .padding(.horizontal, 24)
             

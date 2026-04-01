@@ -4,7 +4,19 @@ struct OnboardingScreenView3: View {
     var body: some View {
         VStack {
             MetricsView()
-            
+            Spacer()
+            SchedulerCards(preset: Presets().presets[0])
+                
+                .background(
+                    RoundedRectangle(cornerRadius:20)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        //.background(Color.white.cornerRadius(15))
+                    
+                        
+                )
+                .padding(.horizontal)
+                
+        
             Spacer()
             //Add over here the schedule part one
             
