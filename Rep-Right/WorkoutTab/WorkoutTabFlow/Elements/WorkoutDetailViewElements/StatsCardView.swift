@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct StatsCardView: View {
+    @State var showScheduler: Bool = false
     var body: some View {
         VStack(spacing: 20) {
             // Using Grid for perfect 2x2 alignment
@@ -28,7 +29,7 @@ struct StatsCardView: View {
                 .frame(width: 300)
             
             Button(action: {
-                print("Schedule workout tapped")
+                showScheduler.toggle()
             }) {
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
@@ -37,6 +38,9 @@ struct StatsCardView: View {
                 .font(.subheadline)
                 .foregroundColor(.orange)
             }
+            .sheet(isPresented: $showScheduler, content: {
+                SchedulerView()
+            })
             .padding(.bottom, 16)
         }
         //.frame(width: .infinity)
@@ -76,4 +80,6 @@ struct StatItemView: View {
 
 #Preview {
     StatsCardView()
+        .environment(WeeklySchedules())
+        
 }

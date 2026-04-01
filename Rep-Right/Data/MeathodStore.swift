@@ -54,3 +54,4 @@ func continueButtonView() -> some View {
             .foregroundColor(.white)
     }
 }
+
