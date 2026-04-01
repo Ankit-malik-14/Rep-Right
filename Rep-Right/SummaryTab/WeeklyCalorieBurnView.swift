@@ -77,19 +77,19 @@ struct WeeklyCalorieBurnView: View {
             HStack {
                 Image(systemName: "flame.fill")
                     .foregroundColor(.orange)
-                HStack(spacing: 2) {
+                HStack(spacing: 5) {
                     Text("5635")
                         .bold()
                     Text("Kcal")
-                        .font(.caption)
+                        //.font(.caption)
                         .bold()
                 }
                 
                 Spacer()
                 
-                Text("80% of Weekly Calorie Target")
-                    .font(.caption2)
-                    .foregroundColor(.primary)
+                //Text("80% of Weekly Calorie Target")
+                    //.font(.caption2)
+                    //.foregroundColor(.primary)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 15)

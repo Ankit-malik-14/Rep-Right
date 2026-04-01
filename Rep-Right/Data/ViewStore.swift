@@ -94,17 +94,15 @@ struct PresetTileViewType: View {
 //MARK: - CONTINUE BUTTON
 struct ContinueButton: View{
     var body: some View{
-        Button {
-            //
-        } label: {
-            ZStack{
-                RoundedRectangle(cornerRadius: 40)
-                    .frame(maxWidth: .infinity, maxHeight: 70)
-                Text("Continue")
-                    .font(.title3)
-                    .foregroundStyle(.white)
-            }.padding()
-        }.tint(.orange)
+        ZStack{
+            RoundedRectangle(cornerRadius: 40)
+                .frame(maxWidth: .infinity, maxHeight: 70)
+                .foregroundStyle(.orange)
+                .padding()
+            Text("Continue")
+                .font(.title3)
+                .foregroundStyle(.white)
+        }
     }
 }
 
