@@ -49,21 +49,9 @@ struct OnboardingScreenView1: View {
             
             Spacer()
             
-            // Page Indicators (Dots)
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(Color.orange)
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 8, height: 8)
-            }
-            .padding(.bottom, 50)
         }
-        //.ignoresSafeArea(.all, edges: .top) // Ensures the whole VStack can push into the top safe area
+       
+        .ignoresSafeArea(.all, edges: .top) // Ensures the whole VStack can push into the top safe area
     }
 }
 

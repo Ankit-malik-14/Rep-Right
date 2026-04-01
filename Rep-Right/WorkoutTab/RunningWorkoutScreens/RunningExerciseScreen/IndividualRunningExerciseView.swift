@@ -168,8 +168,8 @@ struct IndividualRunningExerciseView: View {
             Text("End Session")
                 .padding()
                 .frame(maxWidth: .infinity)
-                
         }
+        .tint(.orange)
         .buttonStyle(.glass)
         .padding(.horizontal)
         

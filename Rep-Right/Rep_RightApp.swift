@@ -18,7 +18,7 @@ struct Rep_RightApp: App {
     
     var body: some Scene {
         WindowGroup {
-            WorkoutScreen()
+            HomeView()
                 .environment(presets)
                 .environment(exercises)
                 .environment(weeklySchedules)
