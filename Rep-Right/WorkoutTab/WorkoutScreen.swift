@@ -16,7 +16,7 @@ enum ExpandedViews{
 struct WorkoutScreen: View {
     @Environment(Exercises.self) var exercises
     @Environment(Presets.self) var preset
-    @Environment(CustomPresetsDumyData.self) var customPresets
+    @Environment(CustomPresetsDummyData.self) var customPresets
     var body: some View {
         NavigationStack{
             ScrollView(.vertical, showsIndicators: false) {
@@ -65,7 +65,7 @@ struct WorkoutScreen: View {
 #Preview {
     NavigationStack{
         WorkoutScreen()
-            .environment(CustomPresetsDumyData())
+            .environment(CustomPresetsDummyData())
             .environment(WeeklySchedules())
             .environment(Presets())
             .environment(Exercises())
