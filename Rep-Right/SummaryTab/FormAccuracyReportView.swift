@@ -9,18 +9,17 @@ struct FormAccuracyReportView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Form Accuracy Report")
                         .font(.headline)
+                        .foregroundStyle(.primary)
                         .bold()
                     
                     Text("Your form accuracy based on previous sessions")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 
                 Spacer()
-                
-                // Circular Progress using Apple's Gauge
                 Gauge(value: accuracyIndicator, in: 0...1) {
                     EmptyView()
                 } currentValueLabel: {
@@ -30,7 +29,7 @@ struct FormAccuracyReportView: View {
                 }
                 .gaugeStyle(.accessoryCircular)
                 .tint(.orange)
-                .scaleEffect(1.5) // Scale it up to match the previous size
+                .scaleEffect(1.5)
                 .frame(width: 70, height: 70)
                 .padding(.trailing, 15)
             }
@@ -38,15 +37,13 @@ struct FormAccuracyReportView: View {
             .padding(.top, 20)
             
             Button(action: {
-                // Action for detailed trends
             }) {
                 Text("View Detailed Form Trends")
                     .font(.subheadline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.orange)
+                    .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(Color.gray.opacity(0.1))
+                    .background(.orange)
                     .cornerRadius(10)
             }
             .padding(.horizontal, 20)
@@ -55,7 +52,6 @@ struct FormAccuracyReportView: View {
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                .background(Color.white.cornerRadius(15))
         )
         .padding(.horizontal)
     }

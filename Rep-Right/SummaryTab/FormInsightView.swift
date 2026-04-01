@@ -5,33 +5,33 @@ struct FormInsightView: View {
         HStack(alignment: .top, spacing: 15) {
             ZStack {
                 Circle()
-                    .fill(Color.orange.opacity(0.2))
+                    .fill(Color.orange.opacity(0.5))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: "lightbulb.fill")
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .font(.system(size: 18))
             }
             
             VStack(alignment: .leading, spacing: 6) {
                 Text("Form Insight")
                     .font(.headline)
+                    .foregroundStyle(.primary)
                     .bold()
                 
                 Text("Your depth on Barbell Squats improved by 12% in the last session. Keep hitting those 90° angles.")
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundColor(.gray)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundStyle(.secondary)
+                    //.fixedSize(horizontal: false, vertical: true)
             }
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial.opacity(0.5),in: RoundedRectangle(cornerRadius: 20))
-//        .background(
-//            RoundedRectangle(cornerRadius: 15)
-//                .fill(Color.gray.opacity(0.1))
-//        )
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
         .padding(.horizontal)
     }
 }

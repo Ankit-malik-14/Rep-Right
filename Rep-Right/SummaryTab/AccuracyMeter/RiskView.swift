@@ -7,7 +7,8 @@
 import SwiftUI
 
 struct RiskView: View {
-    let riskText = "Your Back"
+    let riskText = "Disc Herniation"
+    let riskText2 = "Ligament & Muscle Tears"
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -16,15 +17,15 @@ struct RiskView: View {
                 .fontWeight(.bold)
             
             riskRow(text: riskText)
-            riskRow(text: riskText)
+            riskRow(text: riskText2)
         }
         .padding()
         //Leading is used to make it alingment
         .frame(maxWidth: .infinity, alignment:.leading)
-        .background {
+        .background (
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.background.secondary)
-        }
+        )
         .padding(.horizontal)
     }
     

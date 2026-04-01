@@ -13,7 +13,8 @@ struct MetricsTabViewContainer: View {
             VStack(spacing: 20){
                 ExerciseRingView()
                 Spacer()
-            totalTimeExerciseView()
+                Spacer()
+            TotalTimeExerciseView()
             }.navigationTitle("Metrics")
     }
     }
