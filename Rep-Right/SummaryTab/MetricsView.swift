@@ -6,7 +6,7 @@ struct MetricsView: View {
             Text("Metrics")
                 .font(.title2)
                 .bold()
-                .foregroundStyle(.black)
+                .foregroundStyle(.primary)
                 .padding(.horizontal, 20)
                 .padding(.top)
             
@@ -35,9 +35,10 @@ struct MetricsView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(Color.white)
-        .clipShape(.rect(cornerRadius: 20))
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
         .padding(.horizontal)
     }
 }
@@ -58,7 +59,7 @@ struct MetricCard: View {
                 Text(title)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
@@ -67,7 +68,7 @@ struct MetricCard: View {
                 Text(value)
                     .font(.title2)
                     .bold()
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
 
                 Text(change)
                     .foregroundStyle(.orange)
@@ -76,14 +77,13 @@ struct MetricCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
-        .background(Color(white: 0.97))
-        .clipShape(.rect(cornerRadius: 12))
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
     }
 }
 
 #Preview {
-    ZStack {
-        Color(white: 0.95).ignoresSafeArea()
-        MetricsView()
-    }
+            MetricsView()
 }

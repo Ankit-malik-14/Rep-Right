@@ -98,14 +98,15 @@ struct CaliberationSheetView: View{
                 .bold()
             
                 .padding(10)
+                ContinueButton()
             
-            Button("Start Calliberation") {
-                //CalibrationScreen2()
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(.orange)
+//            Button("Start Calliberation") {
+//                //CalibrationScreen2()
+//            }
+//            .buttonStyle(.borderedProminent)
+//            .tint(.orange)
             
-            .padding(10)
+//            .padding(10)
             
             Button("Cancel", role: .cancel) {
                 //

@@ -10,9 +10,8 @@ struct OnboardingScreenView1: View {
                     .overlay(
                         Image(.aIassistance)
                             .resizable()
-                            .scaledToFill() // Changed from .scaledToFit()
+                            .scaledToFill() 
                     )
-                    // Clip the filled image so it doesn't overflow the rounded corners
                     .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30))
                     .ignoresSafeArea(edges: .top)
                 
@@ -50,21 +49,9 @@ struct OnboardingScreenView1: View {
             
             Spacer()
             
-            // Page Indicators (Dots)
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(Color.orange)
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 8, height: 8)
-            }
-            .padding(.bottom, 50)
         }
-        //.ignoresSafeArea(.all, edges: .top) // Ensures the whole VStack can push into the top safe area
+       
+        .ignoresSafeArea(.all, edges: .top) // Ensures the whole VStack can push into the top safe area
     }
 }
 

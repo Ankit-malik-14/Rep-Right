@@ -6,11 +6,11 @@ struct GaugesView: View {
 
     var valueColor: Color {
         switch value {
-        case 0..<35:
+        case 0..<40:
             return .red
-        case 35..<69:
+        case 40..<75:
             return .orange
-        case 69...100:
+        case 75...100:
             return .green
         default:
             return .primary
@@ -21,12 +21,13 @@ struct GaugesView: View {
         VStack{
             ZStack{
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(.ultraThinMaterial)
+                    //.background(.ultraThinMaterial)
+                    .foregroundStyle(.ultraThinMaterial)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     )
-                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                    //.shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
                     .frame(height: 250)
                     .padding(.horizontal)
                 Gauge(value:value, in: 0...100) {
@@ -55,7 +56,7 @@ struct GaugesView: View {
 
 
 #Preview {
-    @Previewable @State var value = 75.0
+    @Previewable @State var value = 30.0
     ZStack {
         Color.blue.opacity(0.3).ignoresSafeArea()
         GaugesView(value: $value )
