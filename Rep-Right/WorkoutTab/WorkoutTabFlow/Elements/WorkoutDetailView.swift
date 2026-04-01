@@ -72,4 +72,5 @@ struct WorkoutDetailView: View {
 
 #Preview {
     WorkoutDetailView(preset: Presets().presets[0])
+        .environment(WeeklySchedules())
 }

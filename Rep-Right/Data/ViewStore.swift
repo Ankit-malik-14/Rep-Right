@@ -68,12 +68,24 @@ struct PresetTileViewType: View {
                 Text(preset.name).padding()
             }
         case .small:
-            ZStack(alignment: .topLeading){
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(width: 160, height: 185)
+            HStack(alignment: .center){
+                //Image Placeholder
+                RoundedRectangle(cornerRadius: 16)
+                    .frame(width: 67, height: 64)
                     .foregroundStyle(.background.secondary)
-                Text(preset.name).padding()
-            }
+                    .padding(6)
+                VStack(alignment: .leading){
+                    Text(preset.name)
+                        .font(.headline)
+                    HStack{
+                        Text(arrayToString(arrayOfStrings: preset.focousArea))
+                        
+                        Text("•")
+                        Text("\(preset.exercises.count) Exercises")
+                    }.font(.footnote).foregroundStyle(.secondary)
+                }
+                Spacer()
+            }/*.background(.background.secondary,in: RoundedRectangle(cornerRadius: 20)).padding(.horizontal)*/
         }
         
     }
@@ -101,7 +113,7 @@ struct ContinueButton: View{
 struct ViewStore: View {
     var body: some View {
         assisstanceAvailablityTag(type: .iconAndText)
-        PresetTileViewType(preset: Presets().presets[0], type: .large)
+        PresetTileViewType(preset: Presets().presets[0], type: .small)
         ContinueButton()
     }
 }

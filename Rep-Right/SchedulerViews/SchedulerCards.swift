@@ -8,14 +8,39 @@
 import SwiftUI
 
 struct SchedulerCards: View {
-    var preset: Preset?
+    var weekday: Weekday
+    @Environment(WeeklySchedules.self) var weeklySchedules
+    var preset: Preset? {weeklySchedules.schedules[weekday]}
+    @State var selectionSheet: Bool = false
     @State var isRest = false
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment: .center){
                 VStack(alignment: .leading){
-                    Text("Monday")
-                        .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    switch weekday {
+                    case .sunday:
+                        Text("Sunday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    case .monday:
+                        Text("Monday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    case .tuesday:
+                        Text("Tuesday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    case .wednesday:
+                        Text("Wednesday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    case .thursday:
+                        Text("Thursday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    case .friday:
+                        Text("Friday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    case .saturday:
+                        Text("Saturday")
+                            .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
+                    }
+                    
                     
                     if !isRest{
                         Text(preset?.name ?? "")
@@ -54,18 +79,22 @@ struct SchedulerCards: View {
                             Text("Includes \(preset!.exercises.map(\.name).joined(separator: ", "))").font(.body).bold().lineLimit(2)
                             
                         }
+                        Spacer()
                         VStack{
                             Button("Edit"){
-                                
+                                selectionSheet.toggle()
                             }.buttonStyle(.borderedProminent).tint(.orange)
+                                .sheet(isPresented: $selectionSheet) {
+                                    PresetSelectionView(weekday: weekday)
+                                }
                         }
                     }
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background.secondary))
+                    .background(.background.secondary,in: RoundedRectangle(cornerRadius: 20))
                 }
                 else{
                     Button{
-                        
+                        selectionSheet.toggle()
                     } label: {
                         VStack{
                             ZStack{
@@ -92,7 +121,11 @@ struct SchedulerCards: View {
                             }
                         )
                         .padding(.top)
-                    }.buttonStyle(.plain)
+                    }
+                    .buttonStyle(.plain)
+                        .sheet(isPresented: $selectionSheet) {
+                            PresetSelectionView(weekday: weekday)
+                        }
                 }
             }
             else {
@@ -113,10 +146,13 @@ struct SchedulerCards: View {
                     
             }
             
-        }.padding().background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background).shadow(radius:10))
+        }.padding().background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
+            .padding(3)
     }
 }
 
 #Preview {
-    SchedulerCards(preset: nil)
+    SchedulerCards(weekday: .friday)
+        .environment(Presets())
+        .environment(WeeklySchedules())
 }
