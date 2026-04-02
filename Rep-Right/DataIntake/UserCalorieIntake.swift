@@ -41,8 +41,9 @@ class CalorieGoalViewModel {
 }
 
 //MARK: - VIEW
-struct UserCalorieIntake: View {
-    @State private var viewModel = CalorieGoalViewModel()
+struct UserCalorieIntake: View{
+    //@State private var viewModel = CalorieGoalViewModel()
+    @Bindable private var viewModel : CalorieGoalViewModel = CalorieGoalViewModel()
 
         var body: some View {
             
@@ -78,12 +79,10 @@ struct UserCalorieIntake: View {
                                         .font(.largeTitle.bold())
                                 }
                             }.tint(.black)
-                            
                             // VALUE
                             TextField("", text: $viewModel.goalText)
-                                .font(.largeTitle.bold())
+                                .font(.system(size: 80).bold())
                                 .multilineTextAlignment(.center)
-                            
                             // PLUS
                             Button {
                                 viewModel.increaseGoal()
@@ -105,7 +104,6 @@ struct UserCalorieIntake: View {
                     
                     Spacer()
                     
-                    // 3. BOTTOM ACTION BUTTON
                     Button {
                         // Logic to save the data
                         print("Saved goal: \(viewModel.dailyGoal)")
@@ -130,7 +128,7 @@ struct UserCalorieIntake: View {
                 }
 
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemBackground))
+                //.background(Color(.systemBackground))
             
     }
 }
