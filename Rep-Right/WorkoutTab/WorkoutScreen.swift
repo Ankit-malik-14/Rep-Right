@@ -53,13 +53,14 @@ struct WorkoutScreen: View {
                 }
             })
             .navigationTitle("Workouts")
-        }
-        .toolbar{
-            ToolbarItem {
-                    Image(systemName: "person.circle")
+            .toolbar{
+                ToolbarItem {
+                        Image(systemName: "person.circle")
+                }
             }
+
         }
-    }
+        }
 }
 
 #Preview {

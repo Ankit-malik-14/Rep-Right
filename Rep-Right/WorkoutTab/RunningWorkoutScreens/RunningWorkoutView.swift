@@ -13,8 +13,11 @@ struct RunningWorkoutView: View {
             VStack {
                 //Labels
                 DataLabels()
+                    .padding()
                 ImageAndInfoCard()
+                    .padding(4)
                 RunningWorkoutInfo()
+                    .padding(3)
             }
 
     }
