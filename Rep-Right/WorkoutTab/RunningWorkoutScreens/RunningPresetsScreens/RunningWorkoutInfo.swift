@@ -69,12 +69,17 @@ struct RunningWorkoutInfo: View {
                     Button{
                         session.addSet()
                     }label: {
-                        Label("Add Set", systemImage: "plus")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .foregroundStyle(.orange)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundStyle(.background.secondary)
+                                .frame(maxWidth: .infinity)
+                            Label("Add Set", systemImage: "plus")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .foregroundStyle(.orange)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
                     }
                     .gridCellColumns(3)
                 }
@@ -90,13 +95,14 @@ struct RunningWorkoutInfo: View {
                     .gridCellColumns(3)
                 }
                 .padding(.top, 20)
-                
+            
                 //assistance Button
                 GridRow{
                     Button {
                         //
                     } label: {
                         Label("Use Assistance", systemImage: "camera.viewfinder")
+                            .frame(maxWidth: .infinity, maxHeight: 800)
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.orange)
@@ -113,17 +119,20 @@ struct ControlButton: View {
     let icon: String
     let action: () -> Void
     var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                Text(title)
-            }
-            .font(.subheadline.bold())
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 10)
-            .foregroundStyle(.orange)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-        }
+        ZStack{
+            RoundedRectangle(cornerRadius: 8)
+                .foregroundStyle(.background.secondary)
+            Button(action: action) {
+                HStack {
+                    Image(systemName: icon)
+                    Text(title)
+                }
+                .font(.subheadline.bold())
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .foregroundStyle(.orange)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }}
     }
 }
 #Preview {
