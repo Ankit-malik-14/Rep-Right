@@ -11,23 +11,21 @@ struct SummaryTabView: View {
                     FormInsightView()
                     FormAccuracyReportView()
                     
-                }
+                }.navigationDestination(for: UserProfile.self, destination: { userProfile in
+                    UserProfileView()
+                })
             .padding(.bottom)
             }
 
             .navigationTitle("Summary")
             .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button(action: {
-                        // Profile action
-                    }) {
-                        Image(systemName: "person.crop.circle")
-                            .font(.title2)
-                            .foregroundColor(.primary)
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(value: DummyUserProfiles().user) {
+                        Image(systemName: "person.circle.fill")
                     }
                 }
-            }
             
+            }
         }
     }
 }
