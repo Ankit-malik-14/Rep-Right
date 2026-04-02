@@ -14,7 +14,10 @@ struct ExercisesView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     ZStack(alignment: .topLeading){
-                        assisstanceAvailablityTag(type: .iconAndText).padding().offset(x:13)
+                        if exercise.assistanceAvailable {
+                            assisstanceAvailablityTag(type: .iconAndText).padding().offset(x:13)
+                        }
+                        
                         ZStack{
                             Image(systemName: "person.fill")
                                 .resizable()

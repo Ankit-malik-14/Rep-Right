@@ -65,7 +65,7 @@ struct OnboardingScreenView3: View {
             Button {
                 //
             } label: {
-                continueButtonView()
+                ContinueButton()
             }
 
         }
