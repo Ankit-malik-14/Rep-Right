@@ -15,7 +15,7 @@ struct Rep_RightApp: App {
     var customPresetData = CustomPresetsDummyData()
     var body: some Scene {
         WindowGroup {
-            UserDataIntake()
+            HomeView()
                 .environment(presets)
                 .environment(customPresetData)
                 .environment(exercises)
