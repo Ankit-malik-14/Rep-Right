@@ -28,6 +28,7 @@ class WorkoutSession{
         sets.append(WorkoutSet(setNumber: nextNumber, weight: lastWeight, reps: lastReps))
     }
 }
+
 struct RunningWorkoutInfo: View {
     @State private var session = WorkoutSession()
     var body: some View {
@@ -94,15 +95,19 @@ struct RunningWorkoutInfo: View {
                     }
                     .gridCellColumns(3)
                 }
-                .padding(.top, 20)
+//                .padding(.top, 10)
             
                 //assistance Button
                 GridRow{
                     Button {
                         //
                     } label: {
-                        Label("Use Assistance", systemImage: "camera.viewfinder")
-                            .frame(maxWidth: .infinity, maxHeight: 800)
+                        HStack{
+                            Image(systemName: "camera.viewfinder")
+                            Text("Use Assistance")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(4)
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.orange)

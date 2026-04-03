@@ -12,6 +12,10 @@ enum ExpandedViews{
     case defaultPresets
     case ExerciseList
 }
+enum ClickedPresetDestination{
+    case presetInfo
+    case startPreset
+}
 
 struct WorkoutScreen: View {
     @Environment(Exercises.self) var exercises
@@ -39,10 +43,7 @@ struct WorkoutScreen: View {
                     }
                     ExerciseListView()
                 }
-            }.navigationDestination(for: Preset.self, destination: { preset in
-                WorkoutDetailView(preset: preset)
-            })
-            .navigationDestination(for: ExpandedViews.self, destination: { view in
+            }.navigationDestination(for: ExpandedViews.self, destination: { view in
                 switch view {
                 case .ExerciseList:
                     ExerciseListView()
@@ -55,12 +56,13 @@ struct WorkoutScreen: View {
             .navigationTitle("Workouts")
             .toolbar{
                 ToolbarItem {
-                        Image(systemName: "person.circle")
+                    Image(systemName: "person.circle")
                 }
+            
             }
 
         }
-        }
+    }
 }
 
 #Preview {
