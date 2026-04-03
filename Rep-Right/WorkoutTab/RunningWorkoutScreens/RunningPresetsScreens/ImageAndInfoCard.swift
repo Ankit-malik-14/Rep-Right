@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImageAndInfoCard: View {
-    @Environment(Presets.self) var preset
+    var preset: Preset
     var body: some View {
         ZStack(alignment: .bottom) {
             
@@ -17,7 +17,6 @@ struct ImageAndInfoCard: View {
                 .frame(maxWidth: .infinity, maxHeight: 250)
                 .padding(.horizontal)
                 .foregroundStyle(.background.secondary)
-
             // Info card with embedded content
             RoundedRectangle(cornerRadius: 35)
 //                .glassEffect(.regular,in: .rect(cornerRadius: 35))
@@ -26,10 +25,9 @@ struct ImageAndInfoCard: View {
                 .foregroundStyle(.background.tertiary)
                 .overlay(
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("\(preset.presets[0].name)")
+                        Text("\(preset.name)")
                             .font(.title)
                             .bold()
-
                         HStack {
                             // Sets
                             VStack(alignment: .leading) {
@@ -62,6 +60,6 @@ struct ImageAndInfoCard: View {
 }
 
 #Preview {
-    ImageAndInfoCard()
-        .environment(Presets())
+    ImageAndInfoCard(preset: Presets().presets[0])
+        
 }

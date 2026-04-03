@@ -25,9 +25,14 @@ struct DefaultPresets: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
-                        NavigationLink(value: Presets().presets[idx]) {
+                        NavigationLink(value: ClickedPresetDestination.presetInfo) {
                             PresetTileViewType(preset: preset.presets[idx], type: .large)
                         }.buttonStyle(.plain)
+                        .navigationDestination(for: ClickedPresetDestination.self) { type in
+                            if type == ClickedPresetDestination.presetInfo {
+                                WorkoutDetailView(preset: preset.presets[idx])
+                            }
+                        }
                         
                     }
                 }.padding(.horizontal)
@@ -44,6 +49,8 @@ struct DefaultPresets: View {
 
 #Preview {
 //    @Previewable @Environment(Presets.self) var preset
-    DefaultPresets(preset: Presets())
-        .environment(Presets())
+    NavigationStack{
+        DefaultPresets(preset: Presets())
+            .environment(Presets())
+    }
 }

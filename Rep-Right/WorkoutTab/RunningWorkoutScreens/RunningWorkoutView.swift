@@ -8,22 +8,21 @@
 import SwiftUI
 
 struct RunningWorkoutView: View {
+    var preset: Preset
     var body: some View {
-
-            VStack {
-                //Labels
-                DataLabels()
-                    .padding()
-                ImageAndInfoCard()
-                    .padding(4)
-                RunningWorkoutInfo()
-                    .padding(3)
+        VStack{
+            //Labels
+            DataLabels()
+                .padding()
+            ImageAndInfoCard(preset: preset)
+                .padding(3)
+            RunningWorkoutInfo()
+                .padding(3)
             }
-
     }
 }
 
 #Preview {
-    RunningWorkoutView()
-        .environment(Presets())
+    RunningWorkoutView(preset: Presets().presets[2])
+        
 }
