@@ -8,6 +8,8 @@ import SwiftUI
 
 struct CaloriesView: View {
     @State private var value = 100
+   // @State public var
+    
     
     var body: some View {
         ScrollView{
@@ -29,6 +31,9 @@ struct CaloriesView: View {
                 }
                 MoveDataView()
             }
+           // NavigationLink(value: ) {
+                //clipShape(.capsule)
+            //}
         }
     }
 }

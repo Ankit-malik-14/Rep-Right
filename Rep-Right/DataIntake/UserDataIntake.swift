@@ -111,6 +111,7 @@ struct InputSection: View {
                 TextField(store.isMetric ? "170" : "67", text: $store.heightDisplay)
                     .keyboardType(.decimalPad)
                     .frame(width: 60)
+                    
             }
             
             HStack {
