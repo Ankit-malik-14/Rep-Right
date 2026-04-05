@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MoveDataView: View {
-    @State private var cal = 100
+    @Binding var cal: Int
+    //@Binding var goal: Int
     var body: some View {
         VStack(alignment: .leading){
             Text("Move")
@@ -16,6 +17,7 @@ struct MoveDataView: View {
                 .fontWeight(.light)
             HStack{
                 Text("\(cal)/1000")
+                //should be replaced with Text("\(cal)/\($goal)")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundStyle(.orange)
@@ -28,5 +30,7 @@ struct MoveDataView: View {
     }
 }
 #Preview {
-    MoveDataView()
+    @Previewable @State var calorie = 100
+    MoveDataView(cal: $calorie)
 }
+
