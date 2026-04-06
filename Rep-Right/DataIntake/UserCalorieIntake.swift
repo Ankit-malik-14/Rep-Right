@@ -8,7 +8,7 @@
 import SwiftUI
 import Observation
 
-// MARK: - DATA STORE
+// MARK: - DATA STORE FOR CALORIE
 @Observable
 class CalorieGoalViewModel {
     var dailyGoal: Int = 500

@@ -1,7 +1,7 @@
 import SwiftUI
 struct ExerciseModel: Identifiable {
     let id = UUID()
-    let name: String
+    var name: String
     let targetMuscle: String
     let timeAgo: String
     let accuracy: Int
@@ -45,7 +45,7 @@ struct ExerciseAccuracyListView: View {
                                     .font(.subheadline.weight(.semibold))
                             }
                             .padding(.vertical, 4)
-                            NavigationLink(destination: AccuracyMeterView(value: 32.0)) {
+                            NavigationLink(destination: AccuracyMeterView(staticValue: 32.0)) {
                                 EmptyView()
                             }
                             .opacity(0.01)
