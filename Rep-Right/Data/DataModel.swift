@@ -22,11 +22,15 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var assistanceAvailable: Bool
     var demoVideo: URL?
     var setData: [SetData]
+    // var expectedTimeInSec: Int  //with this and met value we can show expected calorie burn for let's say 5mins for example.
+    // var mETValue: Double
 }
 
 struct SetData : Hashable{
     var sets: Int
     var reps: Int
+    //needs optional weight, var wieght: Int?
+    //needs duration for timed exercises, var durationInSec: Int?
 }
 
 struct Preset: Identifiable, Equatable, Hashable {
@@ -40,6 +44,7 @@ struct Preset: Identifiable, Equatable, Hashable {
     var isWarmpUp: Bool
     var scheduledFor: Weekday?
     var estTime: Int
+    //now focus area can become enum and we can process with CaseIterable's .allTypes
     var focousArea: [String] {
         // Compute the top 3 most frequent target areas across all exercises in this preset
         let allAreas = exercises.flatMap { $0.targetAreas }
@@ -58,6 +63,7 @@ struct Preset: Identifiable, Equatable, Hashable {
     }
     var equipments: [String]
     var calories: Int
+    // var calories: Int {exercises.reduce(0){$0 + ($1.metValue * $1.expectedTimeInSec)}} //computed property
 }
 
 struct UserProfile:Hashable {
@@ -105,3 +111,13 @@ enum UnitSystem: String, CaseIterable,Hashable{
     case metric = "Metric"
     case imperial = "Imperial"
 }
+
+/*enum targetMuscleGroup: String, CaseIterable {
+    case shoulder = "Shoulder"
+    case chest = "Chest"
+    case back = "Back"
+    case legs = "Legs"
+    case core = "Core"
+    case arms = "Arms"
+}
+*/
