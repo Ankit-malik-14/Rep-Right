@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct IndividualRunningExerciseView: View {
+    var exercise: Exercise
     var body: some View {
         DataLabels()
         Spacer()
@@ -176,7 +177,7 @@ struct IndividualRunningExerciseView: View {
     }
 }
 #Preview {
-    IndividualRunningExerciseView()
+    IndividualRunningExerciseView(exercise: Exercises().exerciseList[0])
         
 }
 

@@ -5,7 +5,7 @@ struct OnboardingScreenView3: View {
         VStack {
             MetricsView()
             Spacer()
-            SchedulerCards(preset: Presets().presets[0])
+            SchedulerCards(weekday: .wednesday)
                 
                 .background(
                     RoundedRectangle(cornerRadius:20)
@@ -74,4 +74,5 @@ struct OnboardingScreenView3: View {
 #Preview
     {
     OnboardingScreenView3()
+            .environment(WeeklySchedules())
 }

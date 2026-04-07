@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Foundation
-import Observation
 
 
 enum Gender: String, CaseIterable, Identifiable {
@@ -61,7 +60,7 @@ class UserProfileStore {
 
 struct UserDataIntake: View {
     // This is our separate storage instance
-    @State private var store = UserProfileStore()
+    @State private var store: UserProfileStore = UserProfileStore()
 
     var body: some View {
         VStack {

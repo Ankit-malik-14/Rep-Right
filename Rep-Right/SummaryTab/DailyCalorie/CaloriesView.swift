@@ -8,7 +8,8 @@ import SwiftUI
 
 struct CaloriesView: View {
     @State private var value = 100
-   // @State public var
+    //@Binding var currentCalorieBurn: Int
+    //@Binding var goal: Int
     
     
     var body: some View {
@@ -22,6 +23,7 @@ struct CaloriesView: View {
                     
                     Gauge(value:100, in: 0...1000) {
                     }
+                    //replace with Gauge(value: $currentCalorieBurn, in: 0...$goal)
                     .gaugeStyle(.accessoryCircularCapacity)
                     .tint(.orange
                     )
@@ -29,7 +31,7 @@ struct CaloriesView: View {
                     
                     Image(systemName: "flame.fill")
                 }
-                MoveDataView()
+                MoveDataView(cal: $value)
             }
            // NavigationLink(value: ) {
                 //clipShape(.capsule)

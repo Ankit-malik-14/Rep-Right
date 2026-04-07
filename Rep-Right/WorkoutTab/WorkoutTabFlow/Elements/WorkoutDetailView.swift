@@ -6,8 +6,14 @@
 //
 import SwiftUI
 
+
+struct Detailed: Hashable {
+    var preset:Preset
+}
+
 struct WorkoutDetailView: View {
     var preset: Preset
+    var executionPhase: Detailed { Detailed(preset: preset) }
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -24,9 +30,22 @@ struct WorkoutDetailView: View {
                     .padding(.horizontal)
                 
                 // 3. Start Workout Button
-                Button(action: {
-                    print("Start Workout Tapped")
-                }) {
+                
+//                Button{
+//                    
+//                } label: {
+//                    HStack {
+//                        Image(systemName: "play.fill")
+//                        Text("Start Workout")
+//                    }
+//                    .font(.headline)
+//                    .foregroundColor(.white)
+//                    .frame(maxWidth: .infinity)
+//                    .padding(.vertical, 16)
+//                    .background(Color.orange)
+//                    .cornerRadius(12)
+//                }
+                NavigationLink(value: Detailed(preset: preset), label: {
                     HStack {
                         Image(systemName: "play.fill")
                         Text("Start Workout")
@@ -37,8 +56,13 @@ struct WorkoutDetailView: View {
                     .padding(.vertical, 16)
                     .background(Color.orange)
                     .cornerRadius(12)
+                }).navigationDestination(for: Detailed.self) { type in
+                    RunningWorkoutView(preset: executionPhase.preset)
                 }
                 .padding(.horizontal)
+                .navigationDestination(for: Preset.self, destination: { preset in
+                    RunningWorkoutView(preset: preset)
+                })
                 
                 // 4. Exercises List
                 VStack(spacing: 16) {
@@ -65,12 +89,17 @@ struct WorkoutDetailView: View {
             .navigationTitle(preset.name)
             .padding(.bottom, 40)
         }
+        
         .navigationTitle(preset.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    WorkoutDetailView(preset: Presets().presets[0])
-        .environment(WeeklySchedules())
+    
+    NavigationStack{
+        WorkoutDetailView(preset: Presets().presets[0])
+            .environment(WeeklySchedules())
+            
+    }
 }

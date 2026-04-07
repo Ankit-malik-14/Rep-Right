@@ -1,6 +1,12 @@
 {
   "images" : [
     {
+      "filename" : "deadlift.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Plank.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
