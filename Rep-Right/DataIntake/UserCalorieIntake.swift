@@ -8,6 +8,7 @@
 import SwiftUI
 
 
+/* DEPRECATED: CalorieGoalViewModel is deprecated. Replaced by direct binding to WorkoutSummaryManager.dailyCalorieGoal.
 // MARK: - DATA STORE
 @Observable
 class CalorieGoalViewModel {
@@ -39,11 +40,26 @@ class CalorieGoalViewModel {
         dailyGoal += step
     }
 }
+*/
 
 //MARK: - VIEW
+// UPDATED: Now uses WorkoutSummaryManager as the single source of truth for the calorie goal.
 struct UserCalorieIntake: View{
-    //@State private var viewModel = CalorieGoalViewModel()
-    @Bindable private var viewModel : CalorieGoalViewModel = CalorieGoalViewModel()
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    
+    // computed property to bridge double goal to text strings for the TextField
+    private var goalText: Binding<String> {
+        Binding(
+            get: { String(Int(summaryManager.dailyCalorieGoal)) },
+            set: { newValue in
+                if let newValueInt = Int(newValue) {
+                    summaryManager.dailyCalorieGoal = Double(newValueInt)
+                } else if newValue.isEmpty {
+                    summaryManager.dailyCalorieGoal = 0
+                }
+            }
+        )
+    }
 
         var body: some View {
             
@@ -69,7 +85,11 @@ struct UserCalorieIntake: View{
                         HStack(spacing: 25) {
                             // MINUS
                             Button {
-                                viewModel.decreaseGoal()
+                                if summaryManager.dailyCalorieGoal >= 50 {
+                                    summaryManager.dailyCalorieGoal -= 50
+                                } else {
+                                    summaryManager.dailyCalorieGoal = 0
+                                }
                             } label: {
                                 ZStack{
                                     Circle()
@@ -80,12 +100,12 @@ struct UserCalorieIntake: View{
                                 }
                             }.tint(.black)
                             // VALUE
-                            TextField("", text: $viewModel.goalText)
+                            TextField("", text: goalText)
                                 .font(.system(size: 80).bold())
                                 .multilineTextAlignment(.center)
                             // PLUS
                             Button {
-                                viewModel.increaseGoal()
+                                summaryManager.dailyCalorieGoal += 50
                             } label: {
                                 ZStack{
                                     Circle()
@@ -106,7 +126,7 @@ struct UserCalorieIntake: View{
                     
                     Button {
                         // Logic to save the data
-                        print("Saved goal: \(viewModel.dailyGoal)")
+                        print("Saved goal: \(summaryManager.dailyCalorieGoal)")
                     } label: {
                         ContinueButton()
                     }
@@ -136,5 +156,6 @@ struct UserCalorieIntake: View{
 #Preview {
     NavigationStack{
         UserCalorieIntake()
+            .environment(WorkoutSummaryManager())
     }
 }

@@ -57,11 +57,11 @@ struct WorkoutDetailView: View {
                     .background(Color.orange)
                     .cornerRadius(12)
                 }).navigationDestination(for: Detailed.self) { type in
-                    RunningWorkoutView(preset: executionPhase.preset)
+                    ActiveWorkoutView(preset: executionPhase.preset)
                 }
                 .padding(.horizontal)
                 .navigationDestination(for: Preset.self, destination: { preset in
-                    RunningWorkoutView(preset: preset)
+                    ActiveWorkoutView(preset: preset)
                 })
                 
                 // 4. Exercises List

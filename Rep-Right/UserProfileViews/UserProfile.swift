@@ -1,20 +1,29 @@
+/* DEPRECATED: Replaced by ProfileFormView which uses @Bindable MVVM architecture.
 //
 //  UserProfile.swift
 //  RepRightScreens
-//
-//  Created by Jugad on 09/03/26.
 //
 
 import SwiftUI
 
 struct UserProfileView: View {
+    // Fetched from DataModel: user profile data from DummyUserProfiles
+    var userProfile: UserProfile = DummyUserProfiles().user
+    
     @State var isDisabled: Bool = true
+    // Fetched from DataModel: pre-populated from UserProfile.name
     @State var userFirstName: String = ""
+    // Fetched from DataModel: pre-populated from UserProfile.gender
     @State var userSex: Genders = .male
+    // Fetched from DataModel: pre-populated from UserProfile.age
     @State var userAge: Int = 0
+    // Fetched from DataModel: pre-populated from UserProfile.modelSensitivity
     @State var modelSensitiveness: Double = SensitivityLevels.Medium.rawValue
+    // Fetched from DataModel: pre-populated from UserProfile.unitSystem
     @State var selectedUnitSystem: String = UnitSystem.metric.rawValue
+    // Fetched from DataModel: pre-populated from UserProfile.weight
     @State var weight: Double = 0.0
+    // Fetched from DataModel: pre-populated from UserProfile.height
     @State var height: Double = 0.0
     
     var body: some View {
@@ -106,6 +115,16 @@ struct UserProfileView: View {
                 }
             }
         }
+        .onAppear {
+            // Fetched from DataModel: populate form fields from UserProfile model
+            userFirstName = userProfile.name
+            userSex = userProfile.gender
+            userAge = userProfile.age
+            weight = Double(userProfile.weight)
+            height = userProfile.height
+            modelSensitiveness = userProfile.modelSensitivity.rawValue
+            selectedUnitSystem = userProfile.unitSystem.rawValue
+        }
     }
 }
 
@@ -114,3 +133,4 @@ struct UserProfileView: View {
         UserProfileView()
     }
 }
+*/

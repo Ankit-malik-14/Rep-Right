@@ -190,9 +190,11 @@ class CustomPresetsDummyData{
     ]
 }
 
+/* DEPRECATED: Replaced by the global @Observable UserProfileModel injected via environment.
 class DummyUserProfiles {
     var user = UserProfile(profilePicture: "UserImage", name: "Ankit Malik", age: 21, gender: .male , weight: 71, height: 1.73, modelSensitivity: .Medium, unitSystem: .metric)
 }
+*/
 @Observable
 class WeeklySchedules{
     var schedules: [Weekday: Preset] = [.wednesday:Preset(

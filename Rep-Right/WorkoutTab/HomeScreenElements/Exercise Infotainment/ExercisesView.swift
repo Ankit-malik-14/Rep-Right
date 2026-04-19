@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExercisesView: View {
     var exercise: Exercise
+    @State private var showWorkout = false
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -100,7 +101,7 @@ struct ExercisesView: View {
                         }
                         */
                         Button(action: {
-                            
+                            showWorkout = true
                         }) {
                             HStack {
                                 Image(systemName: "play.fill")
@@ -117,7 +118,10 @@ struct ExercisesView: View {
                 }
             }
         }
-        .background(Color.white)
+        .background(Color(.systemBackground))
+        .fullScreenCover(isPresented: $showWorkout) {
+            IndividualRunningExerciseView(exercise: exercise)
+        }
     }
 }
 #Preview {

@@ -8,7 +8,12 @@
 import SwiftUI
 import Foundation
 
+// Backward compatibility aliases to resolve any local scope naming issues
+typealias UserProfileStore = UserProfileModel
+typealias Gender = Genders
 
+
+/* DEPRECATED: UserProfileStore is deprecated. Replaced by the native @Observable UserProfileModel to enforce a single source of truth.
 enum Gender: String, CaseIterable, Identifiable {
     case male = "Male"
     case female = "Female"
@@ -56,42 +61,42 @@ class UserProfileStore {
         }
     }
 }
+*/
 
-
+// UPDATED: Now uses UserProfileModel as the single source of truth.
 struct UserDataIntake: View {
-    // This is our separate storage instance
-    @State private var store: UserProfileStore = UserProfileStore()
+    @Environment(UserProfileModel.self) private var store
 
     var body: some View {
+        @Bindable var localStore = store
         VStack {
             Text("Personalize Your Plan")
                 .font(.largeTitle.bold())
                 .padding()
 
-            Picker("Unit System", selection: $store.isMetric) {
-                Text("Imperial").tag(false)
-                Text("Metric").tag(true)
+            Picker("Unit System", selection: $localStore.unitSystem) {
+                Text("Imperial").tag(UnitSystem.imperial)
+                Text("Metric").tag(UnitSystem.metric)
             }
             .pickerStyle(.segmented)
             .padding()
 
-            // Pass the store into subviews
-                Form{
-                    InputSection(store: store)
-                }.background(.white)
-                .scrollDisabled(true)
+            Form{
+                InputSection(store: store)
+            }.background(.white)
+            .scrollDisabled(true)
             
         }.padding(.vertical)
     }
 }
+
 struct InputSection: View {
-    // Bind directly to the separate store
-    @Bindable var store: UserProfileStore
+    @Bindable var store: UserProfileModel
     
     var body: some View {
         Section {
             Picker("Gender", selection: $store.gender) {
-                ForEach(Gender.allCases) { g in
+                ForEach(Genders.allCases, id: \.self) { g in
                     Text(g.rawValue).tag(g)
                 }
             }
@@ -99,24 +104,23 @@ struct InputSection: View {
             HStack {
                 Text("Age")
                 Spacer()
-                TextField("Age", text: $store.age)
+                TextField("Age", value: $store.age, format: .number)
                     .keyboardType(.numberPad)
                     .frame(width: 60)
             }
             
             HStack {
-                Text("Height (\(store.isMetric ? "cm" : "in"))")
+                Text("Height (\(store.unitSystem == .metric ? "m" : "ft"))")
                 Spacer()
-                TextField(store.isMetric ? "170" : "67", text: $store.heightDisplay)
+                TextField(store.unitSystem == .metric ? "1.7" : "5.6", value: $store.height, format: .number)
                     .keyboardType(.decimalPad)
                     .frame(width: 60)
-                    
             }
             
             HStack {
-                Text("Weight (\(store.isMetric ? "kg" : "lbs"))")
+                Text("Weight (\(store.unitSystem == .metric ? "kg" : "lbs"))")
                 Spacer()
-                TextField(store.isMetric ? "70" : "154", text: $store.weightDisplay)
+                TextField(store.unitSystem == .metric ? "70" : "154", value: $store.weight, format: .number)
                     .keyboardType(.decimalPad)
                     .frame(width: 60)
             }
@@ -126,4 +130,5 @@ struct InputSection: View {
 
 #Preview {
     UserDataIntake()
+        .environment(UserProfileModel())
 }

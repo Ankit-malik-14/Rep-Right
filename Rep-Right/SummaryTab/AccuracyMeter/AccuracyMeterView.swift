@@ -2,13 +2,13 @@
 //  AccuracyMeterView.swift
 //  Rep-Right
 //
-//  Created by GU on 17/03/26.
-//
 
 import SwiftUI
 
 struct AccuracyMeterView: View {
     @State var value: Double
+    // Fetched from DataModel: exercise name passed from parent navigation
+    var exerciseName: String
     
     var body: some View {
         VStack{
@@ -17,14 +17,13 @@ struct AccuracyMeterView: View {
                     GaugesView(value: $value)
                         .padding(.vertical)
                     LevelView(value: $value)
-                    //Divider()
                     MotivationalQuote(value:$value)
-                    //Divider()
                         .padding(.vertical)
                     RiskView()
                     SuggestionView()
                 }
-                .navigationTitle("Exercise Name")
+                // Fetched from DataModel: dynamic exercise name instead of hardcoded "Exercise Name"
+                .navigationTitle(exerciseName)
                 .font(.system(size: 20, weight: .bold, design: .default))
                 .navigationBarTitleDisplayMode(.inline)
             }
@@ -33,5 +32,5 @@ struct AccuracyMeterView: View {
 }
 
 #Preview {
-    AccuracyMeterView(value: 30.0)
+    AccuracyMeterView(value: 30.0, exerciseName: "Push-Up")
 }

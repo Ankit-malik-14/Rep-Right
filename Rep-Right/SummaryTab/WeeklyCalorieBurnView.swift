@@ -8,16 +8,19 @@ struct DailyCalorie: Identifiable {
 }
 
 struct WeeklyCalorieBurnView: View {
-    let mockData: [DailyCalorie] = [
-        DailyCalorie(day: "Mon", calories: 320),
-        DailyCalorie(day: "Tue", calories: 450),
-        DailyCalorie(day: "Wed", calories: 280),
-        DailyCalorie(day: "Thu", calories: 510),
-        DailyCalorie(day: "Fri", calories: 390),
-        DailyCalorie(day: "Sat", calories: 600),
-        DailyCalorie(day: "Sun", calories: 420)
-    ]
+    // Fetched from SummaryDataModel: Access global summary manager
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
     
+    var dynamicData: [DailyCalorie] {
+        // Fetched from SummaryDataModel: Mapping weeklyCalorieChartData to DailyCalorie
+        summaryManager.weeklyCalorieChartData.map { DailyCalorie(day: $0.day, calories: $0.calories) }
+    }
+    
+    var totalCalories: Int {
+        // Fetched from SummaryDataModel: Sum of current week calories
+        dynamicData.reduce(0) { $0 + $1.calories }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
@@ -32,14 +35,12 @@ struct WeeklyCalorieBurnView: View {
             .padding([.horizontal, .top], 20)
             .padding(.bottom, 30)
             
-            Chart(mockData) { item in
+            Chart(dynamicData) { item in
                 LineMark(
                     x: .value("Day", item.day),
                     y: .value("Calories", item.calories)
                 )
-                //.interpolationMethod(.catmullRom)
                 .foregroundStyle(.orange)
-                //.lineStyle(StrokeStyle(lineWidth: 3))
                 
                 AreaMark(
                     x: .value("Day", item.day),
@@ -78,18 +79,13 @@ struct WeeklyCalorieBurnView: View {
                 Image(systemName: "flame.fill")
                     .foregroundColor(.orange)
                 HStack(spacing: 5) {
-                    Text("5635")
+                    Text("\(totalCalories)")
                         .bold()
                     Text("Kcal")
-                        //.font(.caption)
                         .bold()
                 }
                 
                 Spacer()
-                
-                //Text("80% of Weekly Calorie Target")
-                    //.font(.caption2)
-                    //.foregroundColor(.primary)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
@@ -97,7 +93,6 @@ struct WeeklyCalorieBurnView: View {
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                //.background(Color.white.cornerRadius(15))
         )
         .padding(.horizontal)
     }
@@ -105,5 +100,5 @@ struct WeeklyCalorieBurnView: View {
 
 #Preview {
     WeeklyCalorieBurnView()
+        .environment(WorkoutSummaryManager())
 }
-

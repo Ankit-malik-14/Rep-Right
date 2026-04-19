@@ -44,19 +44,22 @@ class DummyWorkoutSummaryData {
                     exerciseId: pushUpId,
                     actualSet: [SetData(sets: 3, reps: 15)],
                     startTime: today,
-                    endTime: today.addingTimeInterval(10 * 60)
+                    endTime: today.addingTimeInterval(10 * 60),
+                    caloriesBurned: nil
                 ),
                 (
                     exerciseId: squatId,
                     actualSet: [SetData(sets: 4, reps: 15)],
                     startTime: today.addingTimeInterval(12 * 60),
-                    endTime: today.addingTimeInterval(25 * 60)
+                    endTime: today.addingTimeInterval(25 * 60),
+                    caloriesBurned: nil
                 ),
                 (
                     exerciseId: plankId,
                     actualSet: [SetData(sets: 3, reps: 60)],
                     startTime: today.addingTimeInterval(27 * 60),
-                    endTime: today.addingTimeInterval(32 * 60)
+                    endTime: today.addingTimeInterval(32 * 60),
+                    caloriesBurned: nil
                 )
             ]
         )
@@ -66,7 +69,8 @@ class DummyWorkoutSummaryData {
             exerciseId: pushUpId,
             actualSet: [SetData(sets: 4, reps: 20)],
             startTime: yesterday,
-            endTime: yesterday.addingTimeInterval(15 * 60)
+            endTime: yesterday.addingTimeInterval(15 * 60),
+            caloriesBurned: nil
         )
         
         //a preset session: Two Days Ago (Upper Focus)
@@ -77,13 +81,15 @@ class DummyWorkoutSummaryData {
                     exerciseId: pushUpId,
                     actualSet: [SetData(sets: 3, reps: 12)],
                     startTime: twoDaysAgo,
-                    endTime: twoDaysAgo.addingTimeInterval(8 * 60)
+                    endTime: twoDaysAgo.addingTimeInterval(8 * 60),
+                    caloriesBurned: nil
                 ),
                 (
                     exerciseId: rowId,
                     actualSet: [SetData(sets: 3, reps: 10)],
                     startTime: twoDaysAgo.addingTimeInterval(10 * 60),
-                    endTime: twoDaysAgo.addingTimeInterval(20 * 60)
+                    endTime: twoDaysAgo.addingTimeInterval(20 * 60),
+                    caloriesBurned: nil
                 )
             ]
         )
@@ -99,7 +105,8 @@ class DummyWorkoutSummaryData {
             endTime: lastWeek.addingTimeInterval(20 * 60),
             actualSet: [SetData(sets: 5, reps: 10)],
             formAccuracy: 88.5,
-            formInsights: ["Great depth!", "Keep your chest up a bit more on the ascent."]
+            formInsights: ["Great depth!", "Keep your chest up a bit more on the ascent."],
+            caloriesBurnedValue: nil
         )
         dummyManager.completedExercises.append(manualRecord)
         

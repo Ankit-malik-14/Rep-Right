@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct FormInsightView: View {
+    // Fetched from SummaryDataModel: reads the latest form insight string
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
             ZStack {
@@ -19,11 +22,11 @@ struct FormInsightView: View {
                     .foregroundStyle(.primary)
                     .bold()
                 
-                Text("Your depth on Barbell Squats improved by 12% in the last session. Keep hitting those 90° angles.")
+                // Fetched from SummaryDataModel: latestFormInsight computed property
+                Text(summaryManager.latestFormInsight ?? "Complete a session with AI Assistance to get personalized form insights.")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
-                    //.fixedSize(horizontal: false, vertical: true)
             }
         }
         .padding(20)
@@ -38,5 +41,5 @@ struct FormInsightView: View {
 
 #Preview {
     FormInsightView()
+        .environment(WorkoutSummaryManager())
 }
-
