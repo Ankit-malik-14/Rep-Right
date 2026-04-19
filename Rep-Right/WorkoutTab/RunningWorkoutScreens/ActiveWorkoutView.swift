@@ -201,7 +201,7 @@ struct ActiveWorkoutView: View {
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showSheet) {
             WorkoutControlsSheet(manager: manager)
-                .presentationDetents([.fraction(0.3), .medium])
+                .presentationDetents([.medium])
                 .presentationBackground(.ultraThinMaterial)
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(24)
