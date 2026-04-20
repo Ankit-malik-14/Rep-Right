@@ -113,6 +113,14 @@ struct CalorieBreakdownView: View {
         }
         .navigationTitle("Weekly Calories")
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: SummaryRoute.userCalorieIntake) {
+                    Text("Edit")
+                        .foregroundStyle(.orange)
+                }
+            }
+        }
     }
     
     private func statPill(label: String, value: String, unit: String) -> some View {

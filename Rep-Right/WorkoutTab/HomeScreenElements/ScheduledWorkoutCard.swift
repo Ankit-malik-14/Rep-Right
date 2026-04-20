@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ScheduledWorkoutCard: View {
     @Environment(WeeklySchedules.self) var weeklySchedules
+    @State private var showWorkout = false
+    
     func focousPrinter(areas : [String])-> String{
         var result = ""
         for i in areas{
@@ -90,7 +92,7 @@ struct ScheduledWorkoutCard: View {
                                                         .foregroundStyle(.secondary)
                                                     Spacer()
                                                     Button {
-                                                        //
+                                                        showWorkout = true
                                                     } label: {
                                                         Text("Start Workout")
                                                     }.buttonStyle(.borderedProminent)
@@ -105,6 +107,9 @@ struct ScheduledWorkoutCard: View {
                             }
                             .padding()
                 }
+            }
+            .fullScreenCover(isPresented: $showWorkout) {
+                ActiveWorkoutView(preset: todaysSchedule)
             }
         }
     }

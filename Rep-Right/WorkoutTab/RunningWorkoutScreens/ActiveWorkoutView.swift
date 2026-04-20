@@ -163,6 +163,7 @@ struct ActiveWorkoutView: View {
     @State private var manager: WorkoutSessionManager
     @State private var showSheet = false
     @State private var countdownValue = 3
+    @State private var selectedDetent: PresentationDetent = .fraction(0.1)
     
     @Environment(\.dismiss) private var dismiss
     @Environment(WorkoutSummaryManager.self) private var summaryManager
@@ -176,39 +177,43 @@ struct ActiveWorkoutView: View {
     }
     
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            
-            switch manager.phase {
-            case .preparing:
-                preparingView
-                    .transition(.opacity)
+        // TimelineView drives elapsed-time recalculation every second
+        // without blocking the main thread (replaces Timer.scheduledTimer)
+        TimelineView(.periodic(from: .now, by: 1.0)) { _ in
+            ZStack {
+                Color.black.ignoresSafeArea()
                 
-            case .activeExercise(let exercise):
-                ExerciseBackground(exercise: exercise)
-                    .transition(.opacity.combined(with: .scale(scale: 1.02)))
-                
-            case .resting:
-                WorkoutRestScreen(manager: manager)
-                    .transition(.opacity)
-                
-            case .finished:
-                finishedView
-                    .transition(.opacity)
+                switch manager.phase {
+                case .preparing:
+                    preparingView
+                        .transition(.opacity)
+                    
+                case .activeExercise(let exercise):
+                    ExerciseBackground(exercise: exercise)
+                        .transition(.opacity.combined(with: .scale(scale: 1.02)))
+                    
+                case .resting:
+                    WorkoutRestScreen(manager: manager)
+                        .transition(.opacity)
+                    
+                case .finished:
+                    finishedView
+                        .transition(.opacity)
+                }
             }
-        }
-        .animation(.easeInOut(duration: 0.4), value: manager.phase)
-        .navigationBarBackButtonHidden(true)
-        .sheet(isPresented: $showSheet) {
-            WorkoutControlsSheet(manager: manager)
-                .presentationDetents([.fraction(0.3), .medium])
-                .presentationBackground(.ultraThinMaterial)
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(24)
-                .interactiveDismissDisabled()
-        }
-        .onChange(of: manager.phase) { _, newPhase in
-            handlePhaseChange(newPhase)
+            .animation(.easeInOut(duration: 0.4), value: manager.phase)
+            .navigationBarBackButtonHidden(true)
+            .sheet(isPresented: $showSheet) {
+                WorkoutControlsSheet(manager: manager, selectedDetent: $selectedDetent)
+                    .presentationDetents([.fraction(0.2), .medium], selection: $selectedDetent)
+                    .presentationBackground(.ultraThinMaterial)
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(24)
+                    .interactiveDismissDisabled()
+            }
+            .onChange(of: manager.phase) { _, newPhase in
+                handlePhaseChange(newPhase)
+            }
         }
     }
     
@@ -275,7 +280,7 @@ struct ActiveWorkoutView: View {
                         label: "Calories"
                     )
                     statColumn(
-                        value: "\(manager.exerciseQueue.count)",
+                        value: "\(manager.completedExerciseCount)",
                         label: "Exercises"
                     )
                 }
@@ -329,19 +334,34 @@ struct ActiveWorkoutView: View {
         }
     }
     
-// UPDATED: Using the new UserProfileModel class directly instead of the old struct
+    // UPDATED: Logs only exercises the user actually attempted (up to currentIndex),
+    // using each exercise's own archived sets, filtered to completed-only.
     private func logSession() {
         let weight = userProfile.weight
-        let count = max(manager.exerciseQueue.count, 1)
+        
+        // Archive the current exercise's sets before building the log
+        manager.archiveCurrentSets()
+        
+        // Only consider exercises up to (and including) the one the user was on
+        let attemptedCount = manager.currentIndex + 1
+        let attemptedExercises = Array(manager.exerciseQueue.prefix(attemptedCount))
+        let count = max(attemptedExercises.count, 1)
         let timePerExercise = manager.elapsedTime / Double(count)
         
-        let exerciseData = manager.exerciseQueue.map { exercise in
+        let exerciseData: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
+            // Retrieve this exercise's archived sets (not the current exercise's sets)
+            let archived = manager.completedSetsArchive[idx] ?? []
+            let completedOnly = archived.filter(\.isCompleted)
+            
+            // Skip exercises where the user completed zero sets
+            guard !completedOnly.isEmpty else { return nil }
+            
             let cals = summaryManager.calculateCalories(
                 for: exercise,
                 durationInSeconds: timePerExercise,
                 weightInKg: weight
             )
-            let setData = manager.currentSets.map {
+            let setData = completedOnly.map {
                 SetData(sets: 1, reps: Int($0.reps) ?? $0.targetReps)
             }
             return (

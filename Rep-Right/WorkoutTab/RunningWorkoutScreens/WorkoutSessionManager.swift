@@ -58,17 +58,28 @@ class WorkoutSessionManager {
     
     var phase: WorkoutPhase = .preparing
     
-    // Workout timer
-    var elapsedTime: TimeInterval = 0
-    private var workoutTimer: Timer?
-    var isTimerRunning: Bool = false
+    // Workout timer — Date-based for TimelineView (no Timer needed)
+    var accumulatedTime: TimeInterval = 0
+    var timerStartDate: Date? = nil
+    var isTimerRunning: Bool { timerStartDate != nil }
     
-    // Rest timer
+    /// Computed elapsed time: banked time + current running segment.
+    /// Recalculated on every TimelineView tick.
+    var elapsedTime: TimeInterval {
+        accumulatedTime + (timerStartDate.map { Date().timeIntervalSince($0) } ?? 0)
+    }
+    
+    // Rest timer (kept as Timer — it drives state transitions, not just display)
     var restTimeRemaining: Int = 60
     private var restTimer: Timer?
     
     // Per-exercise set tracking (exactly 3 sets)
     var currentSets: [ExerciseSetEntry] = []
+    
+    // MARK: - Set History Archive
+    /// Snapshots of each exercise's sets, keyed by exercise index.
+    /// Populated when transitioning away from an active exercise.
+    var completedSetsArchive: [Int: [ExerciseSetEntry]] = [:]
     
     private let defaultRestDuration = 60
     
@@ -92,6 +103,13 @@ class WorkoutSessionManager {
         guard !exerciseQueue.isEmpty else { return 0 }
         if case .finished = phase { return 1.0 }
         return Double(currentIndex) / Double(exerciseQueue.count)
+    }
+    
+    /// Number of exercises that had at least one completed set.
+    var completedExerciseCount: Int {
+        completedSetsArchive.values.filter { sets in
+            sets.contains(where: \.isCompleted)
+        }.count
     }
     
     var elapsedTimeFormatted: String {
@@ -170,6 +188,11 @@ class WorkoutSessionManager {
         currentSets = entries
     }
     
+    /// Archives the current exercise's sets into the history dictionary.
+    func archiveCurrentSets() {
+        completedSetsArchive[currentIndex] = currentSets
+    }
+    
     func toggleSetComplete(id: UUID) {
         guard let i = currentSets.firstIndex(where: { $0.id == id }) else { return }
         currentSets[i].isCompleted.toggle()
@@ -185,10 +208,12 @@ class WorkoutSessionManager {
     // MARK: - State Transitions
     
     func skipExercise() {
+        archiveCurrentSets()
         isOnLastExercise ? finishWorkout() : transitionToRest()
     }
     
     private func transitionToRest() {
+        archiveCurrentSets()
         stopRestTimer()
         restTimeRemaining = defaultRestDuration
         phase = .resting(duration: defaultRestDuration)
@@ -211,24 +236,21 @@ class WorkoutSessionManager {
     }
     
     func finishWorkout() {
+        archiveCurrentSets()
         stopWorkoutTimer()
         stopRestTimer()
         phase = .finished
     }
     
-    // MARK: - Workout Timer
+    // MARK: - Workout Timer (Date-based, driven by TimelineView)
     
     func startWorkoutTimer() {
-        isTimerRunning = true
-        workoutTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.elapsedTime += 1
-        }
+        timerStartDate = Date()
     }
     
     func pauseWorkoutTimer() {
-        isTimerRunning = false
-        workoutTimer?.invalidate()
-        workoutTimer = nil
+        accumulatedTime = elapsedTime
+        timerStartDate = nil
     }
     
     func toggleTimer() {
@@ -236,9 +258,7 @@ class WorkoutSessionManager {
     }
     
     private func stopWorkoutTimer() {
-        isTimerRunning = false
-        workoutTimer?.invalidate()
-        workoutTimer = nil
+        pauseWorkoutTimer()
     }
     
     // MARK: - Rest Timer
@@ -261,7 +281,6 @@ class WorkoutSessionManager {
     }
     
     deinit {
-        workoutTimer?.invalidate()
         restTimer?.invalidate()
     }
 }

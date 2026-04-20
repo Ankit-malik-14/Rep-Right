@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ExercisesView: View {
     var exercise: Exercise
-    @State private var showWorkout = false
+    /// Bridge: wraps this single exercise into a Preset so ActiveWorkoutView can consume it.
+    private var exerciseAsPreset: Detailed { Detailed(preset: Preset.from(singleExercise: exercise)) }
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -88,21 +89,7 @@ struct ExercisesView: View {
                         
                     
                     HStack(spacing: 12) {
-                        
-                        /*Button(action: {
-                            
-                        }) {
-                            Text("Done")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.2))
-                                .foregroundColor(.black)
-                                .cornerRadius(25)
-                        }
-                        */
-                        Button(action: {
-                            showWorkout = true
-                        }) {
+                        NavigationLink(value: exerciseAsPreset) {
                             HStack {
                                 Image(systemName: "play.fill")
                                 Text("Try Workout")
@@ -113,14 +100,13 @@ struct ExercisesView: View {
                             .foregroundColor(.white)
                             .cornerRadius(25)
                         }
-                        
                     }.padding()
                 }
             }
         }
         .background(Color(.systemBackground))
-        .fullScreenCover(isPresented: $showWorkout) {
-            IndividualRunningExerciseView(exercise: exercise)
+        .navigationDestination(for: Detailed.self) { detail in
+            ActiveWorkoutView(preset: detail.preset)
         }
     }
 }

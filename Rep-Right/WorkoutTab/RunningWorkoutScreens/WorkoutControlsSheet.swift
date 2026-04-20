@@ -7,6 +7,7 @@ import SwiftUI
 
 struct WorkoutControlsSheet: View {
     @Bindable var manager: WorkoutSessionManager
+    @Binding var selectedDetent: PresentationDetent
     
     var body: some View {
         VStack(spacing: 16) {
@@ -24,16 +25,18 @@ struct WorkoutControlsSheet: View {
                     
                     Spacer()
                     
-                    // Live stopwatch
-                    HStack(spacing: 4) {
-                        Image(systemName: "timer")
-                            .foregroundStyle(.orange)
-                        Text(manager.elapsedTimeFormatted)
-                            .font(.headline.monospacedDigit())
+                    // Live stopwatch — driven by TimelineView for jank-free updates
+                    TimelineView(.periodic(from: .now, by: 1.0)) { _ in
+                        HStack(spacing: 4) {
+                            Image(systemName: "timer")
+                                .foregroundStyle(.orange)
+                            Text(manager.elapsedTimeFormatted)
+                                .font(.headline.monospacedDigit())
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(.ultraThinMaterial, in: Capsule())
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(.ultraThinMaterial, in: Capsule())
                 }
             }
             .padding(.horizontal)
@@ -82,69 +85,71 @@ struct WorkoutControlsSheet: View {
             }
             .padding(.horizontal)
             
-            Divider().padding(.horizontal)
-            
-            // MARK: - Interactive Sets Table (3 sets)
-            VStack(spacing: 0) {
-                // Table header
-                HStack {
-                    Text("Set")
-                        .frame(width: 36)
-                    Text("Reps")
-                        .frame(maxWidth: .infinity)
-                    Text("Weight")
-                        .frame(maxWidth: .infinity)
-                    Text("")
-                        .frame(width: 44)
-                }
-                .font(.caption.bold())
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+            // MARK: - Interactive Sets Table (visible only when expanded)
+            if selectedDetent == .medium {
+                Divider().padding(.horizontal)
                 
-                // Set rows with checkmark toggles
-                ForEach($manager.currentSets) { $setEntry in
+                VStack(spacing: 0) {
+                    // Table header
                     HStack {
-                        Text("\(setEntry.setNumber)")
-                            .font(.headline)
+                        Text("Set")
                             .frame(width: 36)
-                            .foregroundStyle(setEntry.isCompleted ? .green : .primary)
-                        
-                        TextField("reps", text: $setEntry.reps)
-                            .textFieldStyle(.roundedBorder)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.center)
-                            .disabled(setEntry.isCompleted)
-                        
-                        TextField("kg", text: $setEntry.weight)
-                            .textFieldStyle(.roundedBorder)
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.center)
-                            .disabled(setEntry.isCompleted)
-                        
-                        // Apple-style checkmark toggle
-                        Button {
-                            withAnimation(.spring(duration: 0.3)) {
-                                manager.toggleSetComplete(id: setEntry.id)
-                            }
-                        } label: {
-                            Image(systemName: setEntry.isCompleted
-                                  ? "checkmark.circle.fill"
-                                  : "circle")
-                                .font(.title2)
-                                .foregroundStyle(setEntry.isCompleted ? .green : .gray.opacity(0.4))
-                                .contentTransition(.symbolEffect(.replace))
-                        }
-                        .frame(width: 44)
+                        Text("Reps")
+                            .frame(maxWidth: .infinity)
+                        Text("Weight")
+                            .frame(maxWidth: .infinity)
+                        Text("")
+                            .frame(width: 44)
                     }
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
                     .padding(.horizontal, 20)
-                    .padding(.vertical, 8)
-                    .background(
-                        setEntry.isCompleted
-                        ? Color.green.opacity(0.06)
-                        : .clear,
-                        in: RoundedRectangle(cornerRadius: 8)
-                    )
+                    .padding(.bottom, 8)
+                    
+                    // Set rows with checkmark toggles
+                    ForEach($manager.currentSets) { $setEntry in
+                        HStack {
+                            Text("\(setEntry.setNumber)")
+                                .font(.headline)
+                                .frame(width: 36)
+                                .foregroundStyle(setEntry.isCompleted ? .green : .primary)
+                            
+                            TextField("reps", text: $setEntry.reps)
+                                .textFieldStyle(.roundedBorder)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.center)
+                                .disabled(setEntry.isCompleted)
+                            
+                            TextField("kg", text: $setEntry.weight)
+                                .textFieldStyle(.roundedBorder)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.center)
+                                .disabled(setEntry.isCompleted)
+                            
+                            // Apple-style checkmark toggle
+                            Button {
+                                withAnimation(.spring(duration: 0.3)) {
+                                    manager.toggleSetComplete(id: setEntry.id)
+                                }
+                            } label: {
+                                Image(systemName: setEntry.isCompleted
+                                      ? "checkmark.circle.fill"
+                                      : "circle")
+                                    .font(.title2)
+                                    .foregroundStyle(setEntry.isCompleted ? .green : .gray.opacity(0.4))
+                                    .contentTransition(.symbolEffect(.replace))
+                            }
+                            .frame(width: 44)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 8)
+                        .background(
+                            setEntry.isCompleted
+                            ? Color.green.opacity(0.06)
+                            : .clear,
+                            in: RoundedRectangle(cornerRadius: 8)
+                        )
+                    }
                 }
             }
             
@@ -158,5 +163,5 @@ struct WorkoutControlsSheet: View {
         let m = WorkoutSessionManager(preset: Presets().presets[0])
         m.startWorkout()
         return m
-    }())
+    }(), selectedDetent: .constant(.medium))
 }
