@@ -214,6 +214,22 @@ struct ActiveWorkoutView: View {
             .onChange(of: manager.phase) { _, newPhase in
                 handlePhaseChange(newPhase)
             }
+<<<<<<< HEAD
+=======
+        }
+        .animation(.easeInOut(duration: 0.4), value: manager.phase)
+        .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $showSheet) {
+            WorkoutControlsSheet(manager: manager)
+                .presentationDetents([.medium])
+                .presentationBackground(.ultraThinMaterial)
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(24)
+                .interactiveDismissDisabled()
+        }
+        .onChange(of: manager.phase) { _, newPhase in
+            handlePhaseChange(newPhase)
+>>>>>>> 1f5a715868bb18cdb92676c685a53b586852ead4
         }
     }
     
