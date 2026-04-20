@@ -6,12 +6,15 @@ struct SummaryTabView: View {
             ScrollView{
                 VStack(spacing: 20) {
                     CalendarView()
-                    NavigationLink(destination: MetricRingView()) {
+                    NavigationLink(value: MetricRingView()) {
                         MetricsView()
                     }
+//                    NavigationLink(destination: MetricRingView()) {
+//                        MetricsView()
+//                    }
                     .buttonStyle(.plain)
                     
-                    NavigationLink(destination: CalorieBreakdownView()) {
+                    NavigationLink(value: CalorieBreakdownView()) {
                         WeeklyCalorieBurnView()
                     }
                     .buttonStyle(.plain)
@@ -21,6 +24,12 @@ struct SummaryTabView: View {
                 }
             .padding(.bottom)
             }
+            .navigationDestination(for: MetricRingView.self, destination: { value in
+                MetricRingView()
+            })
+            .navigationDestination(for: CalorieBreakdownView.self, destination: { value in
+                CalorieBreakdownView()
+            })
 
             .navigationTitle("Summary")
             .toolbar {

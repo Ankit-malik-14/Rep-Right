@@ -44,7 +44,17 @@ class CalorieGoalViewModel {
 
 //MARK: - VIEW
 // UPDATED: Now uses WorkoutSummaryManager as the single source of truth for the calorie goal.
-struct UserCalorieIntake: View{
+struct UserCalorieIntake: View, Hashable{
+    static func == (lhs: UserCalorieIntake, rhs: UserCalorieIntake) -> Bool {
+            // Since there are no initialized properties (only State/Environment),
+            // all instances of this view are structurally identical.
+            return true
+        }
+            
+    func hash(into hasher: inout Hasher) {
+        // Hash a constant or the type itself so the hash value is consistent
+        hasher.combine(String(describing: Self.self))
+    }
     @Environment(WorkoutSummaryManager.self) private var summaryManager
     @Environment(\.dismiss) private var dismiss
     
