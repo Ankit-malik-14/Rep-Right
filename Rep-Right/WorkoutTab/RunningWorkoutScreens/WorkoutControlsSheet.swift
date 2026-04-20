@@ -33,7 +33,7 @@ struct WorkoutControlsSheet: View {
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(.ultraThinMaterial, in: Capsule())
+                    .background(.gray, in: Capsule())
                 }
             }
             .padding(.horizontal)
@@ -85,7 +85,7 @@ struct WorkoutControlsSheet: View {
             Divider().padding(.horizontal)
             
             // MARK: - Interactive Sets Table (3 sets)
-            VStack(spacing: 0) {
+            VStack(spacing: 8) {
                 // Table header
                 HStack {
                     Text("Set")
@@ -103,8 +103,9 @@ struct WorkoutControlsSheet: View {
                 .padding(.bottom, 8)
                 
                 // Set rows with checkmark toggles
+                VStack(spacing: 10){
                 ForEach($manager.currentSets) { $setEntry in
-                    HStack {
+                    HStack() {
                         Text("\(setEntry.setNumber)")
                             .font(.headline)
                             .frame(width: 36)
@@ -131,9 +132,9 @@ struct WorkoutControlsSheet: View {
                             Image(systemName: setEntry.isCompleted
                                   ? "checkmark.circle.fill"
                                   : "circle")
-                                .font(.title2)
-                                .foregroundStyle(setEntry.isCompleted ? .green : .gray.opacity(0.4))
-                                .contentTransition(.symbolEffect(.replace))
+                            .font(.title2)
+                            .foregroundStyle(setEntry.isCompleted ? .green : .black)
+                            .contentTransition(.symbolEffect(.replace))
                         }
                         .frame(width: 44)
                     }
@@ -142,14 +143,17 @@ struct WorkoutControlsSheet: View {
                     .background(
                         setEntry.isCompleted
                         ? Color.green.opacity(0.06)
-                        : .clear,
-                        in: RoundedRectangle(cornerRadius: 8)
+                        : .gray,
+                        in: RoundedRectangle(cornerRadius: 15)
                     )
                 }
+            }
+                .padding(.horizontal,5)
             }
             
             Spacer(minLength: 0)
         }
+        .padding(.top)
     }
 }
 

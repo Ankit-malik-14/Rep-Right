@@ -25,7 +25,7 @@ struct ExercisesView: View {
                                 .frame(width: 100,height: 100)
                             
                             RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.gray.opacity(0.15))
+                                .fill(.gray.opacity(0.15))
                                 .frame(height: 300)
                                 .padding(.horizontal)
                         }
@@ -48,7 +48,8 @@ struct ExercisesView: View {
                             
                             Text(arrayToString(arrayOfStrings: exercise.targetAreas))
                                 .font(.footnote)
-                        }.padding([.bottom],5)
+                        }
+                        .padding(.bottom,5)
                         
                         HStack {
                             Text("Equipment :")
@@ -57,7 +58,7 @@ struct ExercisesView: View {
                             
                             Text(arrayToString(arrayOfStrings: exercise.equipments))
                                 .font(.footnote)
-                        }.padding([.bottom],5)
+                        }.padding(.bottom,5)
                         
                     }
                     .padding(.horizontal)
@@ -109,8 +110,8 @@ struct ExercisesView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.orange)
-                            .foregroundColor(.white)
+                            .background(.orange)
+                            .foregroundStyle(.white)
                             .cornerRadius(25)
                         }
                         

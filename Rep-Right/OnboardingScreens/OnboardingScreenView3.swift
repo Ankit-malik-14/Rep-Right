@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct OnboardingScreenView3: View {
+//    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+    @Binding var hasSeen: Bool
     var body: some View {
         VStack {
             MetricsView()
@@ -63,7 +65,7 @@ struct OnboardingScreenView3: View {
             
             Spacer()
             Button {
-                //
+                hasSeen = true
             } label: {
                 ContinueButton()
             }
@@ -71,8 +73,8 @@ struct OnboardingScreenView3: View {
         }
     }
 }
-#Preview
-    {
-    OnboardingScreenView3()
+#Preview{
+    @Previewable @State var seen = false
+    OnboardingScreenView3(hasSeen: $seen)
             .environment(WeeklySchedules())
 }
