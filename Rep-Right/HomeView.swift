@@ -16,10 +16,19 @@ struct HomeView: View {
             Tab("Summary", systemImage: "list.clipboard.fill"){
                 SummaryTabView()
             }
+            Tab("Profile", systemImage: "person.fill"){
+                ProfileFormView()
+            }
         }
     }
 }
 
 #Preview {
     HomeView()
+        .environment(Presets())
+        .environment(Exercises())
+        .environment(WeeklySchedules())
+        .environment(CustomPresetsDummyData())
+        .environment(WorkoutSummaryManager())
+        .environment(UserProfileModel())
 }

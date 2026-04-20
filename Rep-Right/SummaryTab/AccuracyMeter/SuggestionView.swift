@@ -2,15 +2,12 @@
 //  SuggestionView.swift
 //  Rep-Right
 //
-//  Created by GU on 17/03/26.
-//
 
 import SwiftUI
 
 struct SuggestionView: View {
-    // We have to use State Bindng depends on accuracy 
-    let suggestionText = "Brace core tightly to protect spine."
-    let suggestionText2 = "Hinge hips while keeping back flat."
+    // Fetched from SummaryDataModel/parent: suggestion strings passed in dynamically
+    var suggestions: [String] = []
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -18,8 +15,15 @@ struct SuggestionView: View {
                 .font(.headline)
                 .fontWeight(.bold)
             
-            suggestionRow(text: suggestionText)
-            suggestionRow(text: suggestionText2)
+            if suggestions.isEmpty {
+                Text("Complete more sessions to get suggestions.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(suggestions, id: \.self) { suggestion in
+                    suggestionRow(text: suggestion)
+                }
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,5 +46,5 @@ struct SuggestionView: View {
 }
 
 #Preview {
-    SuggestionView()
+    SuggestionView(suggestions: ["Brace core tightly to protect spine.", "Hinge hips while keeping back flat."])
 }

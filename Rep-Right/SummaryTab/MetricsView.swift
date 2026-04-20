@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct MetricsView: View {
+    // Fetched from SummaryDataModel: Access global summary manager
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Metrics")
@@ -14,22 +17,25 @@ struct MetricsView: View {
                 MetricCard(
                     icon: "dumbbell.fill",
                     title: "Exercise",
-                    value: "14",
-                    change: "+2"
+                    // Fetched from SummaryDataModel: total exercises this week
+                    value: "\(summaryManager.totalExercisesCurrentWeek)",
+                    change: ""
                 )
 
                 MetricCard(
                     icon: "timer",
                     title: "Time",
-                    value: "6.5",
-                    change: "+1.5"
+                    // Fetched from SummaryDataModel: total time this week in hours
+                    value: String(format: "%.1f", summaryManager.totalTimeCurrentWeekInHours),
+                    change: ""
                 )
 
                 MetricCard(
                     icon: "calendar",
                     title: "Streak",
-                    value: "14",
-                    change: "+1"
+                    // Fetched from SummaryDataModel: current active streak
+                    value: "\(summaryManager.currentStreak)",
+                    change: ""
                 )
             }
             .padding(.horizontal, 20)
@@ -70,9 +76,11 @@ struct MetricCard: View {
                     .bold()
                     .foregroundStyle(.primary)
 
-                Text(change)
-                    .foregroundStyle(.orange)
-                    .font(.caption)
+                if !change.isEmpty {
+                    Text(change)
+                        .foregroundStyle(.orange)
+                        .font(.caption)
+                }
             }
         }
         .padding()
@@ -85,5 +93,6 @@ struct MetricCard: View {
 }
 
 #Preview {
-            MetricsView()
+    MetricsView()
+        .environment(WorkoutSummaryManager())
 }

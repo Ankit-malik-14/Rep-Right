@@ -1,3 +1,4 @@
+/* DEPRECATED: Replaced by WorkoutRestScreen. This view was part of the old navigation flow.
 //
 //  WorkoutRestView.swift
 //  Rep-Right
@@ -45,3 +46,4 @@ struct WorkoutRestView: View {
 #Preview {
     WorkoutRestView()
 }
+*/

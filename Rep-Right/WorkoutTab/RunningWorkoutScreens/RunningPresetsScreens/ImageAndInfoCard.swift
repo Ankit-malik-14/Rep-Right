@@ -2,13 +2,12 @@
 //  ImageAndInfoCard.swift
 //  Rep-Right
 //
-//  Created by Mayurakshi Das on 19/03/26.
-//
 
 import SwiftUI
 
 struct ImageAndInfoCard: View {
-    var preset: Preset
+    var exercise: Exercise?
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             
@@ -17,36 +16,38 @@ struct ImageAndInfoCard: View {
                 .frame(maxWidth: .infinity, maxHeight: 250)
                 .padding(.horizontal)
                 .foregroundStyle(.background.secondary)
+            
             // Info card with embedded content
             RoundedRectangle(cornerRadius: 35)
-//                .glassEffect(.regular,in: .rect(cornerRadius: 35))
                 .frame(maxHeight: 128)
                 .shadow(radius: 10)
                 .foregroundStyle(.background.tertiary)
                 .overlay(
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("\(preset.name)")
+                        Text(exercise?.name ?? "No Exercise")
                             .font(.title)
                             .bold()
                         HStack {
-                            // Sets
+                            // Target
                             VStack(alignment: .leading) {
-                                Text("Sets")
+                                Text("Target")
                                     .font(.callout.bold())
                                     .foregroundStyle(.secondary)
-                                Text("3/4")
-                                    .font(.title2.bold())
+                                Text(exercise?.targetAreas.first ?? "--")
+                                    .font(.title3.bold())
+                                    .lineLimit(1)
                             }
 
                             Spacer()
 
-                            // Weight
+                            // Equipment
                             VStack(alignment: .trailing) {
-                                Text("Weight")
+                                Text("Equipment")
                                     .font(.callout.bold())
                                     .foregroundStyle(.secondary)
-                                Text("60 kg")
-                                    .font(.title2.bold())
+                                Text(exercise?.equipments.first ?? "Bodyweight")
+                                    .font(.title3.bold())
+                                    .lineLimit(1)
                             }
                         }
                     }
@@ -57,9 +58,4 @@ struct ImageAndInfoCard: View {
                 
         }
     }
-}
-
-#Preview {
-    ImageAndInfoCard(preset: Presets().presets[0])
-        
 }

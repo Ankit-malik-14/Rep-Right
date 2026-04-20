@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 //MARK: - Data Types
 
@@ -22,8 +23,70 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var assistanceAvailable: Bool
     var demoVideo: URL?
     var setData: [SetData]
-    // var expectedTimeInSec: Int  //with this and met value we can show expected calorie burn for let's say 5mins for example.
-    // var mETValue: Double
+    
+    // MARK: - MET Value Lookup
+    // Scientifically accurate MET values mapped by exercise name.
+    // Source: Compendium of Physical Activities (Ainsworth et al.)
+    // Fallback: 3.5 (moderate-effort general exercise)
+    
+    private static let metDictionary: [String: Double] = [
+        // Compound lower body
+        "Bodyweight Squat":     5.0,
+        "Barbell Squat":        6.0,
+        "Goblet Squat":         5.5,
+        "Lunges":               4.0,
+        "Bulgarian Split Squat": 5.0,
+        "Deadlift":             6.0,
+        "Romanian Deadlift":    5.5,
+        "Hip Thrust":           4.5,
+        "Leg Press":            5.0,
+        "Leg Curl":             3.5,
+        "Leg Extension":        3.5,
+        "Calf Raise":           3.0,
+        
+        // Compound upper body
+        "Push-Up":              3.8,
+        "Bench Press":          5.0,
+        "Incline Bench Press":  5.0,
+        "Dumbbell Press":       5.0,
+        "Overhead Press":       5.0,
+        "Dumbbell Row":         4.5,
+        "Barbell Row":          5.0,
+        "Pull-Up":              8.0,
+        "Chin-Up":              7.5,
+        "Lat Pulldown":         4.5,
+        "Dip":                  5.0,
+        
+        // Isolation
+        "Bicep Curl":           3.5,
+        "Tricep Extension":     3.0,
+        "Lateral Raise":        3.0,
+        "Face Pull":            3.0,
+        "Fly":                  3.5,
+        
+        // Core & isometric
+        "Plank":                3.0,
+        "Sit-Up":               3.8,
+        "Crunch":               3.0,
+        "Russian Twist":        3.5,
+        "Hanging Leg Raise":    4.0,
+        "Mountain Climber":     8.0,
+        
+        // Cardio / conditioning
+        "Burpee":               8.0,
+        "Jumping Jack":         7.0,
+        "Jump Rope":            10.0,
+        "Box Jump":             8.0,
+        "Dynamic Warm-up":      3.5,
+        "Battle Ropes":         10.0,
+        "Rowing":               7.0
+    ]
+    
+    /// Returns the MET value for this exercise.
+    /// Falls back to 3.5 (moderate general exercise) if the name isn't in the dictionary.
+    var metValue: Double {
+        Exercise.metDictionary[name] ?? 3.5
+    }
 }
 
 struct SetData : Hashable{
@@ -31,6 +94,15 @@ struct SetData : Hashable{
     var reps: Int
     //needs optional weight, var wieght: Int?
     //needs duration for timed exercises, var durationInSec: Int?
+}
+
+// Used by IndividualRunningExerciseView and ActiveWorkoutView
+struct WorkoutSet: Identifiable {
+    let id = UUID()
+    var setNumber: Int
+    var weight: String
+    var reps: String
+    var isCompleted: Bool = false
 }
 
 struct Preset: Identifiable, Equatable, Hashable {
@@ -66,6 +138,20 @@ struct Preset: Identifiable, Equatable, Hashable {
     // var calories: Int {exercises.reduce(0){$0 + ($1.metValue * $1.expectedTimeInSec)}} //computed property
 }
 
+// UPDATED: Consolidated UserProfile struct into an @Observable class to act as the single source of truth.
+@Observable
+class UserProfileModel {
+    var profilePicture: String? = "UserImage"
+    var name: String = "Ankit Malik"
+    var age: Int = 21
+    var gender: Genders = .male
+    var weight: Double = 71.0
+    var height: Double = 1.73
+    var modelSensitivity: SensitivityLevels = .Medium
+    var unitSystem: UnitSystem = .metric
+}
+
+/* DEPRECATED: Replaced by @Observable class UserProfileModel. Logic moved to unified model for MVVM.
 struct UserProfile:Hashable {
     var profilePicture: String?
     var name: String
@@ -76,6 +162,18 @@ struct UserProfile:Hashable {
     var modelSensitivity: SensitivityLevels
     var unitSystem: UnitSystem
 }
+
+private struct UserProfileKey: EnvironmentKey {
+    static let defaultValue: UserProfile? = nil
+}
+
+extension EnvironmentValues {
+    var userProfile: UserProfile? {
+        get { self[UserProfileKey.self] }
+        set { self[UserProfileKey.self] = newValue }
+    }
+}
+*/
 
 //MARK: - Enums
 

@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct FormAccuracyReportView: View {
-    let accuracyIndicator: Double = 0.85
+    // Fetched from SummaryDataModel: reads the average form accuracy
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -20,10 +21,11 @@ struct FormAccuracyReportView: View {
                 }
                 
                 Spacer()
-                Gauge(value: accuracyIndicator, in: 0...1) {
+                // Fetched from SummaryDataModel: averageFormAccuracy computed property (0.0–1.0)
+                Gauge(value: summaryManager.averageFormAccuracy, in: 0...1) {
                     EmptyView()
                 } currentValueLabel: {
-                    Text("\(Int(accuracyIndicator * 100))%")
+                    Text("\(Int(summaryManager.averageFormAccuracy * 100))%")
                         .font(.callout)
                         .bold()
                 }
@@ -59,5 +61,5 @@ struct FormAccuracyReportView: View {
 
 #Preview {
     FormAccuracyReportView()
+        .environment(WorkoutSummaryManager())
 }
-

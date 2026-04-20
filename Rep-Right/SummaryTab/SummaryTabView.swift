@@ -6,25 +6,29 @@ struct SummaryTabView: View {
             ScrollView{
                 VStack(spacing: 20) {
                     CalendarView()
-                    MetricsView()
-                    WeeklyCalorieBurnView()
+                    NavigationLink(destination: MetricRingView()) {
+                        MetricsView()
+                    }
+                    .buttonStyle(.plain)
+                    
+                    NavigationLink(destination: CalorieBreakdownView()) {
+                        WeeklyCalorieBurnView()
+                    }
+                    .buttonStyle(.plain)
                     FormInsightView()
                     FormAccuracyReportView()
                     
-                }.navigationDestination(for: UserProfile.self, destination: { userProfile in
-                    UserProfileView()
-                })
+                }
             .padding(.bottom)
             }
 
             .navigationTitle("Summary")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(value: DummyUserProfiles().user) {
+                    NavigationLink(destination: ProfileFormView()) {
                         Image(systemName: "person.circle.fill")
                     }
                 }
-            
             }
         }
     }
@@ -32,5 +36,6 @@ struct SummaryTabView: View {
 
 #Preview {
     SummaryTabView()
+        .environment(WorkoutSummaryManager())
 }
 

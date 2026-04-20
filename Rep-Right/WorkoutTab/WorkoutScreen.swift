@@ -21,15 +21,19 @@ struct WorkoutScreen: View {
     @Environment(Exercises.self) var exercises
     @Environment(Presets.self) var preset
     @Environment(CustomPresetsDummyData.self) var customPresets
+    @State private var router = WorkoutRouter()
     var body: some View {
-        NavigationStack{
+        @Bindable var routerBindable = router
+        NavigationStack(path: $routerBindable.path){
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading){
                     
                     ScheduledWorkoutCard()
                     
+                    // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
                     
+                    // Fetched from DataModel: Main default presets data model
                     DefaultPresets(preset: preset)
                     HStack{
                         Text("Exercises")
@@ -62,6 +66,7 @@ struct WorkoutScreen: View {
             }
 
         }
+        .environment(router)
     }
 }
 
