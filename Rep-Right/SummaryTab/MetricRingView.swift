@@ -5,7 +5,18 @@
 
 import SwiftUI
 
-struct MetricRingView: View {
+struct MetricRingView: View, Hashable {
+    static func == (lhs: MetricRingView, rhs: MetricRingView) -> Bool {
+            // Since there are no initialized properties (only State/Environment),
+            // all instances of this view are structurally identical.
+            return true
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            // Hash a constant or the type itself so the hash value is consistent
+            hasher.combine(String(describing: Self.self))
+        }
+    
     // UPDATED: Now uses WorkoutSummaryManager
     @Environment(WorkoutSummaryManager.self) private var data
     @State private var animatedProgress: Double = 0

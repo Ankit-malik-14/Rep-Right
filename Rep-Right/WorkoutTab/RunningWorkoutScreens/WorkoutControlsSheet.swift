@@ -37,12 +37,6 @@ struct WorkoutControlsSheet: View {
                         .padding(.vertical, 8)
                         .background(.ultraThinMaterial, in: Capsule())
                     }
-<<<<<<< HEAD
-=======
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(.gray, in: Capsule())
->>>>>>> 1f5a715868bb18cdb92676c685a53b586852ead4
                 }
             }
             .padding(.horizontal)
@@ -91,7 +85,6 @@ struct WorkoutControlsSheet: View {
             }
             .padding(.horizontal)
             
-<<<<<<< HEAD
             // MARK: - Interactive Sets Table (visible only when expanded)
             if selectedDetent == .medium {
                 Divider().padding(.horizontal)
@@ -107,68 +100,10 @@ struct WorkoutControlsSheet: View {
                             .frame(maxWidth: .infinity)
                         Text("")
                             .frame(width: 44)
-=======
-            Divider().padding(.horizontal)
-            
-            // MARK: - Interactive Sets Table (3 sets)
-            VStack(spacing: 8) {
-                // Table header
-                HStack {
-                    Text("Set")
-                        .frame(width: 36)
-                    Text("Reps")
-                        .frame(maxWidth: .infinity)
-                    Text("Weight")
-                        .frame(maxWidth: .infinity)
-                    Text("")
-                        .frame(width: 44)
-                }
-                .font(.caption.bold())
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
-                
-                // Set rows with checkmark toggles
-                VStack(spacing: 10){
-                ForEach($manager.currentSets) { $setEntry in
-                    HStack() {
-                        Text("\(setEntry.setNumber)")
-                            .font(.headline)
-                            .frame(width: 36)
-                            .foregroundStyle(setEntry.isCompleted ? .green : .primary)
-                        
-                        TextField("reps", text: $setEntry.reps)
-                            .textFieldStyle(.roundedBorder)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.center)
-                            .disabled(setEntry.isCompleted)
-                        
-                        TextField("kg", text: $setEntry.weight)
-                            .textFieldStyle(.roundedBorder)
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.center)
-                            .disabled(setEntry.isCompleted)
-                        
-                        // Apple-style checkmark toggle
-                        Button {
-                            withAnimation(.spring(duration: 0.3)) {
-                                manager.toggleSetComplete(id: setEntry.id)
-                            }
-                        } label: {
-                            Image(systemName: setEntry.isCompleted
-                                  ? "checkmark.circle.fill"
-                                  : "circle")
-                            .font(.title2)
-                            .foregroundStyle(setEntry.isCompleted ? .green : .black)
-                            .contentTransition(.symbolEffect(.replace))
-                        }
-                        .frame(width: 44)
->>>>>>> 1f5a715868bb18cdb92676c685a53b586852ead4
                     }
                     .font(.caption.bold())
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 20)
-<<<<<<< HEAD
                     .padding(.bottom, 8)
                     
                     // Set rows with checkmark toggles
@@ -215,18 +150,7 @@ struct WorkoutControlsSheet: View {
                             in: RoundedRectangle(cornerRadius: 8)
                         )
                     }
-=======
-                    .padding(.vertical, 8)
-                    .background(
-                        setEntry.isCompleted
-                        ? Color.green.opacity(0.06)
-                        : .gray,
-                        in: RoundedRectangle(cornerRadius: 15)
-                    )
->>>>>>> 1f5a715868bb18cdb92676c685a53b586852ead4
                 }
-            }
-                .padding(.horizontal,5)
             }
             
             Spacer(minLength: 0)
