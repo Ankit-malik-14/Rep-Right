@@ -45,4 +45,5 @@ class SummaryData {
 enum SummaryRoute: Hashable {
     case calorieBreakdown
     case metricRing
+    case userCalorieIntake
 }

@@ -96,7 +96,7 @@ struct SetData : Hashable{
     //needs duration for timed exercises, var durationInSec: Int?
 }
 
-// Used by IndividualRunningExerciseView and ActiveWorkoutView
+// Used by ActiveWorkoutView
 struct WorkoutSet: Identifiable {
     let id = UUID()
     var setNumber: Int
@@ -136,6 +136,23 @@ struct Preset: Identifiable, Equatable, Hashable {
     var equipments: [String]
     var calories: Int
     // var calories: Int {exercises.reduce(0){$0 + ($1.metValue * $1.expectedTimeInSec)}} //computed property
+}
+
+extension Preset {
+    /// Helper to run a single exercise inside the standardized ActiveWorkoutView pipeline.
+    static func from(singleExercise exercise: Exercise) -> Preset {
+        return Preset(
+            id: UUID(),
+            isRestDay: false,
+            name: exercise.name,
+            exercises: [exercise],
+            isWarmpUp: false,
+            scheduledFor: nil,
+            estTime: 5, // Rough estimate
+            equipments: exercise.equipments,
+            calories: Int(exercise.metValue * 5.0) // Rough generic calculation
+        )
+    }
 }
 
 // UPDATED: Consolidated UserProfile struct into an @Observable class to act as the single source of truth.

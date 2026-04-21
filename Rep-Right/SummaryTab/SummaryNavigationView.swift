@@ -74,6 +74,8 @@ struct SummaryNavigationView: View {
                     CalorieBreakdownView()
                 case .metricRing:
                     MetricRingView()
+                case .userCalorieIntake:
+                    UserCalorieIntake()
                 }
             }
             // Removed UserProfile navigation sync. Profile tab handles it independently.
