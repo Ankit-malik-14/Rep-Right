@@ -1,5 +1,13 @@
 import SwiftUI
 
+struct ExerciseModel: Identifiable {
+    let id = UUID()
+    var name: String
+    let targetMuscle: String
+    let timeAgo: String
+    let accuracy: Int
+}
+
 struct ExerciseAccuracyListView: View {
     // Fetched from SummaryDataModel: completed exercises with form accuracy data
     @Environment(WorkoutSummaryManager.self) private var summaryManager
@@ -56,6 +64,12 @@ struct ExerciseAccuracyListView: View {
                                 }
                                 .opacity(0.01)
                             }
+                            .padding(.vertical, 4)
+                            NavigationLink(destination: AccuracyMeterView(staticValue: 32.0)) {
+                                EmptyView()
+                            }
+                            .opacity(0.01)
+
                         }
                     } header: {
                         Text("Recent")
