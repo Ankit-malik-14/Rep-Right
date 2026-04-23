@@ -13,7 +13,7 @@ struct CustomPresetsListView: View {
        
             List{
                 ForEach(preset.customPresets){ preset1 in
-                    NavigationLink(value: Detailed(preset: preset1)) {
+                    NavigationLink(value: preset1) {
                         HStack{
                             RoundedRectangle(cornerRadius: 10)
                                 .frame(width: 80, height: 80)
