@@ -10,8 +10,11 @@ struct OnboardingContainerView: View {
             Tab("onboarding2",image: ""){
                 OnboardingScreenView2()
             }
-            Tab("onboarding2",image: ""){
-                OnboardingScreenView3(hasSeen: $onboardingCheck)
+            Tab("onboarding3",image: ""){
+                OnboardingScreenView3()
+            }
+            Tab("onboarding4",image: ""){
+                OnboardingScreenView4(hasSeen: $onboardingCheck)
             }
         }.tabViewStyle(.page)
             .ignoresSafeArea()

@@ -13,21 +13,24 @@ struct CustomPresetsListView: View {
        
             List{
                 ForEach(preset.customPresets){ preset1 in
-                    HStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 80, height: 80)
-                            .foregroundStyle(.background.secondary)
-                        VStack(alignment: .leading){
-                            Text(preset1.name)
-                            HStack{
-                                ForEach(preset1.focousArea, id: \.self) { area in
-                                    Text(area)
-                                        .font(.footnote)
-                                        .foregroundStyle(.secondary)
+                    NavigationLink(value: Detailed(preset: preset1)) {
+                        HStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 80, height: 80)
+                                .foregroundStyle(.background.secondary)
+                            VStack(alignment: .leading){
+                                Text(preset1.name)
+                                HStack{
+                                    ForEach(preset1.focousArea, id: \.self) { area in
+                                        Text(area)
+                                            .font(.footnote)
+                                            .foregroundStyle(.secondary)
+                                    }
                                 }
                             }
                         }
                     }
+                    .buttonStyle(.plain)
                 }
             }.listRowSpacing(10)
                 .navigationTitle("Custom")

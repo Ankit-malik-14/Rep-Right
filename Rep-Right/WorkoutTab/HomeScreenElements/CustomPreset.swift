@@ -22,7 +22,7 @@ struct CustomPreset: View {
             ScrollView(.horizontal){
                 HStack{
                     ForEach(0..<min(preset.customPresets.count, 3),id: \.self){ idx in
-                        NavigationLink(value: ClickedPresetDestination.presetInfo) {
+                        NavigationLink(value: Detailed(preset: preset.customPresets[idx])) {
                             PresetTileViewType(preset: preset.customPresets[idx], type: .large)
                         }.buttonStyle(.plain)
                     }

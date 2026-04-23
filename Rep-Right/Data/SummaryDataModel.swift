@@ -187,8 +187,60 @@ class WorkoutSummaryManager {
         completedExercises.append(contentsOf: exerciseRecords)
     }
     
-    // MARK: - Computed Metrics for UI 
+    // MARK: - Recovery & Smart Recommendations
     
+    // Returns muscle groups that are still within their 48hr recovery window
+    // before the user starts a given preset
+    func muscleRecoveryStatus(
+        for preset: Preset,
+        using catalog: [Exercise],
+        windowHours: Double = 48
+    ) -> [(muscle: String, hoursRemaining: Double)] {
+        let now = Date()
+        let windowStart = now.addingTimeInterval(-windowHours * 3600)
+
+        // All exercises done within the window
+        let recentRecords = completedExercises.filter { $0.date >= windowStart }
+
+        // Flatten to muscle groups touched recently, with their last training time
+        var lastTrained: [String: Date] = [:]
+        for record in recentRecords {
+            guard let exercise = catalog.first(where: { $0.id == record.exerciseId }) else { continue }
+            for muscle in exercise.targetAreas {
+                if let existing = lastTrained[muscle] {
+                    lastTrained[muscle] = max(existing, record.endTime)
+                } else {
+                    lastTrained[muscle] = record.endTime
+                }
+            }
+        }
+
+        // Cross-reference against the target preset's muscles
+        let presetMuscles = Set(preset.exercises.flatMap { $0.targetAreas })
+
+        return presetMuscles.compactMap { muscle in
+            guard let trainedAt = lastTrained[muscle] else { return nil }
+            let hoursElapsed = now.timeIntervalSince(trainedAt) / 3600
+            let hoursRemaining = windowHours - hoursElapsed
+            guard hoursRemaining > 0 else { return nil }
+            return (muscle: muscle, hoursRemaining: hoursRemaining)
+        }.sorted { $0.hoursRemaining > $1.hoursRemaining }
+    }
+
+    // Suggests the best preset to do today, avoiding overworked muscles
+    func smartPresetRecommendation(
+        from presets: [Preset],
+        using catalog: [Exercise]
+    ) -> Preset? {
+        presets
+            .filter { !$0.isRestDay && !$0.exercises.isEmpty }
+            .min { a, b in
+                muscleRecoveryStatus(for: a, using: catalog).count <
+                muscleRecoveryStatus(for: b, using: catalog).count
+            }
+    }
+    
+    // MARK: - Computed Metrics for UI 
     var totalExercisesCurrentWeek: Int {
         weeklySummaries.first?.dailySummaries.reduce(0) { $0 + $1.exercises.count } ?? 0
     }

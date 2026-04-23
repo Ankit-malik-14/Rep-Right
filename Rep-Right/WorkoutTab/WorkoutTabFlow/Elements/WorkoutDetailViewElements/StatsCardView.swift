@@ -9,39 +9,45 @@ import SwiftUI
 
 struct StatsCardView: View {
     @State var showScheduler: Bool = false
+    var preset: Preset? = nil
+    
     var body: some View {
         VStack(spacing: 20) {
             // Using Grid for perfect 2x2 alignment
             Grid(alignment: .leading, horizontalSpacing: 80, verticalSpacing: 24) {
                 GridRow {
-                    StatItemView(icon: "flame.fill", title: "Calories", value: "450 kcal")
-                    StatItemView(icon: "clock", title: "Time", value: "45 mins")
+                    StatItemView(icon: "flame.fill", title: "Calories", value: preset.map { "\($0.calories) kcal" } ?? "450 kcal")
+                    StatItemView(icon: "clock", title: "Time", value: preset.map { "\($0.estTime) mins" } ?? "45 mins")
                 }
                 GridRow {
-                    StatItemView(icon: "dumbbell.fill", title: "Equipment", value: "Dumbbells")
-                    StatItemView(icon: "figure.walk", title: "Target", value: "Back")
+                    StatItemView(icon: "dumbbell.fill", title: "Equipment", value: preset?.equipments.first ?? "Dumbbells")
+                    StatItemView(icon: "figure.walk", title: "Target", value: preset?.focousArea.first ?? "Back")
                 }
             }
             .padding(.top, 20)
             .padding(.horizontal, 20)
             
-            Divider()
-                .frame(width: 300)
-            
-            Button(action: {
-                showScheduler.toggle()
-            }) {
-                HStack(spacing: 6) {
-                    Image(systemName: "calendar")
-                    Text("Schedule workout")
+            if !(preset?.isWarmpUp ?? false) {
+                Divider()
+                    .frame(width: 300)
+                
+                Button(action: {
+                    showScheduler.toggle()
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "calendar")
+                        Text("Schedule workout")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.orange)
                 }
-                .font(.subheadline)
-                .foregroundColor(.orange)
+                .sheet(isPresented: $showScheduler, content: {
+                    SchedulerView(contextPreset: preset)
+                })
+                .padding(.bottom, 16)
+            } else {
+                Spacer().frame(height: 16)
             }
-            .sheet(isPresented: $showScheduler, content: {
-                SchedulerView()
-            })
-            .padding(.bottom, 16)
         }
         //.frame(width: .infinity)
         .background(Color(UIColor.systemBackground))
