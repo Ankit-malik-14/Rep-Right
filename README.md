@@ -38,7 +38,7 @@
 
 | Name | Role | Responsibilities |
 | :--- | :--- | :--- |
-| **Ankit Malik** | Lead Developer | Smart Scheduling UI, Smart Prep, Complex Exercise Models |
+| **Ankit Malik** | Team Lead | Smart Scheduling UI, Smart Prep, Complex Exercise Models |
 | **Mayurakshi Das** | UI/UX & AI Dev | Workout Tab UI/UX, Isometric Detection Models |
 | **Abhyansh** | UI/UX & Data | UI/UX Design, Database Management |
 | **Manas Dubey** | UI/UX & Data Vis | Summary Tabs, Logs, Charts Integration |
