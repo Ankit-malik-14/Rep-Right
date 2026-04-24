@@ -260,6 +260,7 @@ struct ActiveWorkoutView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 20) {
+                // 1. Animated checkmark
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80))
                     .foregroundStyle(.green)
@@ -269,12 +270,24 @@ struct ActiveWorkoutView: View {
                     .font(.title.bold())
                     .foregroundStyle(.white)
                 
+                // 2. Personal record detector
+                if let pr = detectPersonalRecord() {
+                    PRBadgeView(exerciseName: pr)
+                }
+
+                // 3. Recovery advisory
+                let recoveredMuscles = Array(Set(manager.exerciseQueue.flatMap { $0.targetAreas }))
+                if !recoveredMuscles.isEmpty {
+                    RecoveryAdvisoryView(muscles: recoveredMuscles)
+                        .padding(.top, 10)
+                }
+
+                // 4. Stats row
                 HStack(spacing: 30) {
                     statColumn(
                         value: manager.elapsedTimeFormatted,
                         label: "Duration"
                     )
-                    // UPDATED: Use userProfile.weight value natively
                     statColumn(
                         value: "\(manager.estimatedCalories(userWeightKg: userProfile.weight))",
                         label: "Calories"
@@ -284,7 +297,7 @@ struct ActiveWorkoutView: View {
                         label: "Exercises"
                     )
                 }
-                .padding(.top, 10)
+                .padding(.top, 20)
             }
         }
     }
@@ -373,6 +386,88 @@ struct ActiveWorkoutView: View {
             )
         }
         summaryManager.logPresetSession(presetId: preset.id, exercises: exerciseData)
+    }
+    
+    // MARK: - PR Detection
+    private func detectPersonalRecord() -> String? {
+        var prExerciseName: String? = nil
+        
+        for (index, sets) in manager.completedSetsArchive {
+            guard let exercise = manager.exerciseQueue[safe: index] else { continue }
+            let completedSets = sets.filter { $0.isCompleted }
+            guard !completedSets.isEmpty else { continue }
+            
+            // Calculate current total reps (since weight isn't robustly tracked per set in the current model)
+            let currentTotalReps = completedSets.compactMap { Int($0.reps) }.reduce(0, +)
+            
+            // Get past history for this exercise
+            let pastRecords = summaryManager.completedExercises.filter { $0.exerciseId == exercise.id }
+            
+            if pastRecords.isEmpty {
+                // If it's their first time doing it, let's treat it as a baseline, not a PR.
+                continue
+            }
+            
+            let pastMaxReps = pastRecords.map { record in
+                record.actualSet.map { $0.sets * $0.reps }.reduce(0, +)
+            }.max() ?? 0
+            
+            if currentTotalReps > pastMaxReps {
+                prExerciseName = exercise.name
+                break // Just return the first PR found for simplicity
+            }
+        }
+        return prExerciseName
+    }
+}
+
+// MARK: - Helper Extension
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+// MARK: - Celebration Views
+
+struct PRBadgeView: View {
+    let exerciseName: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "star.fill")
+                .foregroundColor(.yellow)
+            Text("Personal best — \(exerciseName)")
+                .font(.subheadline.bold())
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.orange.opacity(0.8))
+        .cornerRadius(20)
+    }
+}
+
+struct RecoveryAdvisoryView: View {
+    let muscles: [String]
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Label("Trainer's Advice", systemImage: "bolt.heart.fill")
+                .font(.subheadline.bold())
+                .foregroundColor(.orange)
+            
+            let musclesText = muscles.prefix(3).joined(separator: ", ")
+            Text("Let your \(musclesText) rest for 48 hours.")
+                .font(.caption)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color(white: 0.15))
+        .cornerRadius(12)
+        .padding(.horizontal, 40)
     }
 }
 

@@ -9,12 +9,16 @@ import SwiftUI
 
 struct SchedulerView: View {
     @Environment(WeeklySchedules.self) var schedules
+    @Environment(\.dismiss) private var dismiss
+    var contextPreset: Preset? = nil
+    
     var body: some View {
         NavigationStack{
             VStack{
                 ScrollView{
                     ForEach(Weekday.allCases,id: \.self){ weekday in
-                        SchedulerCards(weekday: weekday).padding(.horizontal)
+                        SchedulerCards(weekday: weekday, contextPreset: contextPreset)
+                            .padding(.horizontal)
                     }
                 }
             }

@@ -9,7 +9,11 @@ import SwiftUI
 
 struct SchedulerCards: View {
     var weekday: Weekday
+    var contextPreset: Preset? = nil
     @Environment(WeeklySchedules.self) var weeklySchedules
+    @Environment(WorkoutSummaryManager.self) var summaryManager
+    @Environment(Exercises.self) var exercises
+    @Environment(\.dismiss) private var dismiss
     var preset: Preset? {weeklySchedules.schedules[weekday]}
     @State var selectionSheet: Bool = false
     @State var isRest = false
@@ -81,8 +85,13 @@ struct SchedulerCards: View {
                         }
                         Spacer()
                         VStack{
-                            Button("Edit"){
-                                selectionSheet.toggle()
+                            Button(contextPreset != nil ? "Assign" : "Edit"){
+                                if let contextPreset = contextPreset {
+                                    weeklySchedules.schedules[weekday] = contextPreset
+                                    dismiss()
+                                } else {
+                                    selectionSheet.toggle()
+                                }
                             }.buttonStyle(.borderedProminent).tint(.orange)
                                 .sheet(isPresented: $selectionSheet) {
                                     PresetSelectionView(weekday: weekday)
@@ -94,7 +103,12 @@ struct SchedulerCards: View {
                 }
                 else{
                     Button{
-                        selectionSheet.toggle()
+                        if let contextPreset = contextPreset {
+                            weeklySchedules.schedules[weekday] = contextPreset
+                            dismiss()
+                        } else {
+                            selectionSheet.toggle()
+                        }
                     } label: {
                         VStack{
                             ZStack{
@@ -129,25 +143,58 @@ struct SchedulerCards: View {
                 }
             }
             else {
-                VStack{
-                    Image(systemName: "zzz")
-                        .font(.title)
-                        .padding(.bottom,2)
-                    Text("Recovery is key to growth")
-                        .font(.body).bold()
-                }
-                .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(style: .init(dash: [2]))
-                    )
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("Today's Recovery Tips", systemImage: "bolt.heart.fill")
+                        .font(.headline.bold())
+                        .foregroundStyle(.orange)
                     
+                    ForEach(restDayTips(for: weekday), id: \.self) { tip in
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                            Text(tip).font(.subheadline)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(style: .init(dash: [2]))
+                )
+                .foregroundStyle(.secondary)
             }
             
         }.padding().background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
             .padding(3)
+    }
+    
+    func restDayTips(for weekday: Weekday) -> [String] {
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        let yesterdayRecords = summaryManager.completedExercises.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
+        
+        var trainedMuscles: Set<String> = []
+        for record in yesterdayRecords {
+            if let ex = exercises.exerciseList.first(where: { $0.id == record.exerciseId }) {
+                for area in ex.targetAreas {
+                    trainedMuscles.insert(area)
+                }
+            }
+        }
+        
+        var tips = [
+            "Hydrate well to flush out metabolic waste.",
+            "Aim for 8-9 hours of sleep tonight to maximize recovery."
+        ]
+        
+        if !trainedMuscles.isEmpty {
+            let musclesStr = trainedMuscles.prefix(2).joined(separator: " and ")
+            tips.insert("Light walking is fine, but avoid heavy loading on your \(musclesStr.lowercased()) today.", at: 0)
+        } else {
+            tips.insert("A 15-minute mobility flow or stretching session is perfect for today.", at: 0)
+        }
+        
+        return tips
     }
 }
 
@@ -155,4 +202,6 @@ struct SchedulerCards: View {
     SchedulerCards(weekday: .friday)
         .environment(Presets())
         .environment(WeeklySchedules())
+        .environment(WorkoutSummaryManager())
+        .environment(Exercises())
 }
