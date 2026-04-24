@@ -4,11 +4,7 @@
 //
 //  Created by Ankit Malik on 2026-03-16.
 //
-
 import Foundation
-import SwiftUI
-
-//MARK: - Data Types
 
 struct Exercise: Identifiable,Equatable,Hashable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {

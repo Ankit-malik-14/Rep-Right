@@ -5,6 +5,10 @@
 
 import SwiftUI
 
+enum ProfileRoute: Hashable{
+    case profile
+}
+
 struct ProfileFormView: View {
     @Environment(UserProfileModel.self) private var profile
     
