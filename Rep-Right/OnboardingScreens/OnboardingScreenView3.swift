@@ -6,7 +6,7 @@ struct OnboardingScreenView3: View {
             MetricsView()
             Spacer()
             SchedulerCards(weekday: .wednesday)
-                
+                .allowsHitTesting(false)
                 .background(
                     RoundedRectangle(cornerRadius:20)
                         .stroke(Color.gray.opacity(0.3), lineWidth: 1)

@@ -96,6 +96,63 @@ struct SetData : Hashable{
     //needs duration for timed exercises, var durationInSec: Int?
 }
 
+enum FocusArea: String, CaseIterable, Hashable {
+    case shoulder = "Shoulder"
+    case back = "Back"
+    case chest = "Chest"
+    case arms = "Arms"
+    case core = "Core"
+    case legs = "Legs"
+
+    static func from(targetArea: String) -> FocusArea? {
+        let normalized = targetArea
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        switch normalized {
+        case "shoulder", "shoulders", "delts", "delt", "rear delts", "front delts", "side delts":
+            return .shoulder
+        case "back", "lats", "rhomboids", "traps":
+            return .back
+        case "chest", "pecs", "pectorals":
+            return .chest
+        case "arm", "arms", "biceps", "triceps", "forearms":
+            return .arms
+        case "core", "abs", "abdominals", "obliques":
+            return .core
+        case "leg", "legs", "quads", "glutes", "hamstrings", "calves":
+            return .legs
+        default:
+            if normalized.contains("delt") || normalized.contains("shoulder") {
+                return .shoulder
+            }
+            if normalized.contains("lat") || normalized.contains("rhomboid") || normalized.contains("trap") || normalized.contains("back") {
+                return .back
+            }
+            if normalized.contains("chest") || normalized.contains("pec") {
+                return .chest
+            }
+            if normalized.contains("bicep") || normalized.contains("tricep") || normalized.contains("forearm") || normalized.contains("arm") {
+                return .arms
+            }
+            if normalized.contains("core") || normalized.contains("ab") || normalized.contains("oblique") {
+                return .core
+            }
+            if normalized.contains("quad") || normalized.contains("glute") || normalized.contains("hamstring") || normalized.contains("calf") || normalized.contains("leg") {
+                return .legs
+            }
+            return nil
+        }
+    }
+}
+
+extension Exercise {
+    var primaryFocusArea: FocusArea? {
+        guard let firstTarget = targetAreas.first else { return nil }
+        return FocusArea.from(targetArea: firstTarget)
+    }
+}
+
 // Used by ActiveWorkoutView
 struct WorkoutSet: Identifiable {
     let id = UUID()
@@ -118,8 +175,8 @@ struct Preset: Identifiable, Equatable, Hashable {
     var estTime: Int
     //now focus area can become enum and we can process with CaseIterable's .allTypes
     var focousArea: [String] {
-        // Compute the top 3 most frequent target areas across all exercises in this preset
-        let allAreas = exercises.flatMap { $0.targetAreas }
+        // Compute the top 3 most frequent primary focus areas across all exercises in this preset
+        let allAreas = exercises.compactMap { $0.primaryFocusArea?.rawValue }
         guard !allAreas.isEmpty else { return [] }
         var counts: [String: Int] = [:]
         for area in allAreas {
