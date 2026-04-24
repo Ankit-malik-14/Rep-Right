@@ -155,6 +155,12 @@ extension Preset {
     }
 }
 
+enum FitnessLevel: String, CaseIterable, Hashable {
+    case beginner = "Beginner"
+    case intermediate = "Intermediate"
+    case advanced = "Advanced"
+}
+
 // UPDATED: Consolidated UserProfile struct into an @Observable class to act as the single source of truth.
 @Observable
 class UserProfileModel {
@@ -166,6 +172,8 @@ class UserProfileModel {
     var height: Double = 1.73
     var modelSensitivity: SensitivityLevels = .Medium
     var unitSystem: UnitSystem = .metric
+    var fitnessLevel: FitnessLevel = .beginner
+    var weeklyGoalDays: Int = 3
 }
 
 /* DEPRECATED: Replaced by @Observable class UserProfileModel. Logic moved to unified model for MVVM.
