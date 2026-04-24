@@ -14,6 +14,8 @@ struct Detailed: Hashable {
 struct WorkoutDetailView: View {
     var preset: Preset
     var executionPhase: Detailed { Detailed(preset: preset) }
+    @State private var showGate = false
+    @State private var showWorkout = false
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -21,7 +23,7 @@ struct WorkoutDetailView: View {
                 // 1. Header & Stats Section (Overlapping)
                 VStack(spacing: -50) {
                     PresetHeaderCardView()
-                    StatsCardView()
+                    StatsCardView(preset: preset)
                 }
                 .padding(.horizontal)
                 
@@ -45,7 +47,9 @@ struct WorkoutDetailView: View {
 //                    .background(Color.orange)
 //                    .cornerRadius(12)
 //                }
-                NavigationLink(value: Detailed(preset: preset), label: {
+                Button {
+                    showGate = true
+                } label: {
                     HStack {
                         Image(systemName: "play.fill")
                         Text("Start Workout")
@@ -56,13 +60,19 @@ struct WorkoutDetailView: View {
                     .padding(.vertical, 16)
                     .background(Color.orange)
                     .cornerRadius(12)
-                }).navigationDestination(for: Detailed.self) { type in
-                    ActiveWorkoutView(preset: executionPhase.preset)
                 }
                 .padding(.horizontal)
-                .navigationDestination(for: Preset.self, destination: { preset in
+                .sheet(isPresented: $showGate) {
+                    PreWorkoutGateView(preset: preset) {
+                        showGate = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            showWorkout = true
+                        }
+                    }
+                }
+                .navigationDestination(isPresented: $showWorkout) {
                     ActiveWorkoutView(preset: preset)
-                })
+                }
                 
                 // 4. Exercises List
                 VStack(spacing: 16) {

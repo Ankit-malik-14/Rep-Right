@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct OnboardingScreenView3: View {
-//    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
-    @Binding var hasSeen: Bool
     var body: some View {
         VStack {
             MetricsView()
@@ -64,17 +62,15 @@ struct OnboardingScreenView3: View {
             }
             
             Spacer()
-            Button {
-                hasSeen = true
-            } label: {
-                ContinueButton()
-            }
-
+            // Add instructions to swipe
+            Text("Swipe to continue")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.bottom, 20)
         }
     }
 }
 #Preview{
-    @Previewable @State var seen = false
-    OnboardingScreenView3(hasSeen: $seen)
+    OnboardingScreenView3()
             .environment(WeeklySchedules())
 }

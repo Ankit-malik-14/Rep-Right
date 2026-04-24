@@ -10,6 +10,7 @@ import SwiftUI
 struct ScheduledWorkoutCard: View {
     @Environment(WeeklySchedules.self) var weeklySchedules
     @State private var showWorkout = false
+    @State private var showGate = false
     
     func focousPrinter(areas : [String])-> String{
         var result = ""
@@ -92,7 +93,7 @@ struct ScheduledWorkoutCard: View {
                                                         .foregroundStyle(.secondary)
                                                     Spacer()
                                                     Button {
-                                                        showWorkout = true
+                                                        showGate = true
                                                     } label: {
                                                         Text("Start Workout")
                                                     }.buttonStyle(.borderedProminent)
@@ -106,6 +107,15 @@ struct ScheduledWorkoutCard: View {
                                 }
                             }
                             .padding()
+                }
+            }
+            .fullScreenCover(isPresented: $showGate) {
+                PreWorkoutGateView(preset: todaysSchedule) {
+                    showGate = false
+                    // Small delay to allow the gate to dismiss before presenting the workout
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        showWorkout = true
+                    }
                 }
             }
             .fullScreenCover(isPresented: $showWorkout) {

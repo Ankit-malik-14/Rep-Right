@@ -9,15 +9,43 @@ import SwiftUI
 
 struct ExercisesView: View {
     var exercise: Exercise
+    @Environment(UserProfileModel.self) private var userProfile
+    @AppStorage private var hasSeenExerciseGuide: Bool
+    
+    @State private var isExecutionExpanded: Bool = true
+    @State private var showTooltip = false
+    
     /// Bridge: wraps this single exercise into a Preset so ActiveWorkoutView can consume it.
     private var exerciseAsPreset: Detailed { Detailed(preset: Preset.from(singleExercise: exercise)) }
+    
+    init(exercise: Exercise) {
+        self.exercise = exercise
+        self._hasSeenExerciseGuide = AppStorage(wrappedValue: false, "hasSeenExerciseGuide_\(exercise.id)")
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     ZStack(alignment: .topLeading){
                         if exercise.assistanceAvailable {
-                            assisstanceAvailablityTag(type: .iconAndText).padding().offset(x:13)
+                            assisstanceAvailablityTag(type: .iconAndText)
+                                .padding()
+                                .offset(x:13)
+                                .overlay(alignment: .bottomLeading) {
+                                    if showTooltip {
+                                        Text("Tap 'Try Workout' then enable camera for real-time form feedback.")
+                                            .font(.caption)
+                                            .padding(10)
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(8)
+                                            .shadow(radius: 4)
+                                            .offset(x: 13, y: 50)
+                                            .transition(.opacity.combined(with: .move(edge: .top)))
+                                            .zIndex(1)
+                                    }
+                                }
                         }
                         
                         ZStack{
@@ -37,7 +65,7 @@ struct ExercisesView: View {
                             .fontWeight(.bold)
                         
                         Spacer()
-                                            }
+                    }
                     .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 3) {
@@ -67,16 +95,19 @@ struct ExercisesView: View {
                     Divider()
                         .padding(.horizontal)
                     
-                    Text("Execution")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .padding(.horizontal)
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        pointView(steps: exercise.executionSteps)
-                    .padding(.horizontal)
+                    DisclosureGroup(isExpanded: $isExecutionExpanded) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            pointView(steps: exercise.executionSteps)
+                                .padding(.top, 10)
+                        }
+                    } label: {
+                        Text("Execution")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
                     }
                     .padding(.horizontal)
+                    
                     Text("Tips")
                         .font(.title3)
                         .fontWeight(.bold)
@@ -108,6 +139,21 @@ struct ExercisesView: View {
         .background(Color(.systemBackground))
         .navigationDestination(for: Detailed.self) { detail in
             ActiveWorkoutView(preset: detail.preset)
+        }
+        .onAppear {
+            isExecutionExpanded = (userProfile.fitnessLevel == .beginner)
+            
+            if userProfile.fitnessLevel == .beginner && !hasSeenExerciseGuide {
+                withAnimation {
+                    showTooltip = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    withAnimation {
+                        showTooltip = false
+                    }
+                    hasSeenExerciseGuide = true
+                }
+            }
         }
     }
 }

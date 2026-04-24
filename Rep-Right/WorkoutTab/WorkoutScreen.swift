@@ -28,8 +28,16 @@ struct WorkoutScreen: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading){
                     
-                    ScheduledWorkoutCard()
+                    ReadinessBannerView()
+                        .padding(.top)
                     
+                    QuickActionRow()
+                        .padding(.vertical, 8)
+                    
+                    SmartRecommendationCard()
+                        .padding(.bottom, 8)
+                    
+                    ScheduledWorkoutCard()
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
                     
