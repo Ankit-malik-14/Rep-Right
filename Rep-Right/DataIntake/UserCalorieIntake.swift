@@ -8,8 +8,10 @@
 import SwiftUI
 
 
+
 /* DEPRECATED: CalorieGoalViewModel is deprecated. Replaced by direct binding to WorkoutSummaryManager.dailyCalorieGoal.
 // MARK: - DATA STORE
+
 @Observable
 class CalorieGoalViewModel {
     var dailyGoal: Int = 500
