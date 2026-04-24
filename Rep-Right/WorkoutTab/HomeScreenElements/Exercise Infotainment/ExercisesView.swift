@@ -75,7 +75,7 @@ struct ExercisesView: View {
                                 .font(.footnote)
                                 .fontWeight(.bold)
                             
-                            Text(arrayToString(arrayOfStrings: exercise.targetAreas))
+                            Text(exercise.primaryFocusArea?.rawValue ?? arrayToString(arrayOfStrings: exercise.targetAreas))
                                 .font(.footnote)
                         }
                         .padding(.bottom,5)

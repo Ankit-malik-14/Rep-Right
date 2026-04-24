@@ -88,6 +88,34 @@ struct WeeklySummary: Identifiable {
     }
 }
 
+enum FocusAreaLoadStatus: String, CaseIterable, Hashable {
+    case undertrained = "Under"
+    case onTrack = "On Track"
+    case overtrained = "Over"
+}
+
+struct FocusAreaLoadInsight: Identifiable, Hashable {
+    var id: String { focusArea.rawValue }
+    let focusArea: FocusArea
+    let weeklyExercises: Int
+    let status: FocusAreaLoadStatus
+
+    var recommendation: String {
+        switch weeklyExercises {
+        case 0:
+            return "Fresh this week. Safe to train."
+        case 1...6:
+            return "Light volume. You can add more."
+        case 7...9:
+            return "Close to target. One more session is fine."
+        case 10...12:
+            return "Ideal weekly range reached."
+        default:
+            return "Above weekly limit. Prioritize recovery."
+        }
+    }
+}
+
 @Observable
 class WorkoutSummaryManager {
     var completedExercises: [CompletedExerciseRecord] = []
@@ -239,7 +267,57 @@ class WorkoutSummaryManager {
                 muscleRecoveryStatus(for: b, using: catalog).count
             }
     }
-    
+
+    func focusAreaLoadInsights(using catalog: [Exercise], now: Date = Date()) -> [FocusAreaLoadInsight] {
+        let counts = weeklyFocusAreaCounts(using: catalog, now: now)
+
+        return FocusArea.allCases.map { focusArea in
+            let weeklyExercises = counts[focusArea, default: 0]
+            let status: FocusAreaLoadStatus
+
+            if weeklyExercises > 12 {
+                status = .overtrained
+            } else if weeklyExercises >= 10 {
+                status = .onTrack
+            } else {
+                status = .undertrained
+            }
+
+            return FocusAreaLoadInsight(
+                focusArea: focusArea,
+                weeklyExercises: weeklyExercises,
+                status: status
+            )
+        }
+    }
+
+    func weeklyFocusAreaChartData(using catalog: [Exercise], now: Date = Date()) -> [(category: String, value: Double)] {
+        let counts = weeklyFocusAreaCounts(using: catalog, now: now)
+        return FocusArea.allCases.map { focusArea in
+            (category: focusArea.rawValue, value: Double(counts[focusArea, default: 0]))
+        }
+    }
+
+    private func weeklyFocusAreaCounts(using catalog: [Exercise], now: Date = Date()) -> [FocusArea: Int] {
+        let startOfWeek = weekStart.date(
+            from: weekStart.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)
+        ) ?? weekStart.startOfDay(for: now)
+
+        let weekRecords = completedExercises.filter { $0.date >= startOfWeek }
+        let catalogById = Dictionary(uniqueKeysWithValues: catalog.map { ($0.id, $0) })
+
+        var counts = Dictionary(uniqueKeysWithValues: FocusArea.allCases.map { ($0, 0) })
+
+        for record in weekRecords {
+            guard let exercise = catalogById[record.exerciseId] else { continue }
+            if let focusArea = exercise.primaryFocusArea {
+                counts[focusArea, default: 0] += 1
+            }
+        }
+
+        return counts
+    }
+
     // MARK: - Computed Metrics for UI 
     var totalExercisesCurrentWeek: Int {
         weeklySummaries.first?.dailySummaries.reduce(0) { $0 + $1.exercises.count } ?? 0
@@ -347,21 +425,8 @@ class WorkoutSummaryManager {
     /// Groups this week's completed exercises by their target area, counting occurrences.
     /// Requires the full exercise catalog to resolve exerciseId → targetAreas.
     func exercisesByTargetArea(using catalog: [Exercise]) -> [(category: String, value: Double)] {
-        let thisWeekExercises = weeklySummaries.first?.dailySummaries.flatMap { $0.exercises } ?? []
-        
-        var areaCounts: [String: Double] = [:]
-        for record in thisWeekExercises {
-            if let exercise = catalog.first(where: { $0.id == record.exerciseId }) {
-                for area in exercise.targetAreas {
-                    areaCounts[area, default: 0] += 1
-                }
-            }
-        }
-        
-        return areaCounts
-            .sorted { $0.value > $1.value }
-            .prefix(6)
-            .map { (category: $0.key, value: $0.value) }
+        weeklyFocusAreaChartData(using: catalog)
+            .filter { $0.value > 0 }
     }
     
     // MARK: - Weekly Activity by Day (for TotalTimeExerciseView)

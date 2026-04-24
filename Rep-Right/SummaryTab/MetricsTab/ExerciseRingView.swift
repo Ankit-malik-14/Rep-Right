@@ -7,13 +7,13 @@ struct ExerciseRingView: View {
     // Fetched from DataModel: exercise catalog to resolve exerciseId → targetAreas
     @Environment(Exercises.self) private var exercises
 
-    let ringColors: [Color] = [
-        Color(red: 22/255, green: 176/255, blue: 221/255),   // blue
-        Color(red: 228/255, green: 59/255, blue: 55/255),    // red
-        Color(red: 104/255, green: 199/255, blue: 79/255),   // green
-        Color(red: 247/255, green: 188/255, blue: 36/255),   // yellow
-        Color(red: 253/255, green: 147/255, blue: 29/255),   // orange
-        Color(red: 160/255, green: 90/255, blue: 220/255)    // purple
+    let ringColors: [String: Color] = [
+        FocusArea.back.rawValue: Color(red: 22/255, green: 176/255, blue: 221/255),
+        FocusArea.chest.rawValue: Color(red: 228/255, green: 59/255, blue: 55/255),
+        FocusArea.legs.rawValue: Color(red: 104/255, green: 199/255, blue: 79/255),
+        FocusArea.core.rawValue: Color(red: 247/255, green: 188/255, blue: 36/255),
+        FocusArea.shoulder.rawValue: Color(red: 253/255, green: 147/255, blue: 29/255),
+        FocusArea.arms.rawValue: Color(red: 160/255, green: 90/255, blue: 220/255)
     ]
 
     var body: some View {
@@ -43,7 +43,7 @@ struct ExerciseRingView: View {
                 }
                 .chartForegroundStyleScale(
                     domain: stats.map { $0.category },
-                    range: Array(ringColors.prefix(stats.count))
+                    range: stats.map { ringColors[$0.category] ?? .gray }
                 )
                 .chartLegend(position: .bottom, alignment: .center)
                 .frame(width: 250, height: 250)
