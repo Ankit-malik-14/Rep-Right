@@ -62,18 +62,40 @@ struct PresetTileViewType: View {
         switch type {
         case .large:
             ZStack(alignment: .topLeading){
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(width: 160, height: 185)
-                    .foregroundStyle(.background.secondary)
+                
+                if preset.image != nil{
+                    Image(preset.image!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 160, height: 185)
+                        .foregroundStyle(.background.secondary)
+                }
+                else{
+                    RoundedRectangle(cornerRadius: 16)
+                        .frame(width: 160, height: 185)
+                        .foregroundStyle(.background.secondary)
+                }
                 Text(preset.name).padding()
+                
             }
         case .small:
             HStack(alignment: .center){
                 //Image Placeholder
-                RoundedRectangle(cornerRadius: 16)
-                    .frame(width: 67, height: 64)
-                    .foregroundStyle(.background.secondary)
-                    .padding(6)
+                if preset.image != nil{
+                    Image(preset.image!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 67, height: 64)
+                        .foregroundStyle(.background.secondary)
+                        
+                        .padding(6)
+                }
+                else{
+                    RoundedRectangle(cornerRadius: 16)
+                        .frame(width: 67, height: 64)
+                        .foregroundStyle(.background.secondary)
+                        .padding(6)
+                }
                 VStack(alignment: .leading){
                     Text(preset.name)
                         .font(.headline)
@@ -111,7 +133,7 @@ struct ContinueButton: View{
 struct ViewStore: View {
     var body: some View {
         assisstanceAvailablityTag(type: .iconAndText)
-        PresetTileViewType(preset: Presets().presets[0], type: .small)
+        PresetTileViewType(preset: Presets().presets[2], type: .large)
         ContinueButton()
     }
 }

@@ -166,6 +166,7 @@ struct Preset: Identifiable, Equatable, Hashable {
     var id: UUID = UUID()
     var isRestDay: Bool = false
     let name: String
+    var image: String?
     var exercises: [Exercise]
     var isWarmpUp: Bool
     var scheduledFor: Weekday?

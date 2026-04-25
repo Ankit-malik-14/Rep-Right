@@ -113,6 +113,7 @@ class Presets {
         ),
         Preset(
             name: "Upper Focus",
+            image: "Shoulders",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .wednesday,
@@ -122,6 +123,7 @@ class Presets {
         ),
         Preset(
             name: "Core & Stability",
+            image: "Core",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .friday,
@@ -141,6 +143,7 @@ class Presets {
         ),
         Preset(
             name: "Lower Body Builder",
+            image: "Legs",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .thursday,
@@ -165,6 +168,7 @@ class CustomPresetsDummyData{
         ),
         Preset(
             name: "Push + Core",
+            image: "Core",
             exercises: Exercises().exerciseList.filter { ["Push-Up", "Plank"].contains($0.name) },
             isWarmpUp: false,
             scheduledFor: .thursday,
