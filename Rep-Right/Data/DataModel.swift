@@ -18,6 +18,7 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var tips: [String]
     var assistanceAvailable: Bool
     var demoVideo: URL?
+    var image: String?
     var setData: [SetData]
     
     // MARK: - MET Value Lookup
