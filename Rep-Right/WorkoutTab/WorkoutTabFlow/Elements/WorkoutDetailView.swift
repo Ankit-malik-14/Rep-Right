@@ -6,16 +6,10 @@
 //
 import SwiftUI
 
-
-struct Detailed: Hashable {
-    var preset:Preset
-}
-
 struct WorkoutDetailView: View {
     var preset: Preset
-    var executionPhase: Detailed { Detailed(preset: preset) }
-    @State private var showGate = false
-    @State private var showWorkout = false
+    @Environment(WorkoutRouter.self) private var router
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -31,24 +25,9 @@ struct WorkoutDetailView: View {
                 WarmUpCardView()
                     .padding(.horizontal)
                 
-                // 3. Start Workout Button
-                
-//                Button{
-//                    
-//                } label: {
-//                    HStack {
-//                        Image(systemName: "play.fill")
-//                        Text("Start Workout")
-//                    }
-//                    .font(.headline)
-//                    .foregroundColor(.white)
-//                    .frame(maxWidth: .infinity)
-//                    .padding(.vertical, 16)
-//                    .background(Color.orange)
-//                    .cornerRadius(12)
-//                }
+                // 3. Start Workout Button — pushes PreWorkoutGate via router
                 Button {
-                    showGate = true
+                    router.push(.preWorkoutGate(preset))
                 } label: {
                     HStack {
                         Image(systemName: "play.fill")
@@ -62,17 +41,6 @@ struct WorkoutDetailView: View {
                     .cornerRadius(12)
                 }
                 .padding(.horizontal)
-                .sheet(isPresented: $showGate) {
-                    PreWorkoutGateView(preset: preset) {
-                        showGate = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            showWorkout = true
-                        }
-                    }
-                }
-                .navigationDestination(isPresented: $showWorkout) {
-                    ActiveWorkoutView(preset: preset)
-                }
                 
                 // 4. Exercises List
                 VStack(spacing: 16) {
@@ -88,10 +56,6 @@ struct WorkoutDetailView: View {
                     
                     ForEach(preset.exercises) { exercise in
                         ExerciseCardView(exercise: exercise)
-//                        NavigationLink(value: Route.exercise(exercise)) {
-//
-//                        }
-//                        .buttonStyle(.plain) // Prevents standard blue highlight
                     }
                 }
                 .padding(.horizontal)
@@ -110,6 +74,7 @@ struct WorkoutDetailView: View {
     NavigationStack{
         WorkoutDetailView(preset: Presets().presets[2])
             .environment(WeeklySchedules())
+            .environment(WorkoutRouter())
             
     }
 }

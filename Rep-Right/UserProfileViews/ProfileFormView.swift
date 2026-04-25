@@ -5,16 +5,13 @@
 
 import SwiftUI
 
-enum ProfileRoute: Hashable{
-    case profile
-}
 
 struct ProfileFormView: View {
     @Environment(UserProfileModel.self) private var profile
     
     var body: some View {
         @Bindable var profile = profile
-        NavigationStack {
+        //NavigationStack {
             Form {
                 Section {
                     HStack {
@@ -59,7 +56,7 @@ struct ProfileFormView: View {
                 .headerProminence(.increased)
             }
             .navigationTitle("Profile")
-        }
+        //}
     }
 }
 

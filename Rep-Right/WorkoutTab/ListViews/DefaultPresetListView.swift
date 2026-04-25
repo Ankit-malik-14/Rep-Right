@@ -37,9 +37,7 @@ struct DefaultPresetListView: View {
                     }.buttonStyle(.plain)
                     
                 }
-            }.navigationDestination(for: Preset.self, destination: { preset in
-                WorkoutDetailView(preset: preset)
-            })
+            }
             
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {

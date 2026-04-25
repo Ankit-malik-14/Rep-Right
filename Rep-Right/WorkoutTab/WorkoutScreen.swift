@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-enum ExpandedViews{
-    case customPresets
-    case defaultPresets
-    case ExerciseList
-}
-enum ClickedPresetDestination{
-    case presetInfo
-    case startPreset
-}
-
 struct WorkoutScreen: View {
     @Environment(Exercises.self) var exercises
     @Environment(Presets.self) var preset
@@ -51,39 +41,44 @@ struct WorkoutScreen: View {
                             .font(.title.bold())
                             .padding(.horizontal)
                         Spacer()
-                        Button("See all") {
-                            //
+                        NavigationLink(value: WorkoutRoute.exerciseList) {
+                            Text("See all")
                         }.tint(.orange)
                             .padding(.horizontal)
                     }
                     ExerciseListView()
                 }
-            }.navigationDestination(for: ExpandedViews.self, destination: { view in
-                switch view {
-                case .ExerciseList:
-                    ExerciseListView()
-                case .customPresets:
-                    CustomPresetsListView(preset: customPresets)
-                case .defaultPresets:
+            }
+            // MARK: - Single navigation destination for the entire Workout tab
+            .navigationDestination(for: WorkoutRoute.self) { route in
+                switch route {
+                case .defaultPresetsList:
                     DefaultPresetListView(presets: preset)
-                }
-            })
-            .navigationDestination(for: ProfileRoute.self, destination: { view in
-                switch view {
+                case .customPresetsList:
+                    CustomPresetsListView(preset: customPresets)
+                case .exerciseList:
+                    ExerciseListView()
+                case .presetDetail(let p):
+                    WorkoutDetailView(preset: p)
+                case .exerciseDetail(let e):
+                    ExercisesView(exercise: e)
+                case .preWorkoutGate(let p):
+                    PreWorkoutGateView(preset: p)
+                case .activeWorkout(let p):
+                    ActiveWorkoutView(preset: p)
                 case .profile:
                     ProfileFormView()
                 }
-            })
+            }
             .navigationTitle("Workouts")
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing){
-                    NavigationLink(value: ProfileRoute.profile) {
+                    NavigationLink(value: WorkoutRoute.profile) {
                         Image(systemName: "person.circle.fill")
                     }
                 }
                 ToolbarItem(placement:.topBarLeading) {
                     Image(systemName: "calendar")
-//                    QuickActionCard(title: "Scheduler", icon: "calendar", color: .black)
                         .onTapGesture {
                             showScheduler = true
                         }
@@ -103,9 +98,11 @@ struct WorkoutScreen: View {
 #Preview {
     NavigationStack{
         WorkoutScreen()
-            .environment(CustomPresetsDummyData())
-            .environment(WeeklySchedules())
             .environment(Presets())
             .environment(Exercises())
+            .environment(WeeklySchedules())
+            .environment(CustomPresetsDummyData())
+            .environment(WorkoutSummaryManager())
+            .environment(UserProfileModel())
     }
 }
