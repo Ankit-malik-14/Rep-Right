@@ -22,22 +22,24 @@ struct WorkoutScreen: View {
     @Environment(Presets.self) var preset
     @Environment(CustomPresetsDummyData.self) var customPresets
     @State private var router = WorkoutRouter()
+    @State var showScheduler = false
     var body: some View {
         @Bindable var routerBindable = router
         NavigationStack(path: $routerBindable.path){
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading){
                     
-                    ReadinessBannerView()
-                        .padding(.top)
+//                    ReadinessBannerView()
+//                        .padding(.top)
                     
                     QuickActionRow()
                         .padding(.vertical, 8)
                     
+                    ScheduledWorkoutCard()
+                    
                     SmartRecommendationCard()
                         .padding(.bottom, 8)
                     
-                    ScheduledWorkoutCard()
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
                     
@@ -65,13 +67,31 @@ struct WorkoutScreen: View {
                     DefaultPresetListView(presets: preset)
                 }
             })
+            .navigationDestination(for: ProfileRoute.self, destination: { view in
+                switch view {
+                case .profile:
+                    ProfileFormView()
+                }
+            })
             .navigationTitle("Workouts")
             .toolbar{
-                ToolbarItem {
-                    Image(systemName: "person.circle")
+                ToolbarItem(placement: .topBarTrailing){
+                    NavigationLink(value: ProfileRoute.profile) {
+                        Image(systemName: "person.circle.fill")
+                    }
+                }
+                ToolbarItem(placement:.topBarLeading) {
+                    Image(systemName: "calendar")
+//                    QuickActionCard(title: "Scheduler", icon: "calendar", color: .black)
+                        .onTapGesture {
+                            showScheduler = true
+                        }
                 }
             
             }
+            .sheet(isPresented: $showScheduler) {
+                            SchedulerView()
+                        }
 
         }
         .environment(router)
