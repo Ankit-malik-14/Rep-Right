@@ -2,12 +2,12 @@
 //  CaloriesView.swift
 //  Rep_Right
 //
-//  Created by GU on 01/04/26.
-//
+
 import SwiftUI
 
 struct CaloriesView: View {
-    @State private var value = 100
+    // Fetched from SummaryDataModel: reads today's calorie burn and goal
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
     
     var body: some View {
         ScrollView{
@@ -18,16 +18,17 @@ struct CaloriesView: View {
                         .frame(height: 250)
                         .padding(.horizontal)
                     
-                    Gauge(value:100, in: 0...1000) {
+                    // Fetched from SummaryDataModel: todayCaloriesBurned / dailyCalorieGoal
+                    Gauge(value: summaryManager.todayCaloriesBurned, in: 0...summaryManager.dailyCalorieGoal) {
                     }
                     .gaugeStyle(.accessoryCircularCapacity)
-                    .tint(.orange
-                    )
+                    .tint(.orange)
                     .scaleEffect(3.5)
                     
                     Image(systemName: "flame.fill")
                 }
-                MoveDataView()
+                // Fetched from SummaryDataModel: todayCaloriesBurned for display, dailyCalorieGoal for target
+                MoveDataView(cal: Int(summaryManager.todayCaloriesBurned), goal: Int(summaryManager.dailyCalorieGoal))
             }
         }
     }
@@ -35,5 +36,5 @@ struct CaloriesView: View {
 
 #Preview {
     CaloriesView()
-        .environment(Exercises())
+        .environment(WorkoutSummaryManager())
 }

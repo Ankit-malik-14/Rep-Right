@@ -6,25 +6,44 @@ struct SummaryTabView: View {
             ScrollView{
                 VStack(spacing: 20) {
                     CalendarView()
-                    MetricsView()
-                    WeeklyCalorieBurnView()
+                    NavigationLink(value: MetricRingView()) {
+                        MetricsView()
+                    }
+//                    NavigationLink(destination: MetricRingView()) {
+//                        MetricsView()
+//                    }
+                    .buttonStyle(.plain)
+                    
+                    NavigationLink(value: CalorieBreakdownView()) {
+                        WeeklyCalorieBurnView()
+                    }
+                    .buttonStyle(.plain)
                     FormInsightView()
                     FormAccuracyReportView()
                     
-                }.navigationDestination(for: UserProfile.self, destination: { userProfile in
-                    UserProfileView()
-                })
+                }
             .padding(.bottom)
             }
+            .navigationDestination(for: MetricRingView.self, destination: { value in
+                MetricRingView()
+            })
+            .navigationDestination(for: CalorieBreakdownView.self, destination: { value in
+                CalorieBreakdownView()
+            })
+            .navigationDestination(for: ProfileRoute.self, destination: { view in
+                switch view {
+                case .profile:
+                    ProfileFormView()
+                }
+            })
 
             .navigationTitle("Summary")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(value: DummyUserProfiles().user) {
+                    NavigationLink(value: ProfileRoute.profile) {
                         Image(systemName: "person.circle.fill")
                     }
                 }
-            
             }
         }
     }
@@ -32,5 +51,6 @@ struct SummaryTabView: View {
 
 #Preview {
     SummaryTabView()
+        .environment(WorkoutSummaryManager())
 }
 

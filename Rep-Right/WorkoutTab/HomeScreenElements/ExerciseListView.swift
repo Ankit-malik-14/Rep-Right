@@ -24,7 +24,7 @@ struct ExerciseListView: View {
                             VStack(alignment: .leading){
                                 Text(exercise.name)
                                     .font(.headline)
-                                Text(exercise.targetAreas[0])
+                                Text(exercise.primaryFocusArea?.rawValue ?? exercise.targetAreas[0])
                                     .font(.footnote)
                                     .foregroundStyle(.secondary)
                             }

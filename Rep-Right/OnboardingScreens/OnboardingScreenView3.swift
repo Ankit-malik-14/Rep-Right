@@ -6,7 +6,7 @@ struct OnboardingScreenView3: View {
             MetricsView()
             Spacer()
             SchedulerCards(weekday: .wednesday)
-                
+                .allowsHitTesting(false)
                 .background(
                     RoundedRectangle(cornerRadius:20)
                         .stroke(Color.gray.opacity(0.3), lineWidth: 1)
@@ -62,17 +62,15 @@ struct OnboardingScreenView3: View {
             }
             
             Spacer()
-            Button {
-                //
-            } label: {
-                ContinueButton()
-            }
-
+            // Add instructions to swipe
+            Text("Swipe to continue")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.bottom, 20)
         }
     }
 }
-#Preview
-    {
+#Preview{
     OnboardingScreenView3()
             .environment(WeeklySchedules())
 }

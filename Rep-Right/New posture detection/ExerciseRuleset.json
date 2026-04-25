@@ -1,0 +1,351 @@
+{
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Plank",
+      "description": "Body alignment hold in push-up position",
+      "camera_angle": "side",
+      "target_angle_range": 0,
+      "primary_joints": ["shoulder", "hip", "ankle"],
+      "rules": {
+        "body_alignment_threshold": 15,
+        "body_straight": true,
+        "shoulder_hip_ankle_collinear": true,
+        "arm_position": "extended",
+        "arm_angle_threshold": 160
+      },
+      "expected_accuracy": 0.88,
+      "flags": {
+        "misaligned_body": "Body not straight. Check alignment < 15°",
+        "sagging_hips": "Hips sagging. Raise hips to shoulder level",
+        "bent_elbows": "Elbows bent. Keep arms straight > 160°",
+        "head_position": "Head position incorrect. Keep neutral"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Wall Sit",
+      "description": "Back against wall, knees bent at 90 degrees",
+      "camera_angle": "front_or_side",
+      "target_angle_range": [85, 95],
+      "primary_joints": ["hip", "knee", "ankle"],
+      "rules": {
+        "knee_angle_min": 85,
+        "knee_angle_max": 95,
+        "back_vertical": true,
+        "back_angle_tolerance": 10,
+        "hip_below_knee": true
+      },
+      "expected_accuracy": 0.90,
+      "flags": {
+        "knee_angle_incorrect": "Knee angle incorrect. Target 85-95°",
+        "back_tilted": "Back not vertical. Keep back against wall",
+        "knees_over_toes": "Knees tracking over toes",
+        "hips_too_high": "Hips too high. Lower down more"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Static Squat Hold",
+      "description": "Squat position held at bottom range",
+      "camera_angle": "front_or_side",
+      "target_angle_range": [80, 100],
+      "primary_joints": ["hip", "knee", "ankle"],
+      "rules": {
+        "knee_angle_min": 80,
+        "knee_angle_max": 100,
+        "torso_upright": true,
+        "torso_angle_tolerance": 20,
+        "hip_below_knee": true
+      },
+      "expected_accuracy": 0.87,
+      "flags": {
+        "knee_angle_incorrect": "Knee angle out of range. Target 80-100°",
+        "torso_tilted": "Torso tilted forward. Keep upright",
+        "heels_off_ground": "Heels lifting off ground",
+        "knees_caving_inward": "Knees caving inward. Keep alignment"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Glute Bridge Hold",
+      "description": "Lying on back, hips elevated, knees bent",
+      "camera_angle": "side",
+      "target_angle_range": 160,
+      "primary_joints": ["shoulder", "hip", "knee"],
+      "rules": {
+        "hip_elevated": true,
+        "hip_below_knee": true,
+        "shoulder_hip_knee_angle_min": 160,
+        "back_flat": true,
+        "glute_engaged": true
+      },
+      "expected_accuracy": 0.86,
+      "flags": {
+        "hips_not_elevated": "Hips not elevated. Push through heels",
+        "hips_sagging": "Hips sagging. Engage glutes more",
+        "lower_back_arched": "Lower back arching. Keep neutral",
+        "knees_caving": "Knees caving. Keep knees aligned"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Dead Hang",
+      "description": "Hanging from bar with arms extended",
+      "camera_angle": "front",
+      "target_angle_range": 160,
+      "primary_joints": ["wrist", "elbow", "shoulder"],
+      "rules": {
+        "both_arms_extended": true,
+        "arm_angle_threshold": 160,
+        "wrists_above_shoulders": true,
+        "shoulders_engaged": true,
+        "body_straight": true
+      },
+      "expected_accuracy": 0.89,
+      "flags": {
+        "elbows_bent": "Elbows bent. Keep arms straight > 160°",
+        "wrists_below_shoulders": "Wrists below shoulders. Extend fully",
+        "shoulder_shrugged": "Shoulders shrugged. Engage lats",
+        "body_swinging": "Body swinging. Keep still"
+      }
+    },
+    {
+      "id": 6,
+      "name": "Overhead Hold",
+      "description": "Arms held straight overhead",
+      "camera_angle": "front",
+      "target_angle_range": 160,
+      "primary_joints": ["wrist", "elbow", "shoulder"],
+      "rules": {
+        "arms_overhead": true,
+        "arm_angle_threshold": 160,
+        "wrist_above_head": true,
+        "shoulder_engaged": true,
+        "core_tight": true
+      },
+      "expected_accuracy": 0.87,
+      "flags": {
+        "elbows_bent": "Elbows bent. Straighten arms > 160°",
+        "wrists_forward": "Wrists forward. Stack above shoulders",
+        "shoulder_shrugged": "Shoulders shrugged. Lower slightly",
+        "core_not_engaged": "Core not engaged. Tighten abdomen"
+      }
+    },
+    {
+      "id": 7,
+      "name": "High Plank (Push-up Hold)",
+      "description": "Plank position with arms fully extended",
+      "camera_angle": "side",
+      "target_angle_range": 0,
+      "primary_joints": ["wrist", "elbow", "shoulder", "hip", "ankle"],
+      "rules": {
+        "body_alignment_threshold": 15,
+        "body_straight": true,
+        "arm_angle_threshold": 160,
+        "wrists_under_shoulders": true,
+        "shoulders_engaged": true
+      },
+      "expected_accuracy": 0.85,
+      "flags": {
+        "body_misaligned": "Body not straight. Align < 15°",
+        "hips_sagging": "Hips sagging. Raise to shoulder level",
+        "elbows_bent": "Elbows bent. Lock arms > 160°",
+        "shoulders_over_wrists": "Shoulders over wrists. Keep stacked"
+      }
+    },
+    {
+      "id": 8,
+      "name": "Low Plank (Forearm Plank)",
+      "description": "Plank on forearms instead of hands",
+      "camera_angle": "side",
+      "target_angle_range": 0,
+      "primary_joints": ["elbow", "shoulder", "hip", "ankle"],
+      "rules": {
+        "body_alignment_threshold": 15,
+        "body_straight": true,
+        "elbow_angle_threshold": 90,
+        "forearms_on_ground": true,
+        "shoulder_over_elbow": true
+      },
+      "expected_accuracy": 0.80,
+      "flags": {
+        "body_misaligned": "Body not straight. Align < 15°",
+        "hips_sagging": "Hips sagging. Raise to hip level",
+        "elbows_not_90": "Elbow angle incorrect. Target ~90°",
+        "shoulder_not_stacked": "Shoulders not over elbows"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Side Plank",
+      "description": "Plank rotated to one side of body",
+      "camera_angle": "front",
+      "target_angle_range": 0,
+      "primary_joints": ["ankle", "hip", "shoulder"],
+      "rules": {
+        "lateral_alignment_threshold": 15,
+        "vertical_stack": true,
+        "hip_not_sagging": true,
+        "top_arm_position": "extended_or_on_hip"
+      },
+      "expected_accuracy": 0.82,
+      "flags": {
+        "hip_sagging": "Hip sagging down. Engage obliques",
+        "not_straight_line": "Not in straight line. Align body",
+        "top_arm_position": "Top arm position incorrect",
+        "body_leaning_forward": "Body leaning forward. Stack vertically"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Lunge Hold",
+      "description": "Stationary lunge position with both legs",
+      "camera_angle": "side",
+      "target_angle_range": [85, 95],
+      "primary_joints": ["hip", "front_knee", "back_knee"],
+      "rules": {
+        "front_knee_angle_min": 85,
+        "front_knee_angle_max": 95,
+        "front_knee_over_ankle": true,
+        "back_knee_near_floor": true,
+        "torso_upright": true
+      },
+      "expected_accuracy": 0.80,
+      "flags": {
+        "front_knee_angle_incorrect": "Front knee out of range. Target 85-95°",
+        "front_knee_over_toes": "Front knee over toes. Step deeper",
+        "back_knee_too_high": "Back knee too high. Lower down",
+        "torso_tilted": "Torso tilted. Keep upright"
+      }
+    },
+    {
+      "id": 11,
+      "name": "Standing Hip Abduction Hold",
+      "description": "Standing on one leg, other leg raised to side",
+      "camera_angle": "front",
+      "target_angle_range": 20,
+      "primary_joints": ["hip", "lifted_knee", "standing_ankle"],
+      "rules": {
+        "leg_separation_min": 20,
+        "lifted_leg_raised": true,
+        "standing_leg_straight": true,
+        "core_engaged": true,
+        "hip_level": true
+      },
+      "expected_accuracy": 0.78,
+      "flags": {
+        "leg_not_raised_enough": "Leg not raised enough. Lift > 20°",
+        "leaning_to_side": "Leaning to side. Keep upright",
+        "standing_leg_bent": "Standing leg bent. Keep straight",
+        "hip_dropping": "Hip dropping. Engage core"
+      }
+    },
+    {
+      "id": 12,
+      "name": "L-Sit Hold",
+      "description": "Seated position with legs extended horizontally",
+      "camera_angle": "side",
+      "target_angle_range": 90,
+      "primary_joints": ["hip", "knee", "wrist", "shoulder"],
+      "rules": {
+        "hip_angle_threshold": 90,
+        "legs_parallel_to_ground": true,
+        "knee_hip_y_approximate": true,
+        "arms_straight": true,
+        "shoulder_engaged": true
+      },
+      "expected_accuracy": 0.79,
+      "flags": {
+        "hip_angle_incorrect": "Hip angle incorrect. Target 90°",
+        "legs_sagging": "Legs sagging. Raise to parallel",
+        "elbows_bent": "Elbows bent. Keep arms straight",
+        "shoulders_not_engaged": "Shoulders not engaged. Push down"
+      }
+    },
+    {
+      "id": 13,
+      "name": "Hollow Body Hold",
+      "description": "Prone position with arms and legs raised, body arched",
+      "camera_angle": "side",
+      "target_angle_range": 30,
+      "primary_joints": ["shoulder", "hip", "knee", "ankle"],
+      "rules": {
+        "lower_back_flat": true,
+        "back_angle_tolerance": 10,
+        "legs_raised_angle": 30,
+        "arms_overhead": true,
+        "full_body_elongated": true
+      },
+      "expected_accuracy": 0.77,
+      "flags": {
+        "lower_back_arched": "Lower back arched. Flatten it",
+        "legs_not_raised": "Legs not raised enough. Target 30°",
+        "arms_not_overhead": "Arms not overhead. Extend up",
+        "body_not_elongated": "Body not elongated. Stretch more"
+      }
+    },
+    {
+      "id": 14,
+      "name": "Superman Hold",
+      "description": "Prone position with arms and legs extended upward",
+      "camera_angle": "side",
+      "target_angle_range": 0,
+      "primary_joints": ["shoulder", "hip", "knee", "wrist"],
+      "rules": {
+        "arms_elevated": true,
+        "arms_above_hip": true,
+        "legs_elevated": true,
+        "legs_above_hip": true,
+        "chest_lifted": true
+      },
+      "expected_accuracy": 0.76,
+      "flags": {
+        "arms_not_elevated": "Arms not elevated. Lift higher",
+        "legs_not_elevated": "Legs not elevated. Raise up",
+        "chest_not_lifted": "Chest not lifted. Engage back",
+        "arms_legs_not_synchronized": "Lift arms and legs together"
+      }
+    }
+  ],
+  "joint_definitions": {
+    "shoulder": "Point 5 (right shoulder)",
+    "elbow": "Point 6 (right elbow)",
+    "wrist": "Point 7 (right wrist)",
+    "hip": "Point 11 (right hip)",
+    "knee": "Point 12 (right knee)",
+    "ankle": "Point 13 (right ankle)",
+    "left_shoulder": "Point 2 (left shoulder)",
+    "left_elbow": "Point 3 (left elbow)",
+    "left_wrist": "Point 4 (left wrist)",
+    "left_hip": "Point 8 (left hip)",
+    "left_knee": "Point 9 (left knee)",
+    "left_ankle": "Point 10 (left ankle)",
+    "nose": "Point 0",
+    "head": "Point 1"
+  },
+  "vn_body_pose_points": {
+    "description": "VNDetectHumanBodyPoseRequest returns 19 points",
+    "points": [
+      "nose",
+      "neck",
+      "right_shoulder",
+      "right_elbow",
+      "right_wrist",
+      "left_shoulder",
+      "left_elbow",
+      "left_wrist",
+      "right_hip",
+      "right_knee",
+      "right_ankle",
+      "left_hip",
+      "left_knee",
+      "left_ankle",
+      "right_eye",
+      "left_eye",
+      "right_ear",
+      "left_ear",
+      "neck_lower"
+    ]
+  }
+}

@@ -23,19 +23,32 @@ struct DefaultPresets: View {
             }.padding(.horizontal)
             
             ScrollView(.horizontal) {
+//                HStack {
+//                    ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
+//                        NavigationLink(value: ClickedPresetDestination.presetInfo) {
+//                            PresetTileViewType(preset: preset.presets[idx], type: .large)
+//                        }.buttonStyle(.plain)
+//                        .navigationDestination(for: ClickedPresetDestination.self) { type in
+//                            if type == ClickedPresetDestination.presetInfo {
+//                                WorkoutDetailView(preset: preset.presets[idx])
+//                            }
+//                        }
+//                        
+//                    }
+//                }.padding(.horizontal)
                 HStack {
                     ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
-                        NavigationLink(value: ClickedPresetDestination.presetInfo) {
+                        NavigationLink(value: preset.presets[idx]) {
                             PresetTileViewType(preset: preset.presets[idx], type: .large)
-                        }.buttonStyle(.plain)
-                        .navigationDestination(for: ClickedPresetDestination.self) { type in
-                            if type == ClickedPresetDestination.presetInfo {
-                                WorkoutDetailView(preset: preset.presets[idx])
-                            }
                         }
-                        
+                        .buttonStyle(.plain)
                     }
-                }.padding(.horizontal)
+                }
+                .padding(.horizontal)
+                .navigationDestination(for: Preset.self) { selectedPreset in
+                    WorkoutDetailView(preset: selectedPreset)
+                }
+                
             }
             .scrollIndicators(.hidden)
 //                .navigationTitle("Presets")

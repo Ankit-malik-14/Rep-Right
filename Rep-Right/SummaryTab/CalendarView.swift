@@ -76,6 +76,9 @@ struct CalendarView: View {
         }
     }
 
+    // Fetched from SummaryDataModel: Access global summary manager for calendar parsing
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+
     func loadWeek() {
         let calendar = Calendar.current
         let today = Date()
@@ -100,7 +103,9 @@ struct CalendarView: View {
             } else if date > today {
                 status = "future"
             } else {
-                status = i % 2 == 0 ? "missed" : "streak"
+                // Fetched from SummaryDataModel: dynamically checks if the day has workout records
+                let hasWorkout = summaryManager.dailySummaries.contains(where: { calendar.isDate($0.date, inSameDayAs: date) })
+                status = hasWorkout ? "streak" : "missed"
             }
 
             days.append(WorkoutDay(name: name, number: number, status: status))
@@ -131,4 +136,5 @@ struct DayView: View {
 
 #Preview {
     CalendarView()
+        .environment(WorkoutSummaryManager())
 }

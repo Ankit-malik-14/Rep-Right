@@ -8,7 +8,10 @@
 import SwiftUI
 
 
+
+/* DEPRECATED: CalorieGoalViewModel is deprecated. Replaced by direct binding to WorkoutSummaryManager.dailyCalorieGoal.
 // MARK: - DATA STORE
+
 @Observable
 class CalorieGoalViewModel {
     var dailyGoal: Int = 500
@@ -39,10 +42,37 @@ class CalorieGoalViewModel {
         dailyGoal += step
     }
 }
+*/
 
 //MARK: - VIEW
-struct UserCalorieIntake: View {
-    @State private var viewModel = CalorieGoalViewModel()
+// UPDATED: Now uses WorkoutSummaryManager as the single source of truth for the calorie goal.
+struct UserCalorieIntake: View, Hashable{
+    static func == (lhs: UserCalorieIntake, rhs: UserCalorieIntake) -> Bool {
+            // Since there are no initialized properties (only State/Environment),
+            // all instances of this view are structurally identical.
+            return true
+        }
+            
+    func hash(into hasher: inout Hasher) {
+        // Hash a constant or the type itself so the hash value is consistent
+        hasher.combine(String(describing: Self.self))
+    }
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    @Environment(\.dismiss) private var dismiss
+    
+    // computed property to bridge double goal to text strings for the TextField
+    private var goalText: Binding<String> {
+        Binding(
+            get: { String(Int(summaryManager.dailyCalorieGoal)) },
+            set: { newValue in
+                if let newValueInt = Int(newValue) {
+                    summaryManager.dailyCalorieGoal = Double(newValueInt)
+                } else if newValue.isEmpty {
+                    summaryManager.dailyCalorieGoal = 0
+                }
+            }
+        )
+    }
 
         var body: some View {
             
@@ -68,7 +98,11 @@ struct UserCalorieIntake: View {
                         HStack(spacing: 25) {
                             // MINUS
                             Button {
-                                viewModel.decreaseGoal()
+                                if summaryManager.dailyCalorieGoal >= 50 {
+                                    summaryManager.dailyCalorieGoal -= 50
+                                } else {
+                                    summaryManager.dailyCalorieGoal = 0
+                                }
                             } label: {
                                 ZStack{
                                     Circle()
@@ -78,15 +112,13 @@ struct UserCalorieIntake: View {
                                         .font(.largeTitle.bold())
                                 }
                             }.tint(.black)
-                            
                             // VALUE
-                            TextField("", text: $viewModel.goalText)
-                                .font(.largeTitle.bold())
+                            TextField("", text: goalText)
+                                .font(.system(size: 80).bold())
                                 .multilineTextAlignment(.center)
-                            
                             // PLUS
                             Button {
-                                viewModel.increaseGoal()
+                                summaryManager.dailyCalorieGoal += 50
                             } label: {
                                 ZStack{
                                     Circle()
@@ -105,10 +137,10 @@ struct UserCalorieIntake: View {
                     
                     Spacer()
                     
-                    // 3. BOTTOM ACTION BUTTON
                     Button {
                         // Logic to save the data
-                        print("Saved goal: \(viewModel.dailyGoal)")
+                        print("Saved goal: \(summaryManager.dailyCalorieGoal)")
+                        dismiss()
                     } label: {
                         ContinueButton()
                     }
@@ -118,7 +150,7 @@ struct UserCalorieIntake: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            //
+                            dismiss()
                         } label: {
                             Text("Skip")
                                 .foregroundStyle(.orange)
@@ -130,7 +162,7 @@ struct UserCalorieIntake: View {
                 }
 
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemBackground))
+                //.background(Color(.systemBackground))
             
     }
 }
@@ -138,5 +170,6 @@ struct UserCalorieIntake: View {
 #Preview {
     NavigationStack{
         UserCalorieIntake()
+            .environment(WorkoutSummaryManager())
     }
 }

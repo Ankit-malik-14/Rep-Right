@@ -23,6 +23,8 @@ struct MetricsTabViewContainer: View {
 #Preview {
     NavigationStack{
         MetricsTabViewContainer()
+            .environment(WorkoutSummaryManager())
+            .environment(Exercises())
     }
 }
 

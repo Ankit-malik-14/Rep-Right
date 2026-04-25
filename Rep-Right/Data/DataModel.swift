@@ -4,10 +4,7 @@
 //
 //  Created by Ankit Malik on 2026-03-16.
 //
-
 import Foundation
-
-//MARK: - Data Types
 
 struct Exercise: Identifiable,Equatable,Hashable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {
@@ -22,11 +19,143 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var assistanceAvailable: Bool
     var demoVideo: URL?
     var setData: [SetData]
+    
+    // MARK: - MET Value Lookup
+    // Scientifically accurate MET values mapped by exercise name.
+    // Source: Compendium of Physical Activities (Ainsworth et al.)
+    // Fallback: 3.5 (moderate-effort general exercise)
+    
+    private static let metDictionary: [String: Double] = [
+        // Compound lower body
+        "Bodyweight Squat":     5.0,
+        "Barbell Squat":        6.0,
+        "Goblet Squat":         5.5,
+        "Lunges":               4.0,
+        "Bulgarian Split Squat": 5.0,
+        "Deadlift":             6.0,
+        "Romanian Deadlift":    5.5,
+        "Hip Thrust":           4.5,
+        "Leg Press":            5.0,
+        "Leg Curl":             3.5,
+        "Leg Extension":        3.5,
+        "Calf Raise":           3.0,
+        
+        // Compound upper body
+        "Push-Up":              3.8,
+        "Bench Press":          5.0,
+        "Incline Bench Press":  5.0,
+        "Dumbbell Press":       5.0,
+        "Overhead Press":       5.0,
+        "Dumbbell Row":         4.5,
+        "Barbell Row":          5.0,
+        "Pull-Up":              8.0,
+        "Chin-Up":              7.5,
+        "Lat Pulldown":         4.5,
+        "Dip":                  5.0,
+        
+        // Isolation
+        "Bicep Curl":           3.5,
+        "Tricep Extension":     3.0,
+        "Lateral Raise":        3.0,
+        "Face Pull":            3.0,
+        "Fly":                  3.5,
+        
+        // Core & isometric
+        "Plank":                3.0,
+        "Sit-Up":               3.8,
+        "Crunch":               3.0,
+        "Russian Twist":        3.5,
+        "Hanging Leg Raise":    4.0,
+        "Mountain Climber":     8.0,
+        
+        // Cardio / conditioning
+        "Burpee":               8.0,
+        "Jumping Jack":         7.0,
+        "Jump Rope":            10.0,
+        "Box Jump":             8.0,
+        "Dynamic Warm-up":      3.5,
+        "Battle Ropes":         10.0,
+        "Rowing":               7.0
+    ]
+    
+    /// Returns the MET value for this exercise.
+    /// Falls back to 3.5 (moderate general exercise) if the name isn't in the dictionary.
+    var metValue: Double {
+        Exercise.metDictionary[name] ?? 3.5
+    }
 }
 
 struct SetData : Hashable{
     var sets: Int
     var reps: Int
+    //needs optional weight, var wieght: Int?
+    //needs duration for timed exercises, var durationInSec: Int?
+}
+
+enum FocusArea: String, CaseIterable, Hashable {
+    case shoulder = "Shoulder"
+    case back = "Back"
+    case chest = "Chest"
+    case arms = "Arms"
+    case core = "Core"
+    case legs = "Legs"
+
+    static func from(targetArea: String) -> FocusArea? {
+        let normalized = targetArea
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        switch normalized {
+        case "shoulder", "shoulders", "delts", "delt", "rear delts", "front delts", "side delts":
+            return .shoulder
+        case "back", "lats", "rhomboids", "traps":
+            return .back
+        case "chest", "pecs", "pectorals":
+            return .chest
+        case "arm", "arms", "biceps", "triceps", "forearms":
+            return .arms
+        case "core", "abs", "abdominals", "obliques":
+            return .core
+        case "leg", "legs", "quads", "glutes", "hamstrings", "calves":
+            return .legs
+        default:
+            if normalized.contains("delt") || normalized.contains("shoulder") {
+                return .shoulder
+            }
+            if normalized.contains("lat") || normalized.contains("rhomboid") || normalized.contains("trap") || normalized.contains("back") {
+                return .back
+            }
+            if normalized.contains("chest") || normalized.contains("pec") {
+                return .chest
+            }
+            if normalized.contains("bicep") || normalized.contains("tricep") || normalized.contains("forearm") || normalized.contains("arm") {
+                return .arms
+            }
+            if normalized.contains("core") || normalized.contains("ab") || normalized.contains("oblique") {
+                return .core
+            }
+            if normalized.contains("quad") || normalized.contains("glute") || normalized.contains("hamstring") || normalized.contains("calf") || normalized.contains("leg") {
+                return .legs
+            }
+            return nil
+        }
+    }
+}
+
+extension Exercise {
+    var primaryFocusArea: FocusArea? {
+        guard let firstTarget = targetAreas.first else { return nil }
+        return FocusArea.from(targetArea: firstTarget)
+    }
+}
+
+// Used by ActiveWorkoutView
+struct WorkoutSet: Identifiable {
+    let id = UUID()
+    var setNumber: Int
+    var weight: String
+    var reps: String
+    var isCompleted: Bool = false
 }
 
 struct Preset: Identifiable, Equatable, Hashable {
@@ -40,9 +169,10 @@ struct Preset: Identifiable, Equatable, Hashable {
     var isWarmpUp: Bool
     var scheduledFor: Weekday?
     var estTime: Int
+    //now focus area can become enum and we can process with CaseIterable's .allTypes
     var focousArea: [String] {
-        // Compute the top 3 most frequent target areas across all exercises in this preset
-        let allAreas = exercises.flatMap { $0.targetAreas }
+        // Compute the top 3 most frequent primary focus areas across all exercises in this preset
+        let allAreas = exercises.compactMap { $0.primaryFocusArea?.rawValue }
         guard !allAreas.isEmpty else { return [] }
         var counts: [String: Int] = [:]
         for area in allAreas {
@@ -58,8 +188,48 @@ struct Preset: Identifiable, Equatable, Hashable {
     }
     var equipments: [String]
     var calories: Int
+    // var calories: Int {exercises.reduce(0){$0 + ($1.metValue * $1.expectedTimeInSec)}} //computed property
 }
 
+extension Preset {
+    /// Helper to run a single exercise inside the standardized ActiveWorkoutView pipeline.
+    static func from(singleExercise exercise: Exercise) -> Preset {
+        return Preset(
+            id: UUID(),
+            isRestDay: false,
+            name: exercise.name,
+            exercises: [exercise],
+            isWarmpUp: false,
+            scheduledFor: nil,
+            estTime: 5, // Rough estimate
+            equipments: exercise.equipments,
+            calories: Int(exercise.metValue * 5.0) // Rough generic calculation
+        )
+    }
+}
+
+enum FitnessLevel: String, CaseIterable, Hashable {
+    case beginner = "Beginner"
+    case intermediate = "Intermediate"
+    case advanced = "Advanced"
+}
+
+// UPDATED: Consolidated UserProfile struct into an @Observable class to act as the single source of truth.
+@Observable
+class UserProfileModel {
+    var profilePicture: String? = "UserImage"
+    var name: String = "Ankit Malik"
+    var age: Int = 21
+    var gender: Genders = .male
+    var weight: Double = 71.0
+    var height: Double = 1.73
+    var modelSensitivity: SensitivityLevels = .Medium
+    var unitSystem: UnitSystem = .metric
+    var fitnessLevel: FitnessLevel = .beginner
+    var weeklyGoalDays: Int = 3
+}
+
+/* DEPRECATED: Replaced by @Observable class UserProfileModel. Logic moved to unified model for MVVM.
 struct UserProfile:Hashable {
     var profilePicture: String?
     var name: String
@@ -70,6 +240,18 @@ struct UserProfile:Hashable {
     var modelSensitivity: SensitivityLevels
     var unitSystem: UnitSystem
 }
+
+private struct UserProfileKey: EnvironmentKey {
+    static let defaultValue: UserProfile? = nil
+}
+
+extension EnvironmentValues {
+    var userProfile: UserProfile? {
+        get { self[UserProfileKey.self] }
+        set { self[UserProfileKey.self] = newValue }
+    }
+}
+*/
 
 //MARK: - Enums
 
@@ -105,3 +287,13 @@ enum UnitSystem: String, CaseIterable,Hashable{
     case metric = "Metric"
     case imperial = "Imperial"
 }
+
+/*enum targetMuscleGroup: String, CaseIterable {
+    case shoulder = "Shoulder"
+    case chest = "Chest"
+    case back = "Back"
+    case legs = "Legs"
+    case core = "Core"
+    case arms = "Arms"
+}
+*/

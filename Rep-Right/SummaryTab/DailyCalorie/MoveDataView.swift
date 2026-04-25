@@ -2,20 +2,23 @@
 //  MoveDataView.swift
 //  Rep_Right
 //
-//  Created by GU on 01/04/26.
-//
 
 import SwiftUI
 
 struct MoveDataView: View {
-    @State private var cal = 100
+    // Fetched from SummaryDataModel: current calorie burn value
+    var cal: Int
+    // Fetched from SummaryDataModel: daily calorie goal
+    var goal: Int
+    
     var body: some View {
         VStack(alignment: .leading){
             Text("Move")
                 .font(.callout)
                 .fontWeight(.light)
             HStack{
-                Text("\(cal)/1000")
+                // Fetched from SummaryDataModel: todayCaloriesBurned / dailyCalorieGoal
+                Text("\(cal)/\(goal)")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundStyle(.orange)
@@ -27,6 +30,7 @@ struct MoveDataView: View {
         .padding()
     }
 }
+
 #Preview {
-    MoveDataView()
+    MoveDataView(cal: 100, goal: 500)
 }
