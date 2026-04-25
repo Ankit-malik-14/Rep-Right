@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "Core.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

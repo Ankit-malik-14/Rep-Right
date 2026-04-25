@@ -18,6 +18,7 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var tips: [String]
     var assistanceAvailable: Bool
     var demoVideo: URL?
+    var image: String?
     var setData: [SetData]
     
     // MARK: - MET Value Lookup
@@ -165,6 +166,7 @@ struct Preset: Identifiable, Equatable, Hashable {
     var id: UUID = UUID()
     var isRestDay: Bool = false
     let name: String
+    var image: String?
     var exercises: [Exercise]
     var isWarmpUp: Bool
     var scheduledFor: Weekday?

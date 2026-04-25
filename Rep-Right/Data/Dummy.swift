@@ -25,6 +25,7 @@ class Exercises{
             ],
             assistanceAvailable: true,
             demoVideo: URL(string: "https://example.com/videos/pushup.mp4"),
+            image: "PushUp",
             setData: [
                 SetData(sets: 3, reps: 12),
                 SetData(sets: 1, reps: 10)
@@ -47,6 +48,7 @@ class Exercises{
             ],
             assistanceAvailable: false,
             demoVideo: URL(string: "https://example.com/videos/bodyweight_squat.mp4"),
+            image: "Squats",
             setData: [
                 SetData(sets: 4, reps: 15)
             ]
@@ -68,6 +70,7 @@ class Exercises{
             ],
             assistanceAvailable: false,
             demoVideo: URL(string: "https://example.com/videos/dumbbell_row.mp4"),
+            image: "DumbellRow",
             setData: [
                 SetData(sets: 3, reps: 10)
             ]
@@ -88,6 +91,7 @@ class Exercises{
             ],
             assistanceAvailable: true,
             demoVideo: URL(string: "https://example.com/videos/plank.mp4"),
+            image: "Plank",
             setData: [
                 SetData(sets: 3, reps: 45) // interpret reps as seconds for isometric holds
             ]
@@ -109,6 +113,7 @@ class Presets {
         ),
         Preset(
             name: "Upper Focus",
+            image: "Shoulders",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .wednesday,
@@ -118,6 +123,7 @@ class Presets {
         ),
         Preset(
             name: "Core & Stability",
+            image: "Core",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .friday,
@@ -137,6 +143,7 @@ class Presets {
         ),
         Preset(
             name: "Lower Body Builder",
+            image: "Legs",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .thursday,
@@ -161,6 +168,7 @@ class CustomPresetsDummyData{
         ),
         Preset(
             name: "Push + Core",
+            image: "Core",
             exercises: Exercises().exerciseList.filter { ["Push-Up", "Plank"].contains($0.name) },
             isWarmpUp: false,
             scheduledFor: .thursday,
