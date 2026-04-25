@@ -49,6 +49,7 @@ struct PreWorkoutGateView: View {
                 .padding()
             }
             .navigationTitle("Before You Start")
+            //.navigationDestination(for: <#T##Hashable.Type#>, destination: <#T##(Hashable) -> View#>)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Close") {
@@ -56,14 +57,14 @@ struct PreWorkoutGateView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Skip Smart Prep", role: .destructive) {
+                    Button("Skip", role: .destructive) {
                         showSkipAlert = true
                     }
                     .tint(.red)
                 }
             }
             .alert("Skip Smart Prep?", isPresented: $showSkipAlert) {
-                Button("Skip & Start Workout", role: .destructive, action: onProceed)
+                Button("Start Workout", role: .destructive, action: onProceed)
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text("Skipping your warmup increases the risk of injury. It's highly recommended to prepare your muscles first!")

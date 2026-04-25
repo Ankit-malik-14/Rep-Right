@@ -35,10 +35,11 @@ struct WorkoutScreen: View {
                     QuickActionRow()
                         .padding(.vertical, 8)
                     
+                    ScheduledWorkoutCard()
+                    
                     SmartRecommendationCard()
                         .padding(.bottom, 8)
                     
-                    ScheduledWorkoutCard()
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
                     
@@ -66,14 +67,20 @@ struct WorkoutScreen: View {
                     DefaultPresetListView(presets: preset)
                 }
             })
+            .navigationDestination(for: ProfileRoute.self, destination: { view in
+                switch view {
+                case .profile:
+                    ProfileFormView()
+                }
+            })
             .navigationTitle("Workouts")
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing){
-                    NavigationLink(destination: ProfileFormView()) {
+                    NavigationLink(value: ProfileRoute.profile) {
                         Image(systemName: "person.circle.fill")
                     }
                 }
-                ToolbarItem(placement:.bottomBar) {
+                ToolbarItem(placement:.topBarLeading) {
                     Image(systemName: "calendar")
 //                    QuickActionCard(title: "Scheduler", icon: "calendar", color: .black)
                         .onTapGesture {

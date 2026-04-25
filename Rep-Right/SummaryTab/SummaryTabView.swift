@@ -30,11 +30,17 @@ struct SummaryTabView: View {
             .navigationDestination(for: CalorieBreakdownView.self, destination: { value in
                 CalorieBreakdownView()
             })
+            .navigationDestination(for: ProfileRoute.self, destination: { view in
+                switch view {
+                case .profile:
+                    ProfileFormView()
+                }
+            })
 
             .navigationTitle("Summary")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: ProfileFormView()) {
+                    NavigationLink(value: ProfileRoute.profile) {
                         Image(systemName: "person.circle.fill")
                     }
                 }
