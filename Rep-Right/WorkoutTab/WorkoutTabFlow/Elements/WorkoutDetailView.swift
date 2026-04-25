@@ -16,7 +16,7 @@ struct WorkoutDetailView: View {
                 
                 // 1. Header & Stats Section (Overlapping)
                 VStack(spacing: -50) {
-                    PresetHeaderCardView()
+                    PresetHeaderCardView(image: preset.image ?? "")
                     StatsCardView(preset: preset)
                 }
                 .padding(.horizontal)
@@ -72,7 +72,7 @@ struct WorkoutDetailView: View {
 #Preview {
     
     NavigationStack{
-        WorkoutDetailView(preset: Presets().presets[0])
+        WorkoutDetailView(preset: Presets().presets[2])
             .environment(WeeklySchedules())
             .environment(WorkoutRouter())
             

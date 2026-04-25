@@ -21,11 +21,12 @@ struct WorkoutScreen: View {
                     
 //                    ReadinessBannerView()
 //                        .padding(.top)
+                    ScheduledWorkoutCard()
                     
                     QuickActionRow()
                         .padding(.vertical, 8)
                     
-                    ScheduledWorkoutCard()
+                    
                     
                     SmartRecommendationCard()
                         .padding(.bottom, 8)
@@ -85,8 +86,9 @@ struct WorkoutScreen: View {
             
             }
             .sheet(isPresented: $showScheduler) {
-                            SchedulerView()
-                        }
+                SchedulerView()
+            }
+            
 
         }
         .environment(router)

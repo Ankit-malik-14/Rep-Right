@@ -12,17 +12,14 @@ struct ExerciseCardView: View {
     var body: some View {
         HStack(spacing: 16) {
             // Exercise Image Placeholder
-            ZStack {
-                Color.white
-                Image(systemName: "figure.strengthtraining.traditional")
+            Image(exercise.image!)
+            
                     .resizable()
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .frame(width: 75, height: 75)
                     .scaledToFit()
-                    .padding(12)
                     .foregroundColor(.black)
-            }
-            .frame(width: 70, height: 70)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+                    .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 2)
             
             // Text Info
             VStack(alignment: .leading, spacing: 4) {
@@ -41,7 +38,7 @@ struct ExerciseCardView: View {
                 .fill(Color.orange.opacity(0.15))
                 .frame(width: 32, height: 32)
                 .overlay(
-                    Image(systemName: "viewfinder")
+                    Image(systemName: "camera.viewfinder")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.orange)
                 )

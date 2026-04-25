@@ -13,8 +13,9 @@ struct DefaultPresetListView: View {
         ScrollView{
             VStack{
                 ForEach(presets.presets){ preset in
-                    NavigationLink(value: WorkoutRoute.presetDetail(preset)) {
-                        PresetTileViewType(preset: preset, type: .small)
+                    NavigationLink(value: preset) {
+                        PresetTileViewType(preset: preset, type: .large)
+                            .background(RoundedRectangle(cornerRadius: 16).foregroundStyle(.background.secondary)).padding(.horizontal)
 //                        HStack(alignment: .center){
 //                            //Image Placeholder
 //                            RoundedRectangle(cornerRadius: 16)
