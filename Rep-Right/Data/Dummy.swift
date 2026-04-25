@@ -31,6 +31,215 @@ class Exercises{
             ]
         ),
         Exercise(
+                    name: "Wall Sit",
+                    targetAreas: ["Quads", "Glutes", "Hamstrings"],
+                    equipments: ["Wall"],
+                    executionSteps: [
+                        "Stand with your back flat against a wall.",
+                        "Slide down until your knees are at 90 degrees.",
+                        "Keep your back flat against the wall throughout.",
+                        "Hold the position for the required time."
+                    ],
+                    tips: [
+                        "Keep knees directly over ankles, not past toes.",
+                        "Press your entire back into the wall.",
+                        "Keep arms relaxed at sides or on thighs."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 45)]
+                ),
+        Exercise(
+                    name: "Glute Bridge Hold",
+                    targetAreas: ["Glutes", "Hamstrings", "Core"],
+                    equipments: ["Mat"],
+                    executionSteps: [
+                        "Lie on your back with knees bent and feet flat on the floor.",
+                        "Press through your heels to lift your hips toward the ceiling.",
+                        "Squeeze your glutes at the top and hold.",
+                        "Keep your shoulders and upper back on the mat."
+                    ],
+                    tips: [
+                        "Don't let your lower back arch excessively.",
+                        "Keep your core braced throughout.",
+                        "Drive through heels, not toes."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 30)]
+                ),
+        Exercise(
+                    name: "Dead Hang",
+                    targetAreas: ["Lats", "Shoulders", "Forearms", "Core"],
+                    equipments: ["Pull-up Bar"],
+                    executionSteps: [
+                        "Grip the bar slightly wider than shoulder-width.",
+                        "Hang with arms fully extended and feet off the ground.",
+                        "Keep shoulders engaged — don't let them shrug up to ears.",
+                        "Hold the position with a straight body."
+                    ],
+                    tips: [
+                        "Engage your shoulder blades by pulling them down slightly.",
+                        "Breathe steadily; don't hold your breath.",
+                        "Keep your core slightly braced to prevent swinging."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 30)]
+                ),
+        Exercise(
+                    name: "Overhead Hold",
+                    targetAreas: ["Shoulders", "Triceps", "Core"],
+                    equipments: ["Dumbbell", "Barbell"],
+                    executionSteps: [
+                        "Stand tall with feet shoulder-width apart.",
+                        "Press weight directly overhead until arms are fully extended.",
+                        "Keep wrists stacked directly above shoulders.",
+                        "Brace your core and hold the position."
+                    ],
+                    tips: [
+                        "Don't shrug your shoulders — keep them packed.",
+                        "Keep ribs down; avoid flaring them.",
+                        "Squeeze glutes to protect your lower back."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 30)]
+                ),
+        Exercise(
+                    name: "Forearm Plank",
+                    targetAreas: ["Core", "Shoulders", "Glutes"],
+                    equipments: ["Mat"],
+                    executionSteps: [
+                        "Place forearms flat on the ground, elbows under shoulders.",
+                        "Extend legs behind you, resting on toes.",
+                        "Keep your body in a straight line from head to heels.",
+                        "Hold without letting hips drop or rise."
+                    ],
+                    tips: [
+                        "Keep elbows at exactly 90 degrees.",
+                        "Press forearms into the floor to engage shoulders.",
+                        "Squeeze core and glutes throughout."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 45)]
+                ),
+        Exercise(
+                    name: "Side Plank",
+                    targetAreas: ["Obliques", "Core", "Shoulders"],
+                    equipments: ["Mat"],
+                    executionSteps: [
+                        "Lie on your side with legs stacked and elbow under shoulder.",
+                        "Lift your hips off the ground to form a straight line.",
+                        "Keep your top arm extended upward or resting on your hip.",
+                        "Hold without letting your hip drop toward the floor."
+                    ],
+                    tips: [
+                        "Stack feet directly on top of each other.",
+                        "Engage obliques — don't just rely on your arm.",
+                        "Keep your neck neutral; don't crane it up or down."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 30)]
+                ),
+        Exercise(
+                    name: "Lunge Hold",
+                    targetAreas: ["Quads", "Glutes", "Hamstrings", "Core"],
+                    equipments: [],
+                    executionSteps: [
+                        "Step one foot forward into a lunge position.",
+                        "Lower your back knee toward the floor until both knees are at 90 degrees.",
+                        "Keep your torso upright and core braced.",
+                        "Hold the position steadily."
+                    ],
+                    tips: [
+                        "Front knee should stay directly above your ankle.",
+                        "Don't let front knee cave inward.",
+                        "Keep shoulders back and chest up."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 30)]
+                ),
+        Exercise(
+                    name: "Hip Abduction Hold",
+                    targetAreas: ["Glutes", "Hip Abductors", "Core"],
+                    equipments: [],
+                    executionSteps: [
+                        "Stand tall on one leg with a slight bend in the standing knee.",
+                        "Lift the opposite leg out to the side, keeping toes forward.",
+                        "Raise the leg at least 20 degrees from your standing leg.",
+                        "Hold the position with core engaged."
+                    ],
+                    tips: [
+                        "Don't lean your torso to the side to compensate.",
+                        "Keep your hips level — don't let one drop.",
+                        "Focus your gaze on a fixed point to help balance."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 20)]
+                ),
+        Exercise(
+                    name: "L-Sit Hold",
+                    targetAreas: ["Core", "Hip Flexors", "Triceps"],
+                    equipments: ["Parallel Bars", "Dip Bars"],
+                    executionSteps: [
+                        "Support your body on parallel bars with arms fully extended.",
+                        "Lift both legs until they are parallel to the ground.",
+                        "Keep legs straight and together.",
+                        "Hold the position with shoulders pressed down."
+                    ],
+                    tips: [
+                        "Push through the bars to keep shoulders depressed.",
+                        "Point toes to help engage legs fully.",
+                        "Tighten your core as hard as possible."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 15)]
+                ),
+        Exercise(
+                    name: "Hollow Body Hold",
+                    targetAreas: ["Core", "Hip Flexors", "Shoulders"],
+                    equipments: ["Mat"],
+                    executionSteps: [
+                        "Lie on your back and press your lower back firmly into the mat.",
+                        "Raise your arms overhead and lift your legs to about 30 degrees.",
+                        "Lift your shoulders slightly off the mat.",
+                        "Hold the banana-shaped body position."
+                    ],
+                    tips: [
+                        "The lower back must stay pressed into the mat at all times.",
+                        "The lower the legs, the harder it gets — adjust as needed.",
+                        "If too hard, bend your knees to reduce the lever arm."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 20)]
+                ),
+        Exercise(
+                    name: "Superman Hold",
+                    targetAreas: ["Lower Back", "Glutes", "Hamstrings", "Shoulders"],
+                    equipments: ["Mat"],
+                    executionSteps: [
+                        "Lie face down with arms extended overhead and legs straight.",
+                        "Simultaneously lift your arms, chest, and legs off the ground.",
+                        "Squeeze your glutes and lower back to hold the position.",
+                        "Keep your neck neutral — don't crane it upward."
+                    ],
+                    tips: [
+                        "Lift arms and legs at the same time for balance.",
+                        "Don't hold your breath — breathe steadily.",
+                        "Focus on squeezing glutes, not just arching the back."
+                    ],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    setData: [SetData(sets: 3, reps: 20)]
+                ),
+        Exercise(
             name: "Bodyweight Squat",
             targetAreas: ["Quads", "Glutes", "Hamstrings", "Core"],
             equipments: [],

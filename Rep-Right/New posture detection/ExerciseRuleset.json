@@ -18,7 +18,7 @@
       "flags": {
         "misaligned_body": "Body not straight. Check alignment < 15°",
         "sagging_hips": "Hips sagging. Raise hips to shoulder level",
-        "bent_elbows": "Elbows bent. Keep arms straight > 160°",
+        "qbent_elbows": "Elbows bent. Keep arms straight > 160°",
         "head_position": "Head position incorrect. Keep neutral"
       }
     },
