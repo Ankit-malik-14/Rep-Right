@@ -2,10 +2,10 @@ import SwiftUI
 
 struct PreWorkoutGateView: View {
     let preset: Preset
-    var onProceed: () -> Void
 
     @Environment(WorkoutSummaryManager.self) private var summaryManager
     @Environment(Exercises.self) private var exercises
+    @Environment(WorkoutRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
 
     @State private var showSkipAlert = false
@@ -34,41 +34,35 @@ struct PreWorkoutGateView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Recovery warning section
-                    if !recoveryWarnings.isEmpty {
-                        RecoveryWarningCard(warnings: recoveryWarnings)
-                    } else {
-                        AllClearCard()
-                    }
-                    // Smart prep section
-                    SmartPrepPromptCard(preset: preset, smartPrepPreset: smartPrepPreset)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Recovery warning section
+                if !recoveryWarnings.isEmpty {
+                    RecoveryWarningCard(warnings: recoveryWarnings)
+                } else {
+                    AllClearCard()
                 }
-                .padding()
+                // Smart prep section
+                SmartPrepPromptCard(preset: preset, smartPrepPreset: smartPrepPreset)
             }
-            .navigationTitle("Before You Start")
-            //.navigationDestination(for: <#T##Hashable.Type#>, destination: <#T##(Hashable) -> View#>)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Close") {
-                        dismiss()
-                    }
+            .padding()
+        }
+        .navigationTitle("Before You Start")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Skip", role: .destructive) {
+                    showSkipAlert = true
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Skip", role: .destructive) {
-                        showSkipAlert = true
-                    }
-                    .tint(.red)
-                }
+                .tint(.red)
             }
-            .alert("Skip Smart Prep?", isPresented: $showSkipAlert) {
-                Button("Start Workout", role: .destructive, action: onProceed)
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("Skipping your warmup increases the risk of injury. It's highly recommended to prepare your muscles first!")
+        }
+        .alert("Skip Smart Prep?", isPresented: $showSkipAlert) {
+            Button("Start Workout", role: .destructive) {
+                router.push(.activeWorkout(preset))
             }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Skipping your warmup increases the risk of injury. It's highly recommended to prepare your muscles first!")
         }
     }
 }
@@ -124,7 +118,7 @@ struct SmartPrepPromptCard: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
-            NavigationLink(value: Detailed(preset: smartPrepPreset)) {
+            NavigationLink(value: WorkoutRoute.activeWorkout(smartPrepPreset)) {
                 Text("Start Smart Prep")
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)

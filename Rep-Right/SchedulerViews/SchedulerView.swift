@@ -13,7 +13,7 @@ struct SchedulerView: View {
     var contextPreset: Preset? = nil
     
     var body: some View {
-        NavigationStack{
+        //NavigationStack{
             VStack{
                 ScrollView{
                     ForEach(Weekday.allCases,id: \.self){ weekday in
@@ -23,7 +23,7 @@ struct SchedulerView: View {
                 }
             }
                 .navigationTitle("Scheduler")
-        }
+        //}
     }
 }
 
@@ -32,5 +32,7 @@ struct SchedulerView: View {
         SchedulerView()
             .environment(WeeklySchedules())
             .environment(Presets())
+            .environment(Exercises())
+            .environment(CustomPresetsDummyData())
     }
 }

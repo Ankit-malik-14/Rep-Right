@@ -6,20 +6,9 @@
 import SwiftUI
 import Charts
 
-struct CalorieBreakdownView: View, Hashable {
+struct CalorieBreakdownView: View {
     // UPDATED: Use WorkoutSummaryManager
     @Environment(WorkoutSummaryManager.self) private var data
-    
-    static func == (lhs: CalorieBreakdownView, rhs: CalorieBreakdownView) -> Bool {
-            // Since there are no initialized properties (only State/Environment),
-            // all instances of this view are structurally identical.
-            return true
-        }
-        
-    func hash(into hasher: inout Hasher) {
-        // Hash a constant or the type itself so the hash value is consistent
-        hasher.combine(String(describing: Self.self))
-    }
     
     private var totalCalories: Double {
         data.weeklyCalorieChartData.reduce(0.0) { $0 + Double($1.calories) }
@@ -124,12 +113,9 @@ struct CalorieBreakdownView: View, Hashable {
         }
         .navigationTitle("Weekly Calories")
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: UserCalorieIntake.self, destination: { value in
-            UserCalorieIntake()
-        })
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(value: UserCalorieIntake()) {
+                NavigationLink(value: SummaryRoute.userCalorieIntake) {
                     Text("Edit")
                         .foregroundStyle(.orange)
                 }

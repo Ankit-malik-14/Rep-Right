@@ -13,7 +13,7 @@ struct DefaultPresetListView: View {
         ScrollView{
             VStack{
                 ForEach(presets.presets){ preset in
-                    NavigationLink(value: preset) {
+                    NavigationLink(value: WorkoutRoute.presetDetail(preset)) {
                         PresetTileViewType(preset: preset, type: .small)
 //                        HStack(alignment: .center){
 //                            //Image Placeholder
@@ -36,9 +36,7 @@ struct DefaultPresetListView: View {
                     }.buttonStyle(.plain)
                     
                 }
-            }.navigationDestination(for: Preset.self, destination: { preset in
-                WorkoutDetailView(preset: preset)
-            })
+            }
             
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
