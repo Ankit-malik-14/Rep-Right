@@ -3,10 +3,11 @@ import SwiftUI
 struct OnboardingScreenView1: View {
     var body: some View {
         VStack(spacing: 0) {
-            Image("AIassistance")
+            Image("Deadlift-Onboarding")
                 .resizable()
-                .scaledToFit()
-                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30))
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: 600)
+                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 40, bottomTrailingRadius: 40))
                 
             // Text Section
             VStack(spacing: 16) {
@@ -20,6 +21,7 @@ struct OnboardingScreenView1: View {
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.gray)
             }
+            
             .padding(.horizontal, 24)
             
             Spacer()
