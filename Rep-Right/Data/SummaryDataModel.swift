@@ -171,38 +171,73 @@ class WorkoutSummaryManager {
     }
     
     // adds a single exercise into completedExercises array
-    func logStandaloneExercise(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double? = nil) {
-        let record = CompletedExerciseRecord(
-            id: UUID(),
-            exerciseId: exerciseId,
-            presetId: nil,
-            workoutSessionId: nil,
-            date: startTime,
-            startTime: startTime,
-            endTime: endTime,
-            actualSet: actualSet,
-            formAccuracy: nil,
-            formInsights: nil,
-            caloriesBurnedValue: caloriesBurned
-        )
-        completedExercises.append(record)
-    }
+//    func logStandaloneExercise(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double? = nil) {
+//        let record = CompletedExerciseRecord(
+//            id: UUID(),
+//            exerciseId: exerciseId,
+//            presetId: nil,
+//            workoutSessionId: nil,
+//            date: startTime,
+//            startTime: startTime,
+//            endTime: endTime,
+//            actualSet: actualSet,
+//            formAccuracy: nil,
+//            formInsights: nil,
+//            caloriesBurnedValue: caloriesBurned
+//        )
+//        completedExercises.append(record)
+//    }
+//    
+//    func logPresetSession(presetId: UUID, exercises: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)]) {
+//        let sessionId = UUID()
+//        let sessionDate = exercises.first?.startTime ?? Date()
+//        
+//        // logs the overall session
+//        let session = CompletedPresetRecord(id: sessionId, presetId: presetId, date: sessionDate)
+//        completedSessions.append(session)
+//        
+//        // logs all individual exercises wrt to this session
+//        let exerciseRecords = exercises.map { data in
+//            CompletedExerciseRecord(
+//                id: UUID(),
+//                exerciseId: data.exerciseId,
+//                presetId: presetId,
+//                workoutSessionId: sessionId,
+//                date: data.startTime,
+//                startTime: data.startTime,
+//                endTime: data.endTime,
+//                actualSet: data.actualSet,
+//                formAccuracy: nil,
+//                formInsights: nil,
+//                caloriesBurnedValue: data.caloriesBurned
+//            )
+//        }
+//        completedExercises.append(contentsOf: exerciseRecords)
+//    }
     
-    func logPresetSession(presetId: UUID, exercises: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)]) {
-        let sessionId = UUID()
+    // MARK: - Unified Logging Engine
+    // Replaces logStandaloneExercise and logPresetSession
+
+    func logWorkout(
+        presetId: UUID?, // Pass nil for standalone exercises
+        exercises: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)]
+    ) {
+        // 1. Handle the session wrapper if a presetId is provided
+        let sessionId = presetId != nil ? UUID() : nil
         let sessionDate = exercises.first?.startTime ?? Date()
         
-        // logs the overall session
-        let session = CompletedPresetRecord(id: sessionId, presetId: presetId, date: sessionDate)
-        completedSessions.append(session)
+        if let validPresetId = presetId, let validSessionId = sessionId {
+            let session = CompletedPresetRecord(id: validSessionId, presetId: validPresetId, date: sessionDate)
+            completedSessions.append(session)
+        }
         
-        // logs all individual exercises wrt to this session
+        // 2. Log all individual exercises
         let exerciseRecords = exercises.map { data in
             CompletedExerciseRecord(
                 id: UUID(),
                 exerciseId: data.exerciseId,
                 presetId: presetId,
-                workoutSessionId: sessionId,
+                workoutSessionId: sessionId, // Automatically routes to presetSessions or standaloneExercises based on presence
                 date: data.startTime,
                 startTime: data.startTime,
                 endTime: data.endTime,
