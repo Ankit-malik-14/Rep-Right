@@ -12,7 +12,7 @@ struct ExerciseCardView: View {
     var body: some View {
         HStack(spacing: 16) {
             // Exercise Image Placeholder
-            Image(exercise.image!)
+            Image(exercise.image ?? "Placeholder" )
             
                     .resizable()
                     .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -34,14 +34,16 @@ struct ExerciseCardView: View {
             Spacer()
             
             // Right Icon
-            Circle()
-                .fill(Color.orange.opacity(0.15))
-                .frame(width: 32, height: 32)
-                .overlay(
-                    Image(systemName: "camera.viewfinder")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.orange)
-                )
+            if exercise.assistanceAvailable{
+                Circle()
+                    .fill(Color.orange.opacity(0.15))
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Image(systemName: "camera.viewfinder")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.orange)
+                    )
+            }
         }
         .padding(12)
         .background(Color(UIColor.systemGray6).opacity(0.5))
