@@ -20,6 +20,10 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var demoVideo: URL?
     var image: String?
     var setData: [SetData]
+    var primaryFocusArea: FocusArea? {
+        guard let firstTarget = targetAreas.first else { return nil }
+        return FocusArea.from(targetArea: firstTarget)
+    }
     
     // MARK: - MET Value Lookup
     // Scientifically accurate MET values mapped by exercise name.
@@ -140,13 +144,6 @@ enum FocusArea: String, CaseIterable, Hashable {
             }
             return nil
         }
-    }
-}
-
-extension Exercise {
-    var primaryFocusArea: FocusArea? {
-        guard let firstTarget = targetAreas.first else { return nil }
-        return FocusArea.from(targetArea: firstTarget)
     }
 }
 

@@ -385,7 +385,7 @@ struct ActiveWorkoutView: View {
                 caloriesBurned: Optional(cals)
             )
         }
-        summaryManager.logPresetSession(presetId: preset.id, exercises: exerciseData)
+        summaryManager.logWorkout(presetId: preset.id, exercises: exerciseData)
     }
     
     // MARK: - PR Detection
