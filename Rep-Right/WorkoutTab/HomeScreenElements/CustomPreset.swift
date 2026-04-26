@@ -16,9 +16,11 @@ struct CustomPreset: View {
                     .font(.title.bold())
                 Spacer()
                 NavigationLink(value: WorkoutRoute.customPresetsList){
-                    Text("See all")
-                }.tint(.orange)
-            }.padding(.horizontal)
+                    Text(preset.customPresets.count == 0 ? "" : "See all")
+                }
+                .tint(.orange)
+            }
+            .padding(.horizontal)
             ScrollView(.horizontal){
                 HStack{
                     ForEach(0..<min(preset.customPresets.count, 3),id: \.self){ idx in

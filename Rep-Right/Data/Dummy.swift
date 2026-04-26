@@ -5,6 +5,7 @@
 //  Created by Ankit Malik on 2026-03-17.
 //
 import Foundation
+import SwiftUI
 @Observable
 class Exercises{
     var exerciseList: [Exercise] = [
@@ -405,6 +406,15 @@ class CustomPresetsDummyData{
             calories: 100
         )
     ]
+    func add(_ preset: Preset){
+        customPresets.append(preset)
+    }
+    func delete(_ preset: Preset){
+        customPresets.removeAll{$0.id == preset.id}
+    }
+    func delete(atOffsets offsets: IndexSet) {
+        customPresets.remove(atOffsets: offsets)
+    }
 }
 
 /* DEPRECATED: Replaced by the global @Observable UserProfileModel injected via environment.
