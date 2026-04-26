@@ -15,14 +15,14 @@ struct CustomPreset: View {
                 Text("Custom")
                     .font(.title.bold())
                 Spacer()
-                NavigationLink(value: ExpandedViews.customPresets){
+                NavigationLink(value: WorkoutRoute.customPresetsList){
                     Text("See all")
                 }.tint(.orange)
             }.padding(.horizontal)
             ScrollView(.horizontal){
                 HStack{
                     ForEach(0..<min(preset.customPresets.count, 3),id: \.self){ idx in
-                        NavigationLink(value: preset.customPresets[idx]) {
+                        NavigationLink(value: WorkoutRoute.presetDetail(preset.customPresets[idx])) {
                             PresetTileViewType(preset: preset.customPresets[idx], type: .large)
                         }.buttonStyle(.plain)
                     }

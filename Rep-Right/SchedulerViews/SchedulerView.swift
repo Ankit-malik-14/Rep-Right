@@ -13,8 +13,11 @@ struct SchedulerView: View {
     var contextPreset: Preset? = nil
     
     var body: some View {
-        NavigationStack{
-            VStack{
+        //NavigationStack{
+        VStack(alignment: .leading){
+                Text("Scheduler")
+                    .font(.largeTitle).bold()
+                    .padding([.top,.leading,.trailing])
                 ScrollView{
                     ForEach(Weekday.allCases,id: \.self){ weekday in
                         SchedulerCards(weekday: weekday, contextPreset: contextPreset)
@@ -22,15 +25,17 @@ struct SchedulerView: View {
                     }
                 }
             }
-                .navigationTitle("Scheduler")
-        }
+                //.navigationTitle("Scheduler")
+        //}
     }
 }
 
 #Preview {
     NavigationStack{
         SchedulerView()
-            .environment(WeeklySchedules())
             .environment(Presets())
+            .environment(WeeklySchedules())
+            .environment(WorkoutSummaryManager())
+            .environment(Exercises())
     }
 }

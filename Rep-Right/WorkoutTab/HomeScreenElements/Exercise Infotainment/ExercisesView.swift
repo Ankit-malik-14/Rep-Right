@@ -16,7 +16,7 @@ struct ExercisesView: View {
     @State private var showTooltip = false
     
     /// Bridge: wraps this single exercise into a Preset so ActiveWorkoutView can consume it.
-    private var exerciseAsPreset: Detailed { Detailed(preset: Preset.from(singleExercise: exercise)) }
+    private var singleExercisePreset: Preset { Preset.from(singleExercise: exercise) }
     
     init(exercise: Exercise) {
         self.exercise = exercise
@@ -121,7 +121,7 @@ struct ExercisesView: View {
                         
                     
                     HStack(spacing: 12) {
-                        NavigationLink(value: exerciseAsPreset) {
+                        NavigationLink(value: WorkoutRoute.activeWorkout(singleExercisePreset)) {
                             HStack {
                                 Image(systemName: "play.fill")
                                 Text("Try Workout")
@@ -137,9 +137,6 @@ struct ExercisesView: View {
             }
         }
         .background(Color(.systemBackground))
-        .navigationDestination(for: Detailed.self) { detail in
-            ActiveWorkoutView(preset: detail.preset)
-        }
         .onAppear {
             isExecutionExpanded = (userProfile.fitnessLevel == .beginner)
             

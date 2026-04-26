@@ -38,8 +38,7 @@ struct FormAccuracyReportView: View {
             .padding(.horizontal, 20)
             .padding(.top, 20)
             
-            Button(action: {
-            }) {
+            NavigationLink(value: SummaryRoute.exerciseAccuracyList) {
                 Text("View Detailed Form Trends")
                     .font(.subheadline)
                     .foregroundStyle(.black)

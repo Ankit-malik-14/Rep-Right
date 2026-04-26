@@ -13,10 +13,10 @@ struct ExerciseListView: View {
         VStack(alignment: .leading){
             ScrollView(.vertical){
                 ForEach(exercises.exerciseList){ exercise in
-                    NavigationLink(value: exercise) {
+                    NavigationLink(value: WorkoutRoute.exerciseDetail(exercise)) {
                         HStack(alignment: .center){
-                            RoundedRectangle(cornerRadius: 16)
-                            
+                            Image(exercise.image!)
+                                .resizable().clipShape(RoundedRectangle(cornerRadius: 16))
                                 .frame(width: 67, height: 64)
                                 .shadow(radius: 100)
                                 .foregroundStyle(.background.tertiary)
@@ -36,8 +36,6 @@ struct ExerciseListView: View {
                         }.background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background.secondary)).padding(.horizontal)
                     }.buttonStyle(.plain)
                     
-                }.navigationDestination(for: Exercise.self) { exercise in
-                    ExercisesView(exercise: exercise)
                 }
             }
         }

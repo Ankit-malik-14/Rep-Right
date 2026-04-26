@@ -15,68 +15,64 @@ struct ExerciseAccuracyListView: View {
     @Environment(Exercises.self) private var exercises
 
     var body: some View {
-        NavigationStack {
-            // Precompute records with accuracy to help the compiler
-            let all = summaryManager.completedExercises
-            let filtered = all.filter { $0.formAccuracy != nil }
-            let recordsWithAccuracy = filtered.sorted { lhs, rhs in
-                lhs.date > rhs.date
-            }
+        // Precompute records with accuracy to help the compiler
+        let all = summaryManager.completedExercises
+        let filtered = all.filter { $0.formAccuracy != nil }
+        let recordsWithAccuracy = filtered.sorted { lhs, rhs in
+            lhs.date > rhs.date
+        }
 
-            List {
-                if recordsWithAccuracy.isEmpty {
-                    ContentUnavailableView(
-                        "No Accuracy Data",
-                        systemImage: "gauge.with.dots.needle.bottom.50percent",
-                        description: Text("Use AI Assistance during a workout to get accuracy scores")
-                    )
-                } else {
-                    Section {
-                        ForEach(recordsWithAccuracy) { record in
-                            let exercise = exercises.exerciseList.first(where: { $0.id == record.exerciseId })
-                            let exerciseName = exercise?.name ?? "Unknown"
-                            let targetMuscle = exercise?.targetAreas.first ?? "--"
-                            let accuracy = Int(record.formAccuracy ?? 0)
+        List {
+            if recordsWithAccuracy.isEmpty {
+                ContentUnavailableView(
+                    "No Accuracy Data",
+                    systemImage: "gauge.with.dots.needle.bottom.50percent",
+                    description: Text("Use AI Assistance during a workout to get accuracy scores")
+                )
+            } else {
+                Section {
+                    ForEach(recordsWithAccuracy) { record in
+                        let exercise = exercises.exerciseList.first(where: { $0.id == record.exerciseId })
+                        let exerciseName = exercise?.name ?? "Unknown"
+                        let targetMuscle = exercise?.targetAreas.first ?? "--"
+                        let accuracy = Int(record.formAccuracy ?? 0)
 
-                            NavigationLink {
-                                AccuracyMeterView(value: record.formAccuracy ?? 0, exerciseName: exerciseName)
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(exerciseName)
-                                            .font(.title3)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(.primary)
+                        NavigationLink(value: SummaryRoute.accuracyMeter(value: record.formAccuracy ?? 0, exerciseName: exerciseName)) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(exerciseName)
+                                        .font(.title3)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.primary)
 
-                                        HStack(spacing: 12) {
-                                            Text(targetMuscle)
-                                            Text(record.date, format: .relative(presentation: .named))
-                                        }
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
+                                    HStack(spacing: 12) {
+                                        Text(targetMuscle)
+                                        Text(record.date, format: .relative(presentation: .named))
                                     }
-
-                                    Spacer()
-
-                                    Text("\(accuracy)%")
-                                        .font(.headline)
-                                        .foregroundStyle(.orange)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
                                 }
-                                .padding(.vertical, 4)
+
+                                Spacer()
+
+                                Text("\(accuracy)%")
+                                    .font(.headline)
+                                    .foregroundStyle(.orange)
                             }
+                            .padding(.vertical, 4)
                         }
-                    } header: {
-                        Text("Recent")
-                            .textCase(.none)
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
                     }
+                } header: {
+                    Text("Recent")
+                        .textCase(.none)
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
                 }
             }
-            .listStyle(.insetGrouped)
-            .navigationTitle("Exercise History")
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Exercise History")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -284,7 +284,7 @@ struct SmartRecommendationCard: View {
                             .foregroundColor(.secondary)
                     }
                     Spacer()
-                    NavigationLink(value:bestPreset){
+                    NavigationLink(value: WorkoutRoute.presetDetail(bestPreset)){
                         Image(systemName: "chevron.right.circle.fill")
                             .foregroundColor(.orange)
                             .font(.title)
@@ -303,9 +303,7 @@ struct SmartRecommendationCard: View {
                     }
                 }
             }
-            .navigationDestination(for: Preset.self) { presett in
-                WorkoutDetailView(preset: presett)
-            }
+
         }
     }
 

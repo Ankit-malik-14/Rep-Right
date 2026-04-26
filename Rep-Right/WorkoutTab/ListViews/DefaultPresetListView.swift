@@ -14,7 +14,8 @@ struct DefaultPresetListView: View {
             VStack{
                 ForEach(presets.presets){ preset in
                     NavigationLink(value: preset) {
-                        PresetTileViewType(preset: preset, type: .small)
+                        PresetTileViewType(preset: preset, type: .large)
+                            .background(RoundedRectangle(cornerRadius: 16).foregroundStyle(.background.secondary)).padding(.horizontal)
 //                        HStack(alignment: .center){
 //                            //Image Placeholder
 //                            RoundedRectangle(cornerRadius: 16)
@@ -36,9 +37,7 @@ struct DefaultPresetListView: View {
                     }.buttonStyle(.plain)
                     
                 }
-            }.navigationDestination(for: Preset.self, destination: { preset in
-                WorkoutDetailView(preset: preset)
-            })
+            }
             
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
