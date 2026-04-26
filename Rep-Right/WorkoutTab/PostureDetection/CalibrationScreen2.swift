@@ -42,7 +42,7 @@ struct CalibrationScreen2: View {
                 //Timer for 3seconds
                 HStack{
                     VStack(spacing: 50){
-                        Text("Detection starting ...")
+                        Text("Take Position")
                         HStack{
                             ForEach(1...3, id: \.self) { index in
                                 Capsule()
