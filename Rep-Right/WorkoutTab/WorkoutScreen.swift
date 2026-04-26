@@ -46,7 +46,7 @@ struct WorkoutScreen: View {
                         }.tint(.orange)
                             .padding(.horizontal)
                     }
-                    ExerciseListView()
+                    ExerciseDisclosedListView()
                 }
             }
             // MARK: - Single navigation destination for the entire Workout tab
