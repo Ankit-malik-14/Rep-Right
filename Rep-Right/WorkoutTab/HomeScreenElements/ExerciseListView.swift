@@ -15,12 +15,14 @@ struct ExerciseListView: View {
                 ForEach(exercises.exerciseList){ exercise in
                     NavigationLink(value: WorkoutRoute.exerciseDetail(exercise)) {
                         HStack(alignment: .center){
-                            Image(exercise.image!)
-                                .resizable().clipShape(RoundedRectangle(cornerRadius: 16))
-                                .frame(width: 67, height: 64)
-                                .shadow(radius: 100)
-                                .foregroundStyle(.background.tertiary)
-                                .padding(6)
+                           
+                            Image(exercise.image ?? "Placeholder")
+                                    .resizable().clipShape(RoundedRectangle(cornerRadius: 16))
+                                    .frame(width: 67, height: 64)
+                                    .shadow(radius: 100)
+                                    .foregroundStyle(.background.tertiary)
+                                    .padding(6)
+                            
                             VStack(alignment: .leading){
                                 Text(exercise.name)
                                     .font(.headline)
