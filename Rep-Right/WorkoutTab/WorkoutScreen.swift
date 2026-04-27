@@ -33,6 +33,7 @@ struct WorkoutScreen: View {
                     
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
+                        .padding(.horizontal)
                     
                     // Fetched from DataModel: Main default presets data model
                     DefaultPresets(preset: preset)
