@@ -284,9 +284,11 @@ struct SmartRecommendationCard: View {
                             .foregroundColor(.secondary)
                     }
                     Spacer()
-                    Image(systemName: "chevron.right.circle.fill")
-                        .foregroundColor(.orange)
-                        .font(.title)
+                    NavigationLink(value: WorkoutRoute.presetDetail(bestPreset)){
+                        Image(systemName: "chevron.right.circle.fill")
+                            .foregroundColor(.orange)
+                            .font(.title)
+                    }
                 }
                 .padding()
                 .background(Color(UIColor.secondarySystemBackground))
@@ -301,6 +303,7 @@ struct SmartRecommendationCard: View {
                     }
                 }
             }
+
         }
     }
 

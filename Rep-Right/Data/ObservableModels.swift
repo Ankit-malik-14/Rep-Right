@@ -41,9 +41,4 @@ class SummaryData {
 */
 
 // MARK: - Summary Navigation Routes
-
-enum SummaryRoute: Hashable {
-    case calorieBreakdown
-    case metricRing
-    case userCalorieIntake
-}
+// MOVED to AppRoutes/EnumRoutes.swift

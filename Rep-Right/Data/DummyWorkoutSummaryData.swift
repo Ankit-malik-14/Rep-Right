@@ -37,7 +37,7 @@ class DummyWorkoutSummaryData {
         let lastWeek = Calendar.current.date(byAdding: .day, value: -8, to: today)!
         
         //a preset session: Today (Full Body)
-        dummyManager.logPresetSession(
+        dummyManager.logWorkout(
             presetId: fullBodyPresetId,
             exercises: [
                 (
@@ -65,16 +65,16 @@ class DummyWorkoutSummaryData {
         )
         
         //a standalone exercise: Yesterday
-        dummyManager.logStandaloneExercise(
-            exerciseId: pushUpId,
+        dummyManager.logWorkout(presetId: nil, exercises: 
+            [(exerciseId: pushUpId,
             actualSet: [SetData(sets: 4, reps: 20)],
             startTime: yesterday,
             endTime: yesterday.addingTimeInterval(15 * 60),
-            caloriesBurned: nil
+            caloriesBurned: nil)]
         )
         
         //a preset session: Two Days Ago (Upper Focus)
-        dummyManager.logPresetSession(
+        dummyManager.logWorkout(
             presetId: upperFocusPresetId,
             exercises: [
                 (

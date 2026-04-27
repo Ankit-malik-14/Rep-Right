@@ -4,10 +4,10 @@ struct OnboardingScreenView2: View {
     var body: some View {
         VStack(spacing: 10) {
             
-            Image("deadliftForOnboarding")
+            Image("PullUp-Onboarding")
                 .resizable()
                 .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: 650)
+                .frame(maxWidth: .infinity, maxHeight: 600)
                 .clipShape(
                     UnevenRoundedRectangle(bottomLeadingRadius: 40, bottomTrailingRadius: 40)
                 )

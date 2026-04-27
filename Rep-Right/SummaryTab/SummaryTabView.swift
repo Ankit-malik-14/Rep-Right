@@ -6,15 +6,12 @@ struct SummaryTabView: View {
             ScrollView{
                 VStack(spacing: 20) {
                     CalendarView()
-                    NavigationLink(value: MetricRingView()) {
+                    NavigationLink(value: SummaryRoute.metricRing) {
                         MetricsView()
                     }
-//                    NavigationLink(destination: MetricRingView()) {
-//                        MetricsView()
-//                    }
                     .buttonStyle(.plain)
                     
-                    NavigationLink(value: CalorieBreakdownView()) {
+                    NavigationLink(value: SummaryRoute.calorieBreakdown) {
                         WeeklyCalorieBurnView()
                     }
                     .buttonStyle(.plain)
@@ -24,17 +21,27 @@ struct SummaryTabView: View {
                 }
             .padding(.bottom)
             }
-            .navigationDestination(for: MetricRingView.self, destination: { value in
-                MetricRingView()
-            })
-            .navigationDestination(for: CalorieBreakdownView.self, destination: { value in
-                CalorieBreakdownView()
-            })
-
+            // MARK: - Single navigation destination for the entire Summary tab
+            .navigationDestination(for: SummaryRoute.self) { route in
+                switch route {
+                case .calorieBreakdown:
+                    CalorieBreakdownView()
+                case .metricRing:
+                    MetricRingView()
+                case .userCalorieIntake:
+                    UserCalorieIntake()
+                case .exerciseAccuracyList:
+                    ExerciseAccuracyListView()
+                case .accuracyMeter(let value, let name):
+                    AccuracyMeterView(value: value, exerciseName: name)
+                case .profile:
+                    ProfileFormView()
+                }
+            }
             .navigationTitle("Summary")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: ProfileFormView()) {
+                    NavigationLink(value: SummaryRoute.profile) {
                         Image(systemName: "person.circle.fill")
                     }
                 }
@@ -46,5 +53,6 @@ struct SummaryTabView: View {
 #Preview {
     SummaryTabView()
         .environment(WorkoutSummaryManager())
+        .environment(Exercises())
+        .environment(UserProfileModel())
 }
-

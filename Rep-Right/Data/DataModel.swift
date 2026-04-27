@@ -4,11 +4,7 @@
 //
 //  Created by Ankit Malik on 2026-03-16.
 //
-
 import Foundation
-import SwiftUI
-
-//MARK: - Data Types
 
 struct Exercise: Identifiable,Equatable,Hashable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {
@@ -22,7 +18,12 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var tips: [String]
     var assistanceAvailable: Bool
     var demoVideo: URL?
+    var image: String?
     var setData: [SetData]
+    var primaryFocusArea: FocusArea? {
+        guard let firstTarget = targetAreas.first else { return nil }
+        return FocusArea.from(targetArea: firstTarget)
+    }
     
     // MARK: - MET Value Lookup
     // Scientifically accurate MET values mapped by exercise name.
@@ -146,13 +147,6 @@ enum FocusArea: String, CaseIterable, Hashable {
     }
 }
 
-extension Exercise {
-    var primaryFocusArea: FocusArea? {
-        guard let firstTarget = targetAreas.first else { return nil }
-        return FocusArea.from(targetArea: firstTarget)
-    }
-}
-
 // Used by ActiveWorkoutView
 struct WorkoutSet: Identifiable {
     let id = UUID()
@@ -169,6 +163,7 @@ struct Preset: Identifiable, Equatable, Hashable {
     var id: UUID = UUID()
     var isRestDay: Bool = false
     let name: String
+    var image: String?
     var exercises: [Exercise]
     var isWarmpUp: Bool
     var scheduledFor: Weekday?

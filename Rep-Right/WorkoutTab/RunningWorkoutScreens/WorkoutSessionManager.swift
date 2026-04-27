@@ -41,10 +41,14 @@ enum WorkoutPhase: Equatable {
 
 @Observable
 class WorkoutRouter {
-    var path = NavigationPath()
+    var path: [WorkoutRoute] = []
     
     func popToRoot() {
-        path = NavigationPath()
+        path.removeAll()
+    }
+    
+    func push(_ route: WorkoutRoute) {
+        path.append(route)
     }
 }
 

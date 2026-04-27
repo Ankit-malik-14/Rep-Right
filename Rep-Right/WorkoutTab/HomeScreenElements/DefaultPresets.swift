@@ -17,7 +17,7 @@ struct DefaultPresets: View {
                     .bold()
 
                 Spacer()
-                NavigationLink(value: ExpandedViews.defaultPresets) {
+                NavigationLink(value: WorkoutRoute.defaultPresetsList) {
                     Text("See all")
                 }.tint(.orange)
             }.padding(.horizontal)
@@ -38,16 +38,14 @@ struct DefaultPresets: View {
 //                }.padding(.horizontal)
                 HStack {
                     ForEach(0..<min(preset.presets.count, 3), id: \.self) { idx in
-                        NavigationLink(value: preset.presets[idx]) {
+                        NavigationLink(value: WorkoutRoute.presetDetail(preset.presets[idx])) {
                             PresetTileViewType(preset: preset.presets[idx], type: .large)
                         }
                         .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal)
-                .navigationDestination(for: Preset.self) { selectedPreset in
-                    WorkoutDetailView(preset: selectedPreset)
-                }
+
                 
             }
             .scrollIndicators(.hidden)

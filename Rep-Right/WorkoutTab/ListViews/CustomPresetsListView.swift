@@ -9,11 +9,12 @@ import SwiftUI
 
 struct CustomPresetsListView: View {
     var preset: CustomPresetsDummyData
+    @State var showAddSheet: Bool = false
     var body: some View {
        
             List{
                 ForEach(preset.customPresets){ preset1 in
-                    NavigationLink(value: preset1) {
+                    NavigationLink(value: WorkoutRoute.presetDetail(preset1)) {
                         HStack{
                             RoundedRectangle(cornerRadius: 10)
                                 .frame(width: 80, height: 80)
@@ -39,9 +40,9 @@ struct CustomPresetsListView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .topBarTrailing) {
                         Button(role: .destructive){
-                            //
+                            showAddSheet=true
                         } label: {
-                            Image(systemName: "trash")
+                            Image(systemName: "plus")
                         }
                         Button{
                             //
@@ -51,6 +52,10 @@ struct CustomPresetsListView: View {
                         }
                     }
                 }
+                .sheet(isPresented: $showAddSheet) {
+                    CustomPresetAdditionView(isPresented: $showAddSheet)
+                }
+
     }
 }
 

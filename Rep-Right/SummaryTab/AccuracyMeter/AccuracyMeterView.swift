@@ -32,38 +32,27 @@ struct AccuracyMeterView: View {
     @State private var animatedValue: Double = 0
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                GaugesView(value: $animatedValue)
-                    .padding(.vertical)
+        ScrollView {
+            GaugesView(value: $animatedValue)
+                .padding(.vertical)
 
-                LevelView(value: $animatedValue)
+            LevelView(value: $animatedValue)
 
-                Divider()
+            Divider()
 
-                MotivationalQuote(value: $animatedValue)
+            MotivationalQuote(value: $animatedValue)
 
-                Divider()
-                    .padding(.vertical)
+            Divider()
+                .padding(.vertical)
 
-//                if !displayRisks.isEmpty {
-//                    LiveRiskView(risks: displayRisks)
-//                } else {
-                    RiskView()
-                //}
-
-               // LiveSuggestionView(suggestions: displayFeedback)
+            RiskView()
+        }
+        .navigationTitle(exerciseName)
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.4)) {
+                animatedValue = value
             }
-            .navigationTitle(exerciseName)
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-               // animatedValue = displayValue
-            }
-//            .onChange(of: displayValue) { _, newVal in
-//                withAnimation(.easeOut(duration: 0.4)) {
-//                    animatedValue = newVal
-//                }
-//            }
         }
     }
 }
