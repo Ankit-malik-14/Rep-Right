@@ -366,7 +366,7 @@ class Presets {
 
 @Observable
 class CustomPresetsDummyData{
-    var customPresets: [Preset] = [
+    var customPresets: [Preset] = []/*[
         Preset(
             name: "Full body ",
             exercises: Array(Exercises().exerciseList.prefix(3)),
@@ -405,7 +405,7 @@ class CustomPresetsDummyData{
             equipments: ["Mat"],
             calories: 100
         )
-    ]
+    ]*/
     func add(_ preset: Preset){
         customPresets.append(preset)
     }
