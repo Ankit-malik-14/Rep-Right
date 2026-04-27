@@ -6,12 +6,20 @@ struct MetricsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text("Metrics")
-                .font(.title2)
-                .bold()
-                .foregroundStyle(.primary)
-                .padding(.horizontal, 20)
-                .padding(.top)
+            HStack {
+                Text("Metrics")
+                    .font(.title2)
+                    .bold()
+                    .foregroundStyle(.primary)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top)
             
             HStack(spacing: 10) {
                 MetricCard(
@@ -43,7 +51,7 @@ struct MetricsView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .fill(.background.secondary)
         )
         .padding(.horizontal)
     }
@@ -87,7 +95,7 @@ struct MetricCard: View {
         .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .fill(Color(.systemBackground))
         )
     }
 }

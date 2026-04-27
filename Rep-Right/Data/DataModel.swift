@@ -80,7 +80,8 @@ struct Exercise: Identifiable,Equatable,Hashable {
         "Box Jump":             8.0,
         "Dynamic Warm-up":      3.5,
         "Battle Ropes":         10.0,
-        "Rowing":               7.0
+        "Rowing":               7.0,
+        
     ]
     
     /// Returns the MET value for this exercise.

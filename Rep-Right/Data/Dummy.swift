@@ -305,7 +305,106 @@ class Exercises{
             setData: [
                 SetData(sets: 3, reps: 45) // interpret reps as seconds for isometric holds
             ]
-        )
+        ),
+        Exercise(
+                    name: "Bench Press",
+                    targetAreas: ["Chest", "Triceps", "Shoulders"],
+                    equipments: ["Barbell", "Bench"],
+                    executionSteps: ["Lie on the bench.", "Lower bar to chest.", "Press up."],
+                    tips: ["Keep feet planted."],
+                    assistanceAvailable: false,
+                    demoVideo: nil,
+                    image: "BenchPress",
+                    setData: [SetData(sets: 3, reps: 10)]
+                ),
+                Exercise(
+                    name: "Bicep Curl",
+                    targetAreas: ["Biceps"],
+                    equipments: ["Dumbbell"],
+                    executionSteps: ["Curl weight towards shoulders.", "Control the lowering."],
+                    tips: ["Keep elbows tucked."],
+                    assistanceAvailable: false,
+                    demoVideo: nil,
+                    image: "BicepCurl",
+                    setData: [SetData(sets: 3, reps: 12)]
+                ),
+                Exercise(
+                    name: "Crunches",
+                    targetAreas: ["Core"],
+                    equipments: ["Mat"],
+                    executionSteps: ["Lie back, lift shoulders off floor."],
+                    tips: ["Do not pull on neck."],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    image: "Crunches",
+                    setData: [SetData(sets: 3, reps: 20)]
+                ),
+                Exercise(
+                    name: "Dumbbell Press",
+                    targetAreas: ["Chest", "Shoulders"],
+                    equipments: ["Dumbbell", "Bench"],
+                    executionSteps: ["Press dumbbells up from shoulder level."],
+                    tips: ["Control descent."],
+                    assistanceAvailable: false,
+                    demoVideo: nil,
+                    image: "DumbbellPress",
+                    setData: [SetData(sets: 3, reps: 10)]
+                ),
+                Exercise(
+                    name: "Jumping Jacks",
+                    targetAreas: ["Cardio", "Full Body"],
+                    equipments: [],
+                    executionSteps: ["Jump feet out, hands over head."],
+                    tips: ["Maintain rhythm."],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    image: "JumpingJacks",
+                    setData: [SetData(sets: 3, reps: 50)]
+                ),
+                Exercise(
+                    name: "Lat Pulldown",
+                    targetAreas: ["Lats"],
+                    equipments: ["Cable Machine"],
+                    executionSteps: ["Pull bar to upper chest."],
+                    tips: ["Engage lats, not just arms."],
+                    assistanceAvailable: false,
+                    demoVideo: nil,
+                    image: "LatPullDown",
+                    setData: [SetData(sets: 3, reps: 12)]
+                ),
+                Exercise(
+                    name: "Leg Raise",
+                    targetAreas: ["Core", "Hip Flexors"],
+                    equipments: ["Mat"],
+                    executionSteps: ["Lift legs while lying flat."],
+                    tips: ["Keep lower back pressed down."],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    image: "LegRaise",
+                    setData: [SetData(sets: 3, reps: 15)]
+                ),
+                Exercise(
+                    name: "Shoulder Stretch",
+                    targetAreas: ["Shoulders"],
+                    equipments: [],
+                    executionSteps: ["Pull arm across chest."],
+                    tips: ["Keep shoulder down."],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    image: "ShoulderStrech",
+                    setData: [SetData(sets: 1, reps: 30)] // seconds
+                ),
+                Exercise(
+                    name: "Side Stretch",
+                    targetAreas: ["Obliques"],
+                    equipments: [],
+                    executionSteps: ["Reach arm overhead to side."],
+                    tips: ["Keep hips square."],
+                    assistanceAvailable: true,
+                    demoVideo: nil,
+                    image: "SideStretch",
+                    setData: [SetData(sets: 1, reps: 30)] // seconds
+                )
     ]
 }
 
