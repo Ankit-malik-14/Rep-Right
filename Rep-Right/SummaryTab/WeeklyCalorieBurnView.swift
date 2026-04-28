@@ -24,9 +24,18 @@ struct WeeklyCalorieBurnView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Weekly Calorie Burn")
-                    .font(.title3)
-                    .bold()
+                NavigationLink(value: SummaryRoute.calorieBreakdown) {
+                    HStack{
+                        Text("Weekly Calorie Burn")
+                            .font(.title2)
+                            .foregroundStyle(.black)
+                            .bold()
+                        Image(systemName: "chevron.right")
+                            .font(.headline)
+                            .padding(.top, 2)
+                            .tint(.orange)
+                    }
+                }
                 
                 Text("Daily metabolic output trend")
                     .font(.caption)

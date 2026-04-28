@@ -56,7 +56,7 @@ struct PreWorkoutGateView: View {
                 .tint(.red)
             }
         }
-        .alert("Skip Smart Prep?", isPresented: $showSkipAlert) {
+        .alert("Skip Warmup?", isPresented: $showSkipAlert) {
             Button("Start Workout", role: .destructive) {
                 router.push(.activeWorkout(preset))
             }
@@ -96,7 +96,7 @@ struct RecoveryWarningCard: View {
 struct AllClearCard: View {
     var body: some View {
         HStack {
-            Label("All systems go 💪", systemImage: "checkmark.circle.fill")
+            Label("You are ready to lift weight", systemImage: "checkmark.circle.fill")
                 .foregroundColor(.green)
             Spacer()
         }
@@ -112,14 +112,14 @@ struct SmartPrepPromptCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("Smart Prep", systemImage: "figure.mind.and.body")
+            Label("Smart Warmup", systemImage: "figure.mind.and.body")
                 .font(.headline)
             Text("Warm up your \(preset.focousArea.joined(separator: ", ")) before you begin.")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
             NavigationLink(value: WorkoutRoute.activeWorkout(smartPrepPreset)) {
-                Text("Start Smart Prep")
+                Text("Start Warmup")
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
             }
@@ -127,7 +127,7 @@ struct SmartPrepPromptCard: View {
             .tint(.orange)
         }
         .padding()
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(.secondary)
         .cornerRadius(12)
     }
 }

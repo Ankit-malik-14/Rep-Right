@@ -33,20 +33,26 @@ struct WorkoutScreen: View {
                     
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
-                        .padding(.horizontal)
+                        //.padding(.horizontal)
                     
                     // Fetched from DataModel: Main default presets data model
                     DefaultPresets(preset: preset)
                     HStack{
-                        Text("Exercises")
-                            .font(.title.bold())
-                            .padding(.horizontal)
-                        Spacer()
                         NavigationLink(value: WorkoutRoute.exerciseList) {
-                            Text("See all")
-                        }.tint(.orange)
-                            .padding(.horizontal)
+                            HStack{
+                                Text("Exercises")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.black)
+                                Image(systemName: "chevron.right")
+                                    .font(.title3)
+                                    .padding(.top,4)
+                                    .tint(.orange)
+                            }
+                        }
+                        Spacer()
                     }
+                    .padding(.horizontal)
                     ExerciseDisclosedListView()
                 }
             }
