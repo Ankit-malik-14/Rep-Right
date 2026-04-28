@@ -162,8 +162,9 @@ struct ActiveWorkoutView: View {
     let preset: Preset
     @State private var manager: WorkoutSessionManager
     @State private var showSheet = false
+    @State private var showCalibration = false
     @State private var countdownValue = 3
-    @State private var selectedDetent: PresentationDetent = .fraction(0.1)
+    @State private var selectedDetent: PresentationDetent = .fraction(0.25)
     
     @Environment(\.dismiss) private var dismiss
     @Environment(WorkoutSummaryManager.self) private var summaryManager
@@ -203,17 +204,17 @@ struct ActiveWorkoutView: View {
             }
             .animation(.easeInOut(duration: 0.4), value: manager.phase)
             .navigationBarBackButtonHidden(true)
-            .sheet(isPresented: $showSheet) {
-                WorkoutControlsSheet(manager: manager, selectedDetent: $selectedDetent)
-                    .presentationDetents([.fraction(0.2), .medium], selection: $selectedDetent)
-                    .presentationBackground(.ultraThinMaterial)
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(24)
-                    .interactiveDismissDisabled()
-            }
-            .onChange(of: manager.phase) { _, newPhase in
-                handlePhaseChange(newPhase)
-            }
+        }
+        .sheet(isPresented: $showSheet) {
+            WorkoutControlsSheet(manager: manager, selectedDetent: $selectedDetent, showCalibration: $showCalibration)
+                .presentationDetents([.fraction(0.25), .medium], selection: $selectedDetent)
+                .presentationBackground(.ultraThinMaterial)
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(24)
+                .interactiveDismissDisabled()
+        }
+        .onChange(of: manager.phase) { _, newPhase in
+            handlePhaseChange(newPhase)
         }
     }
     
