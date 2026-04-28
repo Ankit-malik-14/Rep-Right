@@ -12,7 +12,7 @@ struct CustomPreset: View {
     @State var showScreen = false
     var body: some View {
         if(preset.customPresets.count == 0){
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading) {
                         // Text Content
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Create custom presets")
@@ -24,12 +24,11 @@ struct CustomPreset: View {
                                 .font(.caption)
                                 //.foregroundColor(.gray)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.top, 24)
+                        .padding(.horizontal)
+                        .padding(.top)
                         .padding(.bottom, 12)
                         // Action Button
                         Button(action: {
-                            // Add your action here
                             showScreen.toggle()
                         }) {
                             HStack(spacing: 6) {
@@ -48,23 +47,31 @@ struct CustomPreset: View {
                             .background(.black.opacity(0.4))
                             .cornerRadius(12)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 20)
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
             .background(.gray.opacity(0.2))
                     .cornerRadius(16)
+                    .padding(.horizontal)
                 
         }
         else{
             VStack(spacing: 5){
                 HStack{
-                    Text("Custom")
-                        .font(.title.bold())
-                    Spacer()
                     NavigationLink(value: WorkoutRoute.customPresetsList){
-                        Text(preset.customPresets.count == 0 ? "" : "See all")
+                        HStack{
+                            Text("Custom Presets")
+                                .foregroundStyle(.black)
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.title3)
+                                .tint(.orange)
+                                .padding(.top,4)
+                        }
                     }
-                    .tint(.orange)
+                    Spacer()
                 }
                 .padding(.horizontal)
                 ScrollView(.horizontal){
@@ -74,9 +81,9 @@ struct CustomPreset: View {
                                 PresetTileViewType(preset: preset.customPresets[idx], type: .large)
                             }.buttonStyle(.plain)
                         }
-                    }.padding(.horizontal)
+                    }
+                    .padding(.horizontal)
                 }
-                .scrollIndicators(.hidden)
             }
         }
     }

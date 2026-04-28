@@ -412,7 +412,7 @@ class Exercises{
 class Presets {
     var presets: [Preset] = [
         Preset(
-            name: "Full Body Starter",
+            name: "Full Body Focus",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .monday,
@@ -423,7 +423,7 @@ class Presets {
         Preset(
             name: "Upper Focus",
             image: "Shoulders",
-            exercises: Exercises().exerciseList,
+            exercises: [],
             isWarmpUp: false,
             scheduledFor: .wednesday,
             estTime: 35,

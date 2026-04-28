@@ -6,15 +6,8 @@ struct SummaryTabView: View {
             ScrollView{
                 VStack(spacing: 20) {
                     CalendarView()
-                    NavigationLink(value: SummaryRoute.metricRing) {
-                        MetricsView()
-                    }
-                    .buttonStyle(.plain)
-                    
-                    NavigationLink(value: SummaryRoute.calorieBreakdown) {
-                        WeeklyCalorieBurnView()
-                    }
-                    .buttonStyle(.plain)
+                    MetricsView()
+                    WeeklyCalorieBurnView()
                     FormInsightView()
                     FormAccuracyReportView()
                     
