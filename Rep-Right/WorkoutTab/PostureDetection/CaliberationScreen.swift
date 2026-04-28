@@ -8,26 +8,74 @@
 import SwiftUI
 
 struct CaliberationScreen: View {
-    @State private var showSheet: Bool = false
+    @State private var showSheet: Bool = true
+    @State private var detector = BackContourDetector()
+    
     var body: some View {
-        Button("Show") {
-            showSheet = true
+        ZStack {
+            // Camera Feed
+            CameraFeedView(session: detector.captureSession)
+                .ignoresSafeArea()
+            
+            // Camera switch button
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        detector.toggleCamera()
+                    }) {
+                        Image(systemName: "arrow.triangle.2.circlepath.camera.fill")
+                            .font(.title2)
+                            .padding()
+                            .background(.ultraThinMaterial, in: Circle())
+                    }
+                    .padding()
+                }
+                Spacer()
+            }
+            
+            // Overlay based on phase
+            if detector.phase == .detectingPerson {
+                VStack {
+                    Spacer()
+                    Text(detector.detectionFeedback)
+                        .font(.title3.bold())
+                        .foregroundStyle(.white)
+                        .padding()
+                        .background(.black.opacity(0.6), in: Capsule())
+                        .padding(.bottom, 50)
+                }
+            } else if detector.phase == .timer {
+                CalibrationScreen2(detector: detector)
+            } else if detector.phase == .analyzing {
+                BackContourOverlayView(detector: detector)
+            }
         }
-        .sheet(isPresented: $showSheet){
-            CaliberationSheetView()
-                .presentationDetents([.custom(CustomDetents.self)])
+        .onAppear {
+            detector.startSession()
+        }
+        .onDisappear {
+            detector.stopSession()
+        }
+        .sheet(isPresented: $showSheet, onDismiss: {
+            detector.startDetectingPerson()
+        }) {
+            CaliberationSheetView(showSheet: $showSheet)
+                .presentationDetents([.custom(CustomDetents.self), .large])
+                .interactiveDismissDisabled() // Force user to tap Continue
         }
     }
 }
 
-struct CaliberationSheetView: View{
-    @Environment(\.dismiss) private var dismiss
-    var body: some View{
-        VStack(alignment: .center){
-            HStack{
+struct CaliberationSheetView: View {
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            HStack {
                 //hip height
-                VStack{
-                    ZStack{
+                VStack {
+                    ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.background.secondary)
                             .frame(width: 80, height: 90)
@@ -42,8 +90,8 @@ struct CaliberationSheetView: View{
                 .padding()
                 
                 //full body
-                VStack{
-                    ZStack{
+                VStack {
+                    ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.background.secondary)
                             .frame(width: 80, height: 90)
@@ -60,12 +108,11 @@ struct CaliberationSheetView: View{
                     Text("Full body")
                         .font(.callout.bold())
                 }
-                
                 .padding()
                 
                 //6-8 feet
-                VStack{
-                    ZStack{
+                VStack {
+                    ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.background.secondary)
                             .frame(width: 80, height: 90)
@@ -79,41 +126,50 @@ struct CaliberationSheetView: View{
                 }
                 .padding()
             }
-//            .padding()
             
             //Text information
-            VStack{
+            VStack {
                 Text("Wear body hugging clothes for better accuracy")
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .center)
-                
                     .padding()
-                Text("For this exercise place camera facing front")
+                Text("For this exercise place camera facing sideways")
             }
-            
             .padding(10)
             
             Text("Scanning Environment...")
                 .bold()
-            
                 .padding(10)
-                ContinueButton()
             
+            Button {
+                showSheet = false
+            } label: {
+                Text("Continue")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.orange)
+                    .foregroundStyle(.white)
+                    .cornerRadius(12)
+            }
+            .padding(.horizontal)
             
             Button("Cancel", role: .cancel) {
-                dismiss()
+                showSheet = false
             }.tint(.orange)
-        } .padding()
+                .padding(.top, 8)
+        }
+        .padding()
     }
 }
 
-struct CustomDetents: CustomPresentationDetent{
+struct CustomDetents: CustomPresentationDetent {
     static func height(in context: Context) -> CGFloat? {
-        context.maxDetentValue-250
+        context.maxDetentValue - 250
     }
 }
+
 #Preview {
     CaliberationScreen()
 }
-
