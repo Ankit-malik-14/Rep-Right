@@ -49,6 +49,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "WallSit",
                     setData: [SetData(sets: 3, reps: 45)]
                 ),
         Exercise(
@@ -68,6 +69,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "GluteBridge",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
@@ -87,6 +89,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "DeadHang",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
@@ -106,6 +109,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "OverheadHold",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
@@ -125,6 +129,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                     image: "Plank",
                     setData: [SetData(sets: 3, reps: 45)]
                 ),
         Exercise(
@@ -144,6 +149,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "SidePlank",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
@@ -163,6 +169,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "Lunges",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
@@ -182,6 +189,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "HipAbduction",
                     setData: [SetData(sets: 3, reps: 20)]
                 ),
         Exercise(
@@ -201,6 +209,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "LSitHold",
                     setData: [SetData(sets: 3, reps: 15)]
                 ),
         Exercise(
@@ -220,6 +229,7 @@ class Exercises{
                     ],
                     assistanceAvailable: true,
                     demoVideo: nil,
+                    image: "HollowBodyHold",
                     setData: [SetData(sets: 3, reps: 20)]
                 ),
         Exercise(
@@ -412,7 +422,8 @@ class Exercises{
 class Presets {
     var presets: [Preset] = [
         Preset(
-            name: "Full Body Starter",
+            name: "Full Body",
+            image: "FullBody",
             exercises: Exercises().exerciseList,
             isWarmpUp: false,
             scheduledFor: .monday,

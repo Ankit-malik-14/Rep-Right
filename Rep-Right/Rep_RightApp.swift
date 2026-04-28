@@ -19,16 +19,16 @@ struct Rep_RightApp: App {
     
     var body: some Scene {
         WindowGroup {
-            JointModelTestScreen()
-//            HomeView()
-//                .environment(presets)
-//                .environment(customPresetData)
-//                .environment(exercises)
-//                .environment(weeklySchedules)
-//                // Fetched from SummaryDataModel: Inject into environment
-//                .environment(summaryManager)
-//                // UPDATED: Removed deprecated DummyUserProfiles, keeping profileModel
-//                .environment(profileModel)
+//            JointModelTestScreen()
+            HomeView()
+                .environment(presets)
+                .environment(customPresetData)
+                .environment(exercises)
+                .environment(weeklySchedules)
+                // Fetched from SummaryDataModel: Inject into environment
+                .environment(summaryManager)
+                // UPDATED: Removed deprecated DummyUserProfiles, keeping profileModel
+                .environment(profileModel)
         }
     }
 }

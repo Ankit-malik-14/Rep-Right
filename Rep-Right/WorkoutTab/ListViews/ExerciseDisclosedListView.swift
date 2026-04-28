@@ -1,10 +1,6 @@
-//
-//  ExerciseListView.swift
-//  Rep_Right
+
 //
 //  Created by Jugad on 26/04/26.
-//
-
 
 //
 //  ExerciseListView.swift
