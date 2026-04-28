@@ -7,12 +7,16 @@
       "camera_angle": "side",
       "target_angle_range": 0,
       "primary_joints": ["shoulder", "hip", "ankle"],
-      "rules": {
-        "body_alignment_threshold": 15,
-        "body_straight": true,
-        "shoulder_hip_ankle_collinear": true,
-        "arm_position": "extended",
-        "arm_angle_threshold": 160
+      "generic_rules": {
+        "angle_rules": [
+          { "joint_a": "shoulder", "joint_b": "hip", "joint_c": "knee", "min_angle": 160, "max_angle": 200, "error_flag": "misaligned_body" }
+        ],
+        "alignment_rules": [
+          { "joint_a": "shoulder", "joint_b": "hip", "max_diff": 0.15, "axis": "y", "error_flag": "misaligned_body" }
+        ],
+        "relative_rules": [
+          { "joint": "hip", "reference": "shoulder", "operator": ">", "offset": 0.1, "axis": "y", "error_flag": "sagging_hips" }
+        ]
       },
       "expected_accuracy": 0.88,
       "flags": {
@@ -29,12 +33,13 @@
       "camera_angle": "front_or_side",
       "target_angle_range": [85, 95],
       "primary_joints": ["hip", "knee", "ankle"],
-      "rules": {
-        "knee_angle_min": 85,
-        "knee_angle_max": 95,
-        "back_vertical": true,
-        "back_angle_tolerance": 10,
-        "hip_below_knee": true
+      "generic_rules": {
+        "angle_rules": [
+          { "joint_a": "hip", "joint_b": "knee", "joint_c": "ankle", "min_angle": 80, "max_angle": 100, "error_flag": "knee_angle_incorrect" },
+          { "joint_a": "shoulder", "joint_b": "hip", "joint_c": "knee", "min_angle": 80, "max_angle": 100, "error_flag": "back_tilted" }
+        ],
+        "alignment_rules": [],
+        "relative_rules": []
       },
       "expected_accuracy": 0.90,
       "flags": {
@@ -51,12 +56,14 @@
       "camera_angle": "front_or_side",
       "target_angle_range": [80, 100],
       "primary_joints": ["hip", "knee", "ankle"],
-      "rules": {
-        "knee_angle_min": 80,
-        "knee_angle_max": 100,
-        "torso_upright": true,
-        "torso_angle_tolerance": 20,
-        "hip_below_knee": true
+      "generic_rules": {
+        "angle_rules": [
+          { "joint_a": "hip", "joint_b": "knee", "joint_c": "ankle", "min_angle": 75, "max_angle": 105, "error_flag": "knee_angle_incorrect" }
+        ],
+        "alignment_rules": [],
+        "relative_rules": [
+          { "joint": "hip", "reference": "knee", "operator": "<", "offset": -0.05, "axis": "y", "error_flag": "hips_too_high" }
+        ]
       },
       "expected_accuracy": 0.87,
       "flags": {
@@ -73,12 +80,14 @@
       "camera_angle": "side",
       "target_angle_range": 160,
       "primary_joints": ["shoulder", "hip", "knee"],
-      "rules": {
-        "hip_elevated": true,
-        "hip_below_knee": true,
-        "shoulder_hip_knee_angle_min": 160,
-        "back_flat": true,
-        "glute_engaged": true
+      "generic_rules": {
+        "angle_rules": [
+          { "joint_a": "shoulder", "joint_b": "hip", "joint_c": "knee", "min_angle": 150, "max_angle": 200, "error_flag": "hips_sagging" }
+        ],
+        "alignment_rules": [],
+        "relative_rules": [
+          { "joint": "hip", "reference": "knee", "operator": ">=", "offset": -0.05, "axis": "y", "error_flag": "hips_not_elevated" }
+        ]
       },
       "expected_accuracy": 0.86,
       "flags": {
