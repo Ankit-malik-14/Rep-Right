@@ -154,9 +154,11 @@ struct RecoveryMapCard: View {
             }
         }
         .padding(16)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(Color(UIColor.secondarySystemBackground))
-        .cornerRadius(20)
+        //.frame(maxWidth: .infinity, alignment: .topLeading)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
         .padding(.horizontal)
     }
 

@@ -434,7 +434,7 @@ class Presets {
         Preset(
             name: "Upper Focus",
             image: "Shoulders",
-            exercises: Exercises().exerciseList,
+            exercises: [],
             isWarmpUp: false,
             scheduledFor: .wednesday,
             estTime: 35,
