@@ -9,9 +9,15 @@ enum JointTestPhase {
 }
 
 struct JointModelTestScreen: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var viewModel = ExerciseDetectionViewModel()
     @State private var phase: JointTestPhase = .infoSheet
     @State private var showSheet: Bool = true
+    @State private var isFinishingSet = false
+    
+    var targetReps: Int? = nil
+    var initialElapsedSeconds: Int = 0
+    var onSetFinished: ((AssistanceSessionResult) -> Void)? = nil
     
     var body: some View {
         ZStack {
@@ -45,7 +51,7 @@ struct JointModelTestScreen: View {
                     }
                 }
             } else if phase == .timer {
-                JointModelTimerOverlay(phase: $phase)
+                JointModelTimerOverlay(phase: $phase, viewModel: viewModel)
             } else if phase == .analyzing {
                 // Skeleton Overlay
                 PoseSkeletonView(
@@ -55,38 +61,33 @@ struct JointModelTestScreen: View {
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
                 
-                // Live Feedback UI
-                VStack {
-                    Spacer()
-                    if let result = viewModel.analysisResult {
-                        VStack(spacing: 8) {
-                            Text(result.exerciseName)
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                            
-                            if result.isCorrect {
-                                Text("Good Form")
-                                    .font(.title3.bold())
-                                    .foregroundStyle(.green)
-                            } else {
-                                Text(result.flags.first ?? "Incorrect Posture")
-                                    .font(.title3.bold())
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                        .padding()
-                        .background(.black.opacity(0.8), in: RoundedRectangle(cornerRadius: 15))
-                        .padding(.bottom, 40)
+                WorkoutCameraOverlayView(
+                    repCount: viewModel.repCount,
+                    targetReps: targetReps,
+                    elapsedFormatted: viewModel.elapsedFormatted,
+                    feedbackTitle: feedbackTitle,
+                    feedbackMessage: feedbackMessage,
+                    accentColor: .orange,
+                    utilityIcon: "arrow.triangle.2.circlepath.camera.fill",
+                    onUtilityTap: {
+                        viewModel.toggleCamera()
+                    },
+                    onFinishTap: {
+                        finishCurrentSet(autoCompleted: false)
                     }
-                }
+                )
             }
         }
         .onAppear {
             // Default to Plank for testing
             viewModel.currentExerciseId = 1
+            viewModel.initialElapsedSeconds = initialElapsedSeconds
+            viewModel.elapsedSeconds = initialElapsedSeconds
+            viewModel.elapsedFormatted = String(format: "%02d:%02d", initialElapsedSeconds / 60, initialElapsedSeconds % 60)
             viewModel.startCameraSession()
         }
         .onDisappear {
+            viewModel.finishSetTracking()
             viewModel.stopCameraSession()
         }
         .sheet(isPresented: $showSheet, onDismiss: {
@@ -95,6 +96,13 @@ struct JointModelTestScreen: View {
             JointModelInfoSheet(showSheet: $showSheet)
                 .presentationDetents([.fraction(0.7), .large])
                 .interactiveDismissDisabled()
+        }
+        .onChange(of: viewModel.repCount) { _, newValue in
+            guard phase == .analyzing,
+                  let targetReps,
+                  targetReps > 0,
+                  newValue >= targetReps else { return }
+            finishCurrentSet(autoCompleted: true)
         }
     }
     
@@ -105,6 +113,29 @@ struct JointModelTestScreen: View {
                 self.phase = .timer
             }
         }
+    }
+    
+    private var feedbackTitle: String? {
+        guard let result = viewModel.analysisResult, !result.isCorrect else { return nil }
+        return "Correction Needed"
+    }
+    
+    private var feedbackMessage: String? {
+        guard let result = viewModel.analysisResult, !result.isCorrect else { return nil }
+        return result.flags.first ?? "Incorrect Posture"
+    }
+    
+    private func finishCurrentSet(autoCompleted: Bool) {
+        guard phase == .analyzing, !isFinishingSet else { return }
+        isFinishingSet = true
+        let completedReps = autoCompleted ? (targetReps ?? viewModel.repCount) : min(viewModel.repCount, targetReps ?? viewModel.repCount)
+        onSetFinished?(AssistanceSessionResult(
+            completedReps: completedReps,
+            formAccuracy: viewModel.formAccuracyScore,
+            formInsights: viewModel.topFormInsights
+        ))
+        viewModel.finishSetTracking()
+        dismiss()
     }
 }
 
@@ -171,6 +202,7 @@ struct JointModelInfoSheet: View {
 
 struct JointModelTimerOverlay: View {
     @Binding var phase: JointTestPhase
+    var viewModel: ExerciseDetectionViewModel
     @State private var timeRemaining = 3
     
     var body: some View {
@@ -195,6 +227,7 @@ struct JointModelTimerOverlay: View {
             } else {
                 timer.invalidate()
                 withAnimation {
+                    viewModel.startSetTracking()
                     phase = .analyzing
                 }
             }

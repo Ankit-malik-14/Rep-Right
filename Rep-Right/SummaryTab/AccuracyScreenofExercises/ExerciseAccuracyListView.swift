@@ -16,11 +16,7 @@ struct ExerciseAccuracyListView: View {
 
     var body: some View {
         // Precompute records with accuracy to help the compiler
-        let all = summaryManager.completedExercises
-        let filtered = all.filter { $0.formAccuracy != nil }
-        let recordsWithAccuracy = filtered.sorted { lhs, rhs in
-            lhs.date > rhs.date
-        }
+        let recordsWithAccuracy = summaryManager.formAccuracyRecords
 
         List {
             if recordsWithAccuracy.isEmpty {
@@ -33,11 +29,12 @@ struct ExerciseAccuracyListView: View {
                 Section {
                     ForEach(recordsWithAccuracy) { record in
                         let exercise = exercises.exerciseList.first(where: { $0.id == record.exerciseId })
-                        let exerciseName = exercise?.name ?? "Unknown"
+                        let exerciseName = exercise?.name ?? record.exerciseName
                         let targetMuscle = exercise?.targetAreas.first ?? "--"
                         let accuracy = Int(record.formAccuracy ?? 0)
+                        let insights = record.formInsights ?? []
 
-                        NavigationLink(value: SummaryRoute.accuracyMeter(value: record.formAccuracy ?? 0, exerciseName: exerciseName)) {
+                        NavigationLink(value: SummaryRoute.accuracyMeter(value: record.formAccuracy ?? 0, exerciseName: exerciseName, insights: insights)) {
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(exerciseName)

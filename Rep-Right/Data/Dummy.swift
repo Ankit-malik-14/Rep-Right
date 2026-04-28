@@ -347,7 +347,7 @@ class Exercises{
                     tips: ["Control descent."],
                     assistanceAvailable: false,
                     demoVideo: nil,
-                    image: "DumbbellPress",
+                    image: "DumbellPress",
                     setData: [SetData(sets: 3, reps: 10)]
                 ),
                 Exercise(
