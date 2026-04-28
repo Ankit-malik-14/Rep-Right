@@ -362,7 +362,7 @@ struct ActiveWorkoutView: View {
         let count = max(attemptedExercises.count, 1)
         let timePerExercise = manager.elapsedTime / Double(count)
         
-        let exerciseData: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
+        let exerciseData: [(exerciseId: UUID, exerciseName: String, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?, formAccuracy: Double?, formInsights: [String]?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
             // Retrieve this exercise's archived sets (not the current exercise's sets)
             let archived = manager.completedSetsArchive[idx] ?? []
             let completedOnly = archived.filter(\.isCompleted)
@@ -375,15 +375,19 @@ struct ActiveWorkoutView: View {
                 durationInSeconds: timePerExercise,
                 weightInKg: weight
             )
+            let assistanceScore = manager.assistanceScore(for: idx)
             let setData = completedOnly.map {
                 SetData(sets: 1, reps: Int($0.reps) ?? $0.targetReps)
             }
             return (
                 exerciseId: exercise.id,
+                exerciseName: exercise.name,
                 actualSet: setData,
                 startTime: Date().addingTimeInterval(-manager.elapsedTime),
                 endTime: Date(),
-                caloriesBurned: Optional(cals)
+                caloriesBurned: Optional(cals),
+                formAccuracy: assistanceScore?.accuracy,
+                formInsights: assistanceScore?.insights
             )
         }
         summaryManager.logWorkout(presetId: preset.id, exercises: exerciseData)

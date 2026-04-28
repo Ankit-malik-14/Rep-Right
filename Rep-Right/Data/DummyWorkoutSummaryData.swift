@@ -42,24 +42,33 @@ class DummyWorkoutSummaryData {
             exercises: [
                 (
                     exerciseId: pushUpId,
+                    exerciseName: "Push-Up",
                     actualSet: [SetData(sets: 3, reps: 15)],
                     startTime: today,
                     endTime: today.addingTimeInterval(10 * 60),
-                    caloriesBurned: nil
+                    caloriesBurned: nil,
+                    formAccuracy: 84,
+                    formInsights: ["Keep your core braced through the full rep.", "Lower with more control to keep your torso aligned."]
                 ),
                 (
                     exerciseId: squatId,
+                    exerciseName: "Bodyweight Squat",
                     actualSet: [SetData(sets: 4, reps: 15)],
                     startTime: today.addingTimeInterval(12 * 60),
                     endTime: today.addingTimeInterval(25 * 60),
-                    caloriesBurned: nil
+                    caloriesBurned: nil,
+                    formAccuracy: 78,
+                    formInsights: ["Drive your knees out slightly as you descend."]
                 ),
                 (
                     exerciseId: plankId,
+                    exerciseName: "Plank",
                     actualSet: [SetData(sets: 3, reps: 60)],
                     startTime: today.addingTimeInterval(27 * 60),
                     endTime: today.addingTimeInterval(32 * 60),
-                    caloriesBurned: nil
+                    caloriesBurned: nil,
+                    formAccuracy: nil,
+                    formInsights: nil
                 )
             ]
         )
@@ -67,10 +76,13 @@ class DummyWorkoutSummaryData {
         //a standalone exercise: Yesterday
         dummyManager.logWorkout(presetId: nil, exercises: 
             [(exerciseId: pushUpId,
+            exerciseName: "Push-Up",
             actualSet: [SetData(sets: 4, reps: 20)],
             startTime: yesterday,
             endTime: yesterday.addingTimeInterval(15 * 60),
-            caloriesBurned: nil)]
+            caloriesBurned: nil,
+            formAccuracy: 91,
+            formInsights: ["Excellent lockout. Maintain that shoulder position."])]
         )
         
         //a preset session: Two Days Ago (Upper Focus)
@@ -79,17 +91,23 @@ class DummyWorkoutSummaryData {
             exercises: [
                 (
                     exerciseId: pushUpId,
+                    exerciseName: "Push-Up",
                     actualSet: [SetData(sets: 3, reps: 12)],
                     startTime: twoDaysAgo,
                     endTime: twoDaysAgo.addingTimeInterval(8 * 60),
-                    caloriesBurned: nil
+                    caloriesBurned: nil,
+                    formAccuracy: 86,
+                    formInsights: ["Keep your head neutral with your spine."]
                 ),
                 (
                     exerciseId: rowId,
+                    exerciseName: "Dumbbell Row",
                     actualSet: [SetData(sets: 3, reps: 10)],
                     startTime: twoDaysAgo.addingTimeInterval(10 * 60),
                     endTime: twoDaysAgo.addingTimeInterval(20 * 60),
-                    caloriesBurned: nil
+                    caloriesBurned: nil,
+                    formAccuracy: 74,
+                    formInsights: ["Pause briefly at the top to keep the shoulder blade engaged."]
                 )
             ]
         )
@@ -98,6 +116,7 @@ class DummyWorkoutSummaryData {
         let manualRecord = CompletedExerciseRecord(
             id: UUID(),
             exerciseId: squatId,
+            exerciseName: "Bodyweight Squat",
             presetId: nil,
             workoutSessionId: nil,
             date: lastWeek,

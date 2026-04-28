@@ -11,6 +11,7 @@ import Observation
 struct CompletedExerciseRecord: Identifiable, Hashable {
     let id: UUID
     let exerciseId: UUID
+    let exerciseName: String
     let presetId: UUID?
     let workoutSessionId: UUID?
     
@@ -220,7 +221,7 @@ class WorkoutSummaryManager {
 
     func logWorkout(
         presetId: UUID?, // Pass nil for standalone exercises
-        exercises: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)]
+        exercises: [(exerciseId: UUID, exerciseName: String, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?, formAccuracy: Double?, formInsights: [String]?)]
     ) {
         // 1. Handle the session wrapper if a presetId is provided
         let sessionId = presetId != nil ? UUID() : nil
@@ -236,14 +237,15 @@ class WorkoutSummaryManager {
             CompletedExerciseRecord(
                 id: UUID(),
                 exerciseId: data.exerciseId,
+                exerciseName: data.exerciseName,
                 presetId: presetId,
                 workoutSessionId: sessionId, // Automatically routes to presetSessions or standaloneExercises based on presence
                 date: data.startTime,
                 startTime: data.startTime,
                 endTime: data.endTime,
                 actualSet: data.actualSet,
-                formAccuracy: nil,
-                formInsights: nil,
+                formAccuracy: data.formAccuracy,
+                formInsights: data.formInsights,
                 caloriesBurnedValue: data.caloriesBurned
             )
         }
@@ -441,6 +443,16 @@ class WorkoutSummaryManager {
         let accuracies = completedExercises.compactMap { $0.formAccuracy }
         guard !accuracies.isEmpty else { return 0.0 }
         return accuracies.reduce(0, +) / Double(accuracies.count) / 100.0
+    }
+    
+    var formAccuracyRecords: [CompletedExerciseRecord] {
+        completedExercises
+            .filter { $0.formAccuracy != nil }
+            .sorted { $0.date > $1.date }
+    }
+    
+    var latestFormAccuracyRecord: CompletedExerciseRecord? {
+        formAccuracyRecords.first
     }
     
     // MARK: - Daily Calorie Metrics

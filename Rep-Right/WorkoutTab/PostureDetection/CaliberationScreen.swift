@@ -8,31 +8,20 @@
 import SwiftUI
 
 struct CaliberationScreen: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var showSheet: Bool = true
     @State private var detector = BackContourDetector()
+    @State private var isFinishingSet = false
+    
+    var targetReps: Int? = nil
+    var initialElapsedSeconds: Int = 0
+    var onSetFinished: ((AssistanceSessionResult) -> Void)? = nil
     
     var body: some View {
         ZStack {
             // Camera Feed
             CameraFeedView(session: detector.captureSession)
                 .ignoresSafeArea()
-            
-            // Camera switch button
-            VStack {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        detector.toggleCamera()
-                    }) {
-                        Image(systemName: "arrow.triangle.2.circlepath.camera.fill")
-                            .font(.title2)
-                            .padding()
-                            .background(.ultraThinMaterial, in: Circle())
-                    }
-                    .padding()
-                }
-                Spacer()
-            }
             
             // Overlay based on phase
             if detector.phase == .detectingPerson {
@@ -49,9 +38,27 @@ struct CaliberationScreen: View {
                 CalibrationScreen2(detector: detector)
             } else if detector.phase == .analyzing {
                 BackContourOverlayView(detector: detector)
+                WorkoutCameraOverlayView(
+                    repCount: detector.repCount,
+                    targetReps: targetReps,
+                    elapsedFormatted: detector.elapsedFormatted,
+                    feedbackTitle: detector.isBackStraight ? nil : "Correction Needed",
+                    feedbackMessage: detector.isBackStraight ? nil : detector.detectionFeedback,
+                    accentColor: .orange,
+                    utilityIcon: "arrow.triangle.2.circlepath.camera.fill",
+                    onUtilityTap: {
+                        detector.toggleCamera()
+                    },
+                    onFinishTap: {
+                        finishCurrentSet(autoCompleted: false)
+                    }
+                )
             }
         }
         .onAppear {
+            detector.initialElapsedSeconds = initialElapsedSeconds
+            detector.elapsedSeconds = initialElapsedSeconds
+            detector.elapsedFormatted = String(format: "%02d:%02d", initialElapsedSeconds / 60, initialElapsedSeconds % 60)
             detector.startSession()
         }
         .onDisappear {
@@ -64,6 +71,26 @@ struct CaliberationScreen: View {
                 .presentationDetents([.custom(CustomDetents.self), .large])
                 .interactiveDismissDisabled() // Force user to tap Continue
         }
+        .onChange(of: detector.repCount) { _, newValue in
+            guard detector.phase == .analyzing,
+                  let targetReps,
+                  targetReps > 0,
+                  newValue >= targetReps else { return }
+            finishCurrentSet(autoCompleted: true)
+        }
+    }
+    
+    private func finishCurrentSet(autoCompleted: Bool) {
+        guard detector.phase == .analyzing, !isFinishingSet else { return }
+        isFinishingSet = true
+        let completedReps = autoCompleted ? (targetReps ?? detector.repCount) : min(detector.repCount, targetReps ?? detector.repCount)
+        onSetFinished?(AssistanceSessionResult(
+            completedReps: completedReps,
+            formAccuracy: detector.formAccuracyScore,
+            formInsights: detector.topFormInsights
+        ))
+        detector.finishSet()
+        dismiss()
     }
 }
 

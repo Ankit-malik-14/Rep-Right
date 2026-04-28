@@ -25,8 +25,8 @@ struct SummaryTabView: View {
                     UserCalorieIntake()
                 case .exerciseAccuracyList:
                     ExerciseAccuracyListView()
-                case .accuracyMeter(let value, let name):
-                    AccuracyMeterView(value: value, exerciseName: name)
+                case .accuracyMeter(let value, let name, let insights):
+                    AccuracyMeterView(value: value, exerciseName: name, insights: insights)
                 case .profile:
                     ProfileFormView()
                 }
