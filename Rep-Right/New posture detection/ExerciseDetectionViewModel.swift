@@ -86,6 +86,11 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     var currentPose: DetectedPose = DetectedPose()
     var analysisResult: ExerciseAnalysisResult?
     var jointOverlayPoints: [CGPoint] = []
+    var repCount: Int = 0
+    var elapsedFormatted: String = "00:00"
+    var initialElapsedSeconds: Int = 0
+    var analyzedFrameCount: Int = 0
+    var correctFrameCount: Int = 0
     
     var captureSession: AVCaptureSession?
     private let sessionQueue = DispatchQueue(label: "com.rep.sessionQueue")
@@ -98,11 +103,103 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     private var previousJoints: [String: CGPoint] = [:]
     private let alpha: CGFloat = 0.4 // 40% new, 60% old
     
+    // Rep counting
+    private var baselineY: CGFloat? = nil
+    private var peakTrackedY: CGFloat? = nil
+    private var isDescending: Bool = false
+    private let repThreshold: CGFloat = 0.05
+    private var feedbackCounts: [String: Int] = [:]
+    
+    // Elapsed set timer
+    var elapsedSeconds: Int = 0
+    private var elapsedTimer: Timer?
+    
+    // Camera toggle for front/back
+    private var cameraPosition: AVCaptureDevice.Position = .front
+    
     override init() {
         super.init()
         loadExerciseRules()
     }
     
+    func toggleCamera() {
+        // Reconfigure session with opposite camera
+        captureSession?.stopRunning()
+        captureSession = AVCaptureSession()
+        captureSession?.sessionPreset = .high
+        
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: cameraPosition == .front ? .back : .front),
+              let input = try? AVCaptureDeviceInput(device: device) else { return }
+        captureSession?.addInput(input)
+        let output = AVCaptureVideoDataOutput()
+        output.alwaysDiscardsLateVideoFrames = true
+        output.setSampleBufferDelegate(self, queue: processingQueue)
+        if captureSession?.canAddOutput(output) == true {
+            captureSession?.addOutput(output)
+        }
+        if let connection = output.connection(with: .video) {
+            connection.videoRotationAngle = 90
+            connection.isVideoMirrored = (cameraPosition == .front)
+        }
+        cameraPosition = cameraPosition == .front ? .back : .front
+        captureSession?.startRunning()
+    }
+    
+    func stopElapsedTimer() {
+        elapsedTimer?.invalidate()
+        elapsedTimer = nil
+    }
+    
+    func startElapsedTimer() {
+        elapsedSeconds = initialElapsedSeconds
+        elapsedFormatted = Self.formatElapsedTime(initialElapsedSeconds)
+        elapsedTimer?.invalidate()
+        elapsedTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.elapsedSeconds += 1
+                self.elapsedFormatted = Self.formatElapsedTime(self.elapsedSeconds)
+            }
+        }
+    }
+    
+    func startSetTracking() {
+        repCount = 0
+        elapsedSeconds = initialElapsedSeconds
+        elapsedFormatted = Self.formatElapsedTime(initialElapsedSeconds)
+        analyzedFrameCount = 0
+        correctFrameCount = 0
+        feedbackCounts = [:]
+        baselineY = nil
+        peakTrackedY = nil
+        isDescending = false
+        startElapsedTimer()
+    }
+    
+    func finishSetTracking() {
+        stopElapsedTimer()
+        baselineY = nil
+        peakTrackedY = nil
+        isDescending = false
+    }
+    
+    var formAccuracyScore: Double? {
+        guard analyzedFrameCount > 0 else { return nil }
+        return (Double(correctFrameCount) / Double(analyzedFrameCount)) * 100.0
+    }
+    
+    var topFormInsights: [String] {
+        feedbackCounts
+            .sorted { lhs, rhs in
+                if lhs.value == rhs.value {
+                    return lhs.key < rhs.key
+                }
+                return lhs.value > rhs.value
+            }
+            .prefix(3)
+            .map { Self.descriptiveInsight(for: $0.key) }
+    }
+
     private func loadExerciseRules() {
         guard let url = Bundle.main.url(forResource: "ExerciseRuleset", withExtension: "json"),
               let data = try? Data(contentsOf: url) else { return }
@@ -145,6 +242,7 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     }
     
     func stopCameraSession() {
+        stopElapsedTimer()
         captureSession?.stopRunning()
     }
     
@@ -227,8 +325,78 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
         DispatchQueue.main.async {
             self.currentPose = detected
             self.jointOverlayPoints = Array(rawJoints.values.map { $0.point })
+            self.updateRepCount(using: mappedJoints)
             self.evaluateRules(mappedJoints: mappedJoints)
         }
+    }
+    
+    private func updateRepCount(using mappedJoints: [String: CGPoint]) {
+        let hipCandidates = [mappedJoints["hip"], mappedJoints["left_hip"], mappedJoints["right_hip"]]
+        let shoulderCandidates = [mappedJoints["shoulder"], mappedJoints["left_shoulder"], mappedJoints["right_shoulder"]]
+        
+        let trackedPoints = hipCandidates.compactMap { $0 }
+        let fallbackPoints = shoulderCandidates.compactMap { $0 }
+        let sourcePoints = trackedPoints.isEmpty ? fallbackPoints : trackedPoints
+        
+        guard !sourcePoints.isEmpty else { return }
+        
+        let currentY = sourcePoints.map(\.y).reduce(0, +) / CGFloat(sourcePoints.count)
+        
+        if baselineY == nil {
+            baselineY = currentY
+            peakTrackedY = currentY
+            return
+        }
+        
+        guard let baselineY else { return }
+        
+        if !isDescending {
+            if currentY > baselineY + repThreshold {
+                isDescending = true
+                peakTrackedY = currentY
+            } else {
+                self.baselineY = baselineY * 0.9 + currentY * 0.1
+            }
+            return
+        }
+        
+        peakTrackedY = max(peakTrackedY ?? currentY, currentY)
+        
+        if currentY <= baselineY + repThreshold * 0.35 {
+            repCount += 1
+            isDescending = false
+            self.baselineY = currentY
+            peakTrackedY = currentY
+        }
+    }
+    
+    private static func formatElapsedTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    private static func descriptiveInsight(for feedback: String) -> String {
+        let normalized = feedback.trimmingCharacters(in: .whitespacesAndNewlines)
+        let lowercased = normalized.lowercased()
+        
+        if lowercased.contains("lower your hips") {
+            return "Your hips stayed a little too high during this movement. Try to lower them slightly and keep your core engaged so your body stays in a stronger, more supported line."
+        }
+        
+        if lowercased.contains("raise your hips") {
+            return "Your hips were dropping below the ideal position on repeated reps. Lift them a touch and brace through your midsection so the movement stays controlled and stable."
+        }
+        
+        if lowercased.contains("back not straight") || lowercased.contains("rounded") {
+            return "Your back position became inconsistent during the set. Focus on keeping your ribcage stacked over your pelvis and move a bit slower so your posture stays cleaner."
+        }
+        
+        if lowercased.contains("missing joints") {
+            return "Tracking became less reliable for part of the set, which usually means your body moved partially out of frame. A cleaner side angle and full-body visibility will improve the coaching feedback."
+        }
+        
+        return "This issue showed up repeatedly in the set: \(normalized). On the next attempt, reduce the tempo slightly and prioritize correcting that position before trying to speed the reps up."
     }
     
     private func evaluateRules(mappedJoints: [String: CGPoint]) {
@@ -298,5 +466,13 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             jointAngles: computedAngles
         )
         self.analysisResult = result
+        analyzedFrameCount += 1
+        if errorFlags.isEmpty {
+            correctFrameCount += 1
+        } else {
+            for flag in Set(errorFlags) {
+                feedbackCounts[flag, default: 0] += 1
+            }
+        }
     }
 }

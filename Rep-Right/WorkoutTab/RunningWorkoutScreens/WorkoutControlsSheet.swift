@@ -174,7 +174,13 @@ struct WorkoutControlsSheet: View {
         }
         .padding(.top)
         .fullScreenCover(isPresented: $showCalibration) {
-            CaliberationScreen()
+            CaliberationScreen(
+                targetReps: manager.currentActiveSetTargetReps,
+                initialElapsedSeconds: Int(manager.elapsedTime),
+                onSetFinished: { result in
+                    manager.recordAssistanceResult(result)
+                }
+            )
         }
     }
 }

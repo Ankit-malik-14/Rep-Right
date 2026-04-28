@@ -36,6 +36,6 @@ enum SummaryRoute: Hashable {
     case metricRing
     case userCalorieIntake
     case exerciseAccuracyList
-    case accuracyMeter(value: Double, exerciseName: String)
+    case accuracyMeter(value: Double, exerciseName: String, insights: [String])
     case profile
 }

@@ -11,6 +11,23 @@ enum CalibrationPhase {
 
 @Observable
 class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
+    private struct ContourAnalysisState {
+        var repCount: Int = 0
+        var analyzedFrameCount: Int = 0
+        var correctFrameCount: Int = 0
+        var baselineY: CGFloat?
+        var lowestTrackedY: CGFloat?
+        var isDescending: Bool = false
+        var feedbackCounts: [String: Int] = [:]
+    }
+    
+    private struct ContourPoseSnapshot {
+        var neck: CGPoint
+        var root: CGPoint
+        var minY: CGFloat
+        var maxY: CGFloat
+        var isFacingLeft: Bool
+    }
     
     // Core AVFoundation
     let captureSession = AVCaptureSession()
@@ -25,10 +42,24 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     var isBackStraight: Bool = true
     var contourPoints: [CGPoint] = []
     var detectionFeedback: String = ""
+    var repCount: Int = 0
+    var elapsedSeconds: Int = 0
+    var elapsedFormatted: String = "00:00"
+    var analyzedFrameCount: Int = 0
+    var correctFrameCount: Int = 0
+    var initialElapsedSeconds: Int = 0
     
     // Timer state
     var timerTime: Int = 3
     private var timer: Timer?
+    private var elapsedTimer: Timer?
+    
+    // Rep counting state
+    private let repThreshold: CGFloat = 0.05
+    private var analysisState = ContourAnalysisState()
+    private var cachedContourPose: ContourPoseSnapshot?
+    private var contourFrameIndex: Int = 0
+    private let poseRefreshInterval = 3
     
     override init() {
         super.init()
@@ -126,6 +157,7 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                 self.captureSession.stopRunning()
             }
         }
+        stopElapsedTimer()
     }
     
     func startDetectingPerson() {
@@ -149,11 +181,151 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                     self.timerTime -= 1
                 } else {
                     self.timer?.invalidate()
-                    self.phase = .analyzing
-                    self.detectionFeedback = "Analyzing..."
+                    self.beginAnalyzingPhase()
                 }
             }
         }
+    }
+    
+    func beginAnalyzingPhase() {
+        resetSetMetrics()
+        phase = .analyzing
+        detectionFeedback = "Analyzing..."
+        startElapsedTimer()
+    }
+    
+    func finishSet() {
+        timer?.invalidate()
+        stopElapsedTimer()
+        phase = .infoSheet
+    }
+    
+    private func resetSetMetrics() {
+        repCount = 0
+        elapsedSeconds = initialElapsedSeconds
+        elapsedFormatted = Self.formatElapsedTime(initialElapsedSeconds)
+        analyzedFrameCount = 0
+        correctFrameCount = 0
+        analysisState = ContourAnalysisState()
+    }
+    
+    private func startElapsedTimer() {
+        elapsedSeconds = initialElapsedSeconds
+        elapsedFormatted = Self.formatElapsedTime(initialElapsedSeconds)
+        elapsedTimer?.invalidate()
+        elapsedTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.elapsedSeconds += 1
+            self.elapsedFormatted = Self.formatElapsedTime(self.elapsedSeconds)
+        }
+    }
+    
+    private func stopElapsedTimer() {
+        elapsedTimer?.invalidate()
+        elapsedTimer = nil
+    }
+    
+    private func makeContourPoseSnapshot(from observation: VNHumanBodyPoseObservation) -> ContourPoseSnapshot? {
+        guard let neckPoint = try? observation.recognizedPoint(.neck),
+              neckPoint.confidence > 0.3,
+              let rootPoint = try? observation.recognizedPoint(.root),
+              rootPoint.confidence > 0.3 else {
+            return nil
+        }
+        
+        let neck = CGPoint(x: neckPoint.location.x, y: 1.0 - neckPoint.location.y)
+        let root = CGPoint(x: rootPoint.location.x, y: 1.0 - rootPoint.location.y)
+        var minY = neck.y
+        var maxY = root.y
+        
+        if minY > maxY {
+            swap(&minY, &maxY)
+        }
+        
+        var isFacingLeft = true
+        if let nose = try? observation.recognizedPoint(.nose),
+           let rightEar = try? observation.recognizedPoint(.rightEar),
+           let leftEar = try? observation.recognizedPoint(.leftEar) {
+            let ear = rightEar.confidence > leftEar.confidence ? rightEar : leftEar
+            if nose.confidence > 0.1 && ear.confidence > 0.1 {
+                isFacingLeft = nose.location.x < ear.location.x
+            }
+        }
+        
+        return ContourPoseSnapshot(
+            neck: neck,
+            root: root,
+            minY: minY,
+            maxY: maxY,
+            isFacingLeft: isFacingLeft
+        )
+    }
+    
+    private func updateRepCount(with currentY: CGFloat, state: inout ContourAnalysisState) {
+        if state.baselineY == nil {
+            state.baselineY = currentY
+            state.lowestTrackedY = currentY
+            return
+        }
+        
+        guard let baselineY = state.baselineY else { return }
+        
+        if !state.isDescending {
+            if currentY > baselineY + repThreshold {
+                state.isDescending = true
+                state.lowestTrackedY = currentY
+            } else {
+                state.baselineY = baselineY * 0.9 + currentY * 0.1
+            }
+            return
+        }
+        
+        state.lowestTrackedY = max(state.lowestTrackedY ?? currentY, currentY)
+        
+        if currentY <= baselineY + repThreshold * 0.35 {
+            state.repCount += 1
+            state.isDescending = false
+            state.baselineY = currentY
+            state.lowestTrackedY = currentY
+        }
+    }
+    
+    var formAccuracyScore: Double? {
+        let state = analysisState
+        guard state.analyzedFrameCount > 0 else { return nil }
+        return (Double(state.correctFrameCount) / Double(state.analyzedFrameCount)) * 100.0
+    }
+    
+    var topFormInsights: [String] {
+        analysisState.feedbackCounts
+            .sorted { lhs, rhs in
+                if lhs.value == rhs.value {
+                    return lhs.key < rhs.key
+                }
+                return lhs.value > rhs.value
+            }
+            .prefix(3)
+            .map { Self.descriptiveInsight(for: $0.key) }
+    }
+    
+    private static func formatElapsedTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    private static func descriptiveInsight(for feedback: String) -> String {
+        let normalized = feedback.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        
+        if normalized.contains("upper back rounded") {
+            return "Your upper back started rounding during the set. Keep your chest lifted, engage your core, and think about lengthening through the spine on every rep."
+        }
+        
+        if normalized.contains("back not straight") {
+            return "Your back drifted out of a neutral position during the movement. Slow the rep down slightly and brace through the midsection so your torso stays more stable."
+        }
+        
+        return "Your posture became inconsistent in this phase of the movement. Focus on controlled reps and keep the spine stacked and steady from start to finish."
     }
     
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
@@ -213,49 +385,28 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     }
     
     private func performContourDetection(pixelBuffer: CVPixelBuffer, requestHandler: VNImageRequestHandler) {
-        // First get the mask
         let segRequest = VNGeneratePersonSegmentationRequest()
         segRequest.qualityLevel = .accurate
         segRequest.outputPixelFormat = kCVPixelFormatType_OneComponent8
+        contourFrameIndex += 1
+        let shouldRefreshPose = cachedContourPose == nil || contourFrameIndex % poseRefreshInterval == 0
+        let poseRequest = shouldRefreshPose ? VNDetectHumanBodyPoseRequest() : nil
         
-        // Also get body pose to find neck and hip bounds
-        let poseRequest = VNDetectHumanBodyPoseRequest()
-        
+        autoreleasepool {
         do {
-            try requestHandler.perform([segRequest, poseRequest])
+            if let poseRequest {
+                try requestHandler.perform([segRequest, poseRequest])
+                if let pose = poseRequest.results?.first,
+                   let snapshot = makeContourPoseSnapshot(from: pose) {
+                    cachedContourPose = snapshot
+                }
+            } else {
+                try requestHandler.perform([segRequest])
+            }
             
             guard let maskObservation = segRequest.results?.first else { return }
+            guard let poseSnapshot = cachedContourPose else { return }
             let maskPixelBuffer = maskObservation.pixelBuffer
-            
-            // Get Neck and Hip bounds
-            var minY: CGFloat = CGFloat(0.0) // Neck
-            var maxY: CGFloat = CGFloat(1.0) // Hip
-            var isFacingLeft = true // Nose X < Ear X
-            
-            if let pose = poseRequest.results?.first {
-                if let neck = try? pose.recognizedPoint(.neck), neck.confidence > 0.3 {
-                    // Vision coordinates are bottom-left origin. We will flip Y later.
-                    minY = CGFloat(1.0) - CGFloat(neck.location.y)
-                }
-                if let root = try? pose.recognizedPoint(.root), root.confidence > 0.3 {
-                    maxY = CGFloat(1.0) - CGFloat(root.location.y)
-                }
-                
-                // Determine orientation to know which side is the back
-                if let nose = try? pose.recognizedPoint(.nose), let rightEar = try? pose.recognizedPoint(.rightEar), let leftEar = try? pose.recognizedPoint(.leftEar) {
-                    let ear = rightEar.confidence > leftEar.confidence ? rightEar : leftEar
-                    if nose.confidence > 0.1 && ear.confidence > 0.1 {
-                        isFacingLeft = nose.location.x < ear.location.x
-                    }
-                }
-            }
-            
-            // Ensure Y bounds are valid
-            if minY > maxY {
-                let temp = minY
-                minY = maxY
-                maxY = temp
-            }
             
             // Extract silhouette edge from mask using perpendicular spine sampling
             CVPixelBufferLockBaseAddress(maskPixelBuffer, .readOnly)
@@ -268,64 +419,64 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             let bufferPointer = baseAddress.assumingMemoryBound(to: UInt8.self)
             
             var edgePoints: [CGPoint] = []
+
+            let neck = poseSnapshot.neck
+            let root = poseSnapshot.root
+            let minY = poseSnapshot.minY
+            let maxY = poseSnapshot.maxY
             
-            if let pose = poseRequest.results?.first,
-               let neckPt = try? pose.recognizedPoint(.neck), neckPt.confidence > 0.3,
-               let rootPt = try? pose.recognizedPoint(.root), rootPt.confidence > 0.3 {
+            // Spine vector
+            let vx = root.x - neck.x
+            let vy = root.y - neck.y
+            let length = max(0.001, sqrt(vx * vx + vy * vy))
+            
+            // Normal vector pointing to the back
+            var nx = vy / length
+            var ny = -vx / length
+            if !poseSnapshot.isFacingLeft {
+                nx = -nx
+                ny = -ny
+            }
+            
+            // Sample along the spine from slightly above neck (-0.1) to root (1.0)
+            let sampleCount = 50
+            for i in 0...sampleCount {
+                let t = -0.1 + 1.1 * (CGFloat(i) / CGFloat(sampleCount))
+                let px = neck.x + t * vx
+                let py = neck.y + t * vy
                 
-                // Flip Y for UIKit coordinates
-                let neck = CGPoint(x: neckPt.location.x, y: 1.0 - neckPt.location.y)
-                let root = CGPoint(x: rootPt.location.x, y: 1.0 - rootPt.location.y)
-                
-                // Spine vector
-                let vx = root.x - neck.x
-                let vy = root.y - neck.y
-                let length = max(0.001, sqrt(vx*vx + vy*vy))
-                
-                // Normal vector pointing to the back
-                var nx = vy / length
-                var ny = -vx / length
-                if !isFacingLeft {
-                    nx = -nx
-                    ny = -ny
+                if py < minY - 0.06 || py > maxY + 0.04 {
+                    continue
                 }
                 
-                // Sample along the spine from slightly above neck (-0.1) to root (1.0)
-                let sampleCount = 50
-                for i in 0...sampleCount {
-                    let t = -0.1 + 1.1 * (CGFloat(i) / CGFloat(sampleCount))
-                    let px = neck.x + t * vx
-                    let py = neck.y + t * vy
+                // March outward along normal
+                var foundEdge = false
+                var lastValid = CGPoint(x: px, y: py)
+                var insideBody = false
+                
+                for step in stride(from: 0.0, to: 0.4, by: 0.005) {
+                    let sampleX = px + CGFloat(step) * nx
+                    let sampleY = py + CGFloat(step) * ny
                     
-                    // March outward along normal
-                    var foundEdge = false
-                    var lastValid = CGPoint(x: px, y: py)
-                    var insideBody = false
+                    let pxInt = Int(sampleX * CGFloat(width))
+                    let pyInt = Int(sampleY * CGFloat(height))
                     
-                    for step in stride(from: 0.0, to: 0.4, by: 0.005) {
-                        let sampleX = px + CGFloat(step) * nx
-                        let sampleY = py + CGFloat(step) * ny
-                        
-                        let pxInt = Int(sampleX * CGFloat(width))
-                        let pyInt = Int(sampleY * CGFloat(height))
-                        
-                        if pxInt >= 0 && pxInt < width && pyInt >= 0 && pyInt < height {
-                            let pixel = bufferPointer[pyInt * bytesPerRow + pxInt]
-                            if pixel > 128 { // Lowered threshold back to 128 to ensure strong detection
-                                insideBody = true
-                                lastValid = CGPoint(x: sampleX, y: sampleY)
-                            } else if insideBody {
-                                foundEdge = true
-                                break
-                            }
-                        } else {
+                    if pxInt >= 0 && pxInt < width && pyInt >= 0 && pyInt < height {
+                        let pixel = bufferPointer[pyInt * bytesPerRow + pxInt]
+                        if pixel > 128 {
+                            insideBody = true
+                            lastValid = CGPoint(x: sampleX, y: sampleY)
+                        } else if insideBody {
+                            foundEdge = true
                             break
                         }
+                    } else {
+                        break
                     }
-                    
-                    if foundEdge {
-                        edgePoints.append(lastValid)
-                    }
+                }
+                
+                if foundEdge {
+                    edgePoints.append(lastValid)
                 }
             }
             
@@ -348,6 +499,8 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                 edgePoints = smoothed
             }
             
+            let headY = edgePoints.map(\.y).min()
+            
             // Curve analysis
             var straight = true
             var msg = "Straight"
@@ -367,7 +520,7 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                     
                     // Robust 2D cross-product to determine side (avoids division by zero for horizontal backs)
                     let cross = (bottom.x - top.x) * (p.y - top.y) - (bottom.y - top.y) * (p.x - top.x)
-                    let isOutward = isFacingLeft ? (cross < 0) : (cross > 0)
+                    let isOutward = poseSnapshot.isFacingLeft ? (cross < 0) : (cross > 0)
                     
                     if isOutward {
                         let isUpper = CGFloat(index) / CGFloat(edgePoints.count) < 0.4
@@ -388,15 +541,34 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                 }
             }
             
+            var state = analysisState
+            state.analyzedFrameCount += 1
+            if straight {
+                state.correctFrameCount += 1
+            } else {
+                state.feedbackCounts[msg, default: 0] += 1
+            }
+            if let headY {
+                updateRepCount(with: headY, state: &state)
+            }
+            analysisState = state
+            
+            let nextRepCount = state.repCount
+            let nextAnalyzedFrameCount = state.analyzedFrameCount
+            let nextCorrectFrameCount = state.correctFrameCount
+            
             DispatchQueue.main.async {
                 self.contourPoints = edgePoints
                 self.isBackStraight = straight
                 self.detectionFeedback = straight ? "Good Form" : msg
+                self.repCount = nextRepCount
+                self.analyzedFrameCount = nextAnalyzedFrameCount
+                self.correctFrameCount = nextCorrectFrameCount
             }
             
         } catch {
             print("Contour detection failed: \(error)")
         }
+        }
     }
 }
-
