@@ -5,7 +5,7 @@ struct MetricsView: View {
     @Environment(WorkoutSummaryManager.self) private var summaryManager
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading){
             NavigationLink(value: SummaryRoute.metricRing) {
                 HStack{
                     Text("Metrics")
@@ -20,39 +20,39 @@ struct MetricsView: View {
                         .tint(.orange)
                 }
             }
-            
-            HStack(spacing: 10) {
-                MetricCard(
-                    icon: "dumbbell.fill",
-                    title: "Exercise",
-                    // Fetched from SummaryDataModel: total exercises this week
-                    value: "\(summaryManager.totalExercisesCurrentWeek)",
-                    change: ""
-                )
-
-                MetricCard(
-                    icon: "timer",
-                    title: "Time",
-                    // Fetched from SummaryDataModel: total time this week in hours
-                    value: String(format: "%.1f", summaryManager.totalTimeCurrentWeekInHours),
-                    change: ""
-                )
-
-                MetricCard(
-                    icon: "calendar",
-                    title: "Streak",
-                    // Fetched from SummaryDataModel: current active streak
-                    value: "\(summaryManager.currentStreak)",
-                    change: ""
-                )
+            VStack() {
+                HStack(spacing: 10) {
+                    MetricCard(
+                        icon: "dumbbell.fill",
+                        title: "Exercise",
+                        // Fetched from SummaryDataModel: total exercises this week
+                        value: "\(summaryManager.totalExercisesCurrentWeek)",
+                        change: ""
+                    )
+                    
+                    MetricCard(
+                        icon: "timer",
+                        title: "Time",
+                        // Fetched from SummaryDataModel: total time this week in hours
+                        value: String(format: "%.1f", summaryManager.totalTimeCurrentWeekInHours),
+                        change: ""
+                    )
+                    
+                    MetricCard(
+                        icon: "calendar",
+                        title: "Streak",
+                        // Fetched from SummaryDataModel: current active streak
+                        value: "\(summaryManager.currentStreak)",
+                        change: ""
+                    )
+                }
+                .padding()
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(.background.secondary)
+            )
         }
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(.background.secondary)
-        )
         .padding(.horizontal)
     }
 }

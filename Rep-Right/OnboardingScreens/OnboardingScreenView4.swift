@@ -157,7 +157,7 @@ struct OnboardingScreenView4: View {
                             FitnessLevelCard(
                                 level: .beginner,
                                 title: "Beginner",
-                                description: "Just starting out or returning after a long break",
+                                description: "Just starting out",
                                 isSelected: userProfile.fitnessLevel == .beginner
                             ) { userProfile.fitnessLevel = .beginner }
 

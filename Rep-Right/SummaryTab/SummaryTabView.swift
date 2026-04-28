@@ -32,13 +32,13 @@ struct SummaryTabView: View {
                 }
             }
             .navigationTitle("Summary")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(value: SummaryRoute.profile) {
-                        Image(systemName: "person.circle.fill")
-                    }
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    NavigationLink(value: SummaryRoute.profile) {
+//                        Image(systemName: "person.circle.fill")
+//                    }
+//                }
+//            }
         }
     }
 }

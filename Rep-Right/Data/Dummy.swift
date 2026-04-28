@@ -11,7 +11,7 @@ class Exercises{
     var exerciseList: [Exercise] = [
         Exercise(
             name: "Push-Up",
-            targetAreas: ["Chest", "Triceps", "Shoulders", "Core"],
+            targetAreas: ["Chest", "Triceps", "Shoulders"],
             equipments: [],
             executionSteps: [
                 "Start in a high plank with hands slightly wider than shoulder-width.",
@@ -74,7 +74,7 @@ class Exercises{
                 ),
         Exercise(
                     name: "Dead Hang",
-                    targetAreas: ["Lats", "Shoulders", "Forearms", "Core"],
+                    targetAreas: ["Lats", "Shoulders", "Forearms"],
                     equipments: ["Pull-up Bar"],
                     executionSteps: [
                         "Grip the bar slightly wider than shoulder-width.",
@@ -94,7 +94,7 @@ class Exercises{
                 ),
         Exercise(
                     name: "Overhead Hold",
-                    targetAreas: ["Shoulders", "Triceps", "Core"],
+                    targetAreas: ["Shoulders", "Triceps", "Upper Back"],
                     equipments: ["Dumbbell", "Barbell"],
                     executionSteps: [
                         "Stand tall with feet shoulder-width apart.",
