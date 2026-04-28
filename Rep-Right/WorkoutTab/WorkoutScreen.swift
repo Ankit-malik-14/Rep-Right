@@ -31,6 +31,9 @@ struct WorkoutScreen: View {
                     SmartRecommendationCard()
                         .padding(.bottom, 8)
                     
+                    SmartWeekScheduleCard()
+                        .padding(.bottom, 8)
+                    
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
                         //.padding(.horizontal)
