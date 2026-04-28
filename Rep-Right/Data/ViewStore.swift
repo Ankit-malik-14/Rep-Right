@@ -68,6 +68,7 @@ struct PresetTileViewType: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 160, height: 185)
+                        .clipShape(.rect(cornerRadius: 16))
                         .foregroundStyle(.background.secondary)
                 }
                 else{
@@ -75,7 +76,17 @@ struct PresetTileViewType: View {
                         .frame(width: 160, height: 185)
                         .foregroundStyle(.background.secondary)
                 }
-                Text(preset.name).padding()
+                Text(preset.name)
+                        .font(.subheadline.bold())
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: 112, alignment: .leading)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .padding(12)
+
                 
             }
         case .small:
@@ -86,6 +97,7 @@ struct PresetTileViewType: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 67, height: 64)
+                        .clipShape(.rect(cornerRadius: 16))
                         .foregroundStyle(.background.secondary)
                         
                         .padding(6)
