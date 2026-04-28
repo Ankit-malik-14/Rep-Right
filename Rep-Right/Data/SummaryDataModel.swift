@@ -370,6 +370,10 @@ class WorkoutSummaryManager {
         let minutes = (weeklySummaries.first?.totalDuration ?? 0) / 60.0
         return Int(minutes)
     }
+
+    var activeDaysCurrentWeek: Int {
+        weeklySummaries.first?.dailySummaries.filter { !$0.exercises.isEmpty }.count ?? 0
+    }
     
     var calorieProgress: Double {
         let weeklyTarget = dailyCalorieGoal * 7.0

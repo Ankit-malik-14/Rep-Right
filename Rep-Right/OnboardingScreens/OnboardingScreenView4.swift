@@ -228,7 +228,7 @@ struct FitnessLevelCard: View {
                     .font(.title2)
             }
             .padding(16)
-            .background(isSelected ? Color.orange.opacity(0.08) : Color(.secondarySystemBackground))
+            .background(isSelected ? Color.orange.opacity(0.08) : Color.secondary)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(
                 RoundedRectangle(cornerRadius: 14)

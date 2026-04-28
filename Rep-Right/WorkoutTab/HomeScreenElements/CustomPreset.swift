@@ -18,11 +18,11 @@ struct CustomPreset: View {
                             Text("Create custom presets")
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .foregroundColor(.black)
+                                //.foregroundColor()
                             
                             Text("You can create a custom workout preset as per your needs.")
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                //.foregroundColor(.gray)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
@@ -45,13 +45,13 @@ struct CustomPreset: View {
                             .foregroundColor(.orange)
                             .frame(maxWidth: .infinity)
                             .frame(height: 52)
-                            .background(.black.opacity(0.06))
+                            .background(.black.opacity(0.4))
                             .cornerRadius(12)
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
                     }
-                    .background(Color(UIColor.systemGray6))
+            .background(.gray.opacity(0.2))
                     .cornerRadius(16)
                 
         }

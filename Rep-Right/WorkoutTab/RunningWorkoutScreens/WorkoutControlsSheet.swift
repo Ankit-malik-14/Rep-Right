@@ -79,7 +79,7 @@ struct WorkoutControlsSheet: View {
                     Button {
                         manager.skipExercise()
                     } label: {
-                        Label("Skip", systemImage: "forward.fill")
+                        Label("Skip", systemImage: "")
                             .font(.subheadline.bold())
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)

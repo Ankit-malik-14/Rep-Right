@@ -7,9 +7,28 @@ import SwiftUI
 
 struct MetricRingView: View {
     
-    // UPDATED: Now uses WorkoutSummaryManager
     @Environment(WorkoutSummaryManager.self) private var data
+    @Environment(UserProfileModel.self) private var profile
     @State private var animatedProgress: Double = 0
+
+    private var activeMinutesProgress: Double {
+        guard data.targetActiveMinutes > 0 else { return 0 }
+        return min(Double(data.activeMinutesCurrentWeek) / Double(data.targetActiveMinutes), 1.0)
+    }
+
+    private var streakProgress: Double {
+        let streakGoal = max(profile.weeklyGoalDays, 1)
+        return min(Double(data.currentStreak) / Double(streakGoal), 1.0)
+    }
+
+    private var consistencyProgress: Double {
+        let goalDays = max(profile.weeklyGoalDays, 1)
+        return min(Double(data.activeDaysCurrentWeek) / Double(goalDays), 1.0)
+    }
+
+    private var overallProgress: Double {
+        (activeMinutesProgress + streakProgress + consistencyProgress) / 3.0
+    }
     
     var body: some View {
         ScrollView {
@@ -48,39 +67,30 @@ struct MetricRingView: View {
                 .frame(width: 220, height: 220)
                 .padding(.top, 20)
                 
-                // MARK: - Metric Cards
-                LazyVGrid(columns: [.init(), .init()], spacing: 14) {
-                    // UPDATED: metrics updated for WorkoutSummaryManager
-                    metricCard(
-                        icon: "figure.walk",
-                        title: "Active Minutes",
-                        value: "\(data.activeMinutesCurrentWeek)",
-                        target: "\(data.targetActiveMinutes) min goal",
-                        color: .green
-                    )
-                    
-                    let totalCals = data.weeklyCalorieChartData.reduce(0) { $0 + $1.calories }
-                    metricCard(
-                        icon: "flame.fill",
-                        title: "Calories",
-                        value: "\(totalCals)",
-                        target: "\(Int(data.dailyCalorieGoal * 7)) kcal goal",
-                        color: .orange
-                    )
-                    
-                    let targetDays = data.weeklyCalorieChartData.filter { Double($0.calories) >= data.dailyCalorieGoal }.count
-                    metricCard(
-                        icon: "trophy.fill",
-                        title: "Streak",
-                        value: "\(targetDays)",
-                        target: "days on target",
-                        color: .yellow
-                    )
+                VStack(spacing: 14) {
+                    HStack(spacing: 14) {
+                        metricCard(
+                            icon: "figure.walk",
+                            title: "Active Minutes",
+                            value: "\(data.activeMinutesCurrentWeek)",
+                            target: "\(data.targetActiveMinutes) min goal",
+                            color: .green
+                        )
+                        
+                        metricCard(
+                            icon: "trophy.fill",
+                            title: "Streak",
+                            value: "\(data.currentStreak)",
+                            target: "\(profile.weeklyGoalDays)-day goal",
+                            color: .yellow
+                        )
+                    }
+
                     metricCard(
                         icon: "heart.fill",
-                        title: "Progress",
-                        value: "\(Int(data.calorieProgress * 100))%",
-                        target: "of weekly goal",
+                        title: "Consistency",
+                        value: "\(Int(consistencyProgress * 100))%",
+                        target: "\(data.activeDaysCurrentWeek)/\(profile.weeklyGoalDays) active days",
                         color: .red
                     )
                 }
@@ -91,14 +101,20 @@ struct MetricRingView: View {
         .navigationTitle("Activity")
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
-            withAnimation(.spring(duration: 1.0, bounce: 0.2)) {
-                // UPDATED: Bind to dynamic calorieProgress
-                animatedProgress = data.calorieProgress
-            }
+            animateRing(to: overallProgress)
+        }
+        .onChange(of: overallProgress) { _, newValue in
+            animateRing(to: newValue)
         }
     }
     
     // MARK: - Metric Card Component
+
+    private func animateRing(to progress: Double) {
+        withAnimation(.spring(duration: 1.0, bounce: 0.2)) {
+            animatedProgress = progress
+        }
+    }
     
     private func metricCard(icon: String, title: String, value: String, target: String, color: Color) -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -127,5 +143,6 @@ struct MetricRingView: View {
     NavigationStack {
         MetricRingView()
             .environment(WorkoutSummaryManager())
+            .environment(UserProfileModel())
     }
 }
