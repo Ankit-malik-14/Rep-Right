@@ -20,7 +20,7 @@ struct Rep_RightApp: App {
     var body: some Scene {
         WindowGroup {
 //            JointModelTestScreen()
-            HomeView()
+            ContentView()
                 .environment(presets)
                 .environment(customPresetData)
                 .environment(exercises)

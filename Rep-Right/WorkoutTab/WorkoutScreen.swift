@@ -79,12 +79,12 @@ struct WorkoutScreen: View {
             }
             .navigationTitle("Workouts")
             .toolbar{
-                ToolbarItem(placement: .topBarTrailing){
-                    NavigationLink(value: WorkoutRoute.profile) {
-                        Image(systemName: "person.circle.fill")
-                    }
-                }
-                ToolbarItem(placement:.topBarLeading) {
+//                ToolbarItem(placement: .topBarTrailing){
+//                    NavigationLink(value: WorkoutRoute.profile) {
+//                        Image(systemName: "person.circle.fill")
+//                    }
+//                }
+                ToolbarItem(placement:.topBarTrailing) {
                     Image(systemName: "calendar")
                         .onTapGesture {
                             showScheduler = true
