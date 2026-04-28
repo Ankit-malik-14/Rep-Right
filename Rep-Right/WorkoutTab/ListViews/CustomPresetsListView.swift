@@ -21,6 +21,8 @@ struct CustomPresetsListView: View {
                                 .foregroundStyle(.background.secondary)
                             VStack(alignment: .leading){
                                 Text(preset1.name)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                                 HStack{
                                     ForEach(preset1.focousArea, id: \.self) { area in
                                         Text(area)
