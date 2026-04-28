@@ -91,7 +91,7 @@ struct Exercise: Identifiable,Equatable,Hashable {
     }
 }
 
-struct SetData : Hashable{
+struct SetData : Hashable, Codable{
     var sets: Int
     var reps: Int
     //needs optional weight, var wieght: Int?
