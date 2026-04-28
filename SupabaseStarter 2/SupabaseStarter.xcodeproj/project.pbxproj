@@ -7,123 +7,131 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		84DD5FB42FA06ACE0069B585 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 84DD5FB32FA06ACE0069B585 /* Auth */; };
-		84DD5FB62FA06ACE0069B585 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 84DD5FB52FA06ACE0069B585 /* PostgREST */; };
-		84DD5FB82FA06ACE0069B585 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 84DD5FB72FA06ACE0069B585 /* Storage */; };
-		84DD5FBA2FA06ACE0069B585 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 84DD5FB92FA06ACE0069B585 /* Supabase */; };
+		A49E494D2F973C2400845F0E /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = A49E494C2F973C2400845F0E /* Auth */; };
+		A49E494F2F973C2400845F0E /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = A49E494E2F973C2400845F0E /* PostgREST */; };
+		A49E49512F973C2400845F0E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A49E49502F973C2400845F0E /* Supabase */; };
+		A49E49772F977DD300845F0E /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = A49E49762F977DD300845F0E /* Storage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1F50D7922F68005100A7755C /* Rep_Right.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rep_Right.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A406D7322F90906300D26109 /* SupabaseStarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SupabaseStarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1F50D7942F68005100A7755C /* Rep-Right */ = {
+		A406D7342F90906300D26109 /* SupabaseStarter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Rep-Right";
+			path = SupabaseStarter;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1F50D78F2F68005100A7755C /* Frameworks */ = {
+		A406D72F2F90906300D26109 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84DD5FBA2FA06ACE0069B585 /* Supabase in Frameworks */,
-				84DD5FB82FA06ACE0069B585 /* Storage in Frameworks */,
-				84DD5FB62FA06ACE0069B585 /* PostgREST in Frameworks */,
-				84DD5FB42FA06ACE0069B585 /* Auth in Frameworks */,
+				A49E49772F977DD300845F0E /* Storage in Frameworks */,
+				A49E494F2F973C2400845F0E /* PostgREST in Frameworks */,
+				A49E494D2F973C2400845F0E /* Auth in Frameworks */,
+				A49E49512F973C2400845F0E /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1F50D7892F68005100A7755C = {
+		A406D7292F90906300D26109 = {
 			isa = PBXGroup;
 			children = (
-				1F50D7942F68005100A7755C /* Rep-Right */,
-				1F50D7932F68005100A7755C /* Products */,
+				A406D7342F90906300D26109 /* SupabaseStarter */,
+				A49E49752F977DD300845F0E /* Frameworks */,
+				A406D7332F90906300D26109 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		1F50D7932F68005100A7755C /* Products */ = {
+		A406D7332F90906300D26109 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F50D7922F68005100A7755C /* Rep_Right.app */,
+				A406D7322F90906300D26109 /* SupabaseStarter.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A49E49752F977DD300845F0E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1F50D7912F68005100A7755C /* Rep_Right */ = {
+		A406D7312F90906300D26109 /* SupabaseStarter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F50D79D2F68005200A7755C /* Build configuration list for PBXNativeTarget "Rep_Right" */;
+			buildConfigurationList = A406D73D2F90906400D26109 /* Build configuration list for PBXNativeTarget "SupabaseStarter" */;
 			buildPhases = (
-				1F50D78E2F68005100A7755C /* Sources */,
-				1F50D78F2F68005100A7755C /* Frameworks */,
-				1F50D7902F68005100A7755C /* Resources */,
+				A406D72E2F90906300D26109 /* Sources */,
+				A406D72F2F90906300D26109 /* Frameworks */,
+				A406D7302F90906300D26109 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				1F50D7942F68005100A7755C /* Rep-Right */,
+				A406D7342F90906300D26109 /* SupabaseStarter */,
 			);
-			name = Rep_Right;
+			name = SupabaseStarter;
 			packageProductDependencies = (
-				84DD5FB32FA06ACE0069B585 /* Auth */,
-				84DD5FB52FA06ACE0069B585 /* PostgREST */,
-				84DD5FB72FA06ACE0069B585 /* Storage */,
-				84DD5FB92FA06ACE0069B585 /* Supabase */,
+				A49E494C2F973C2400845F0E /* Auth */,
+				A49E494E2F973C2400845F0E /* PostgREST */,
+				A49E49502F973C2400845F0E /* Supabase */,
+				A49E49762F977DD300845F0E /* Storage */,
 			);
-			productName = "Rep-Right";
-			productReference = 1F50D7922F68005100A7755C /* Rep_Right.app */;
+			productName = SupabaseStarter;
+			productReference = A406D7322F90906300D26109 /* SupabaseStarter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		1F50D78A2F68005100A7755C /* Project object */ = {
+		A406D72A2F90906300D26109 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2620;
+				LastSwiftUpdateCheck = 2640;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
-					1F50D7912F68005100A7755C = {
-						CreatedOnToolsVersion = 26.2;
+					A406D7312F90906300D26109 = {
+						CreatedOnToolsVersion = 26.4;
 					};
 				};
 			};
-			buildConfigurationList = 1F50D78D2F68005100A7755C /* Build configuration list for PBXProject "Rep_Right" */;
+			buildConfigurationList = A406D72D2F90906300D26109 /* Build configuration list for PBXProject "SupabaseStarter" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 1F50D7892F68005100A7755C;
+			mainGroup = A406D7292F90906300D26109;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				84DD5FB22FA06ACE0069B585 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				A49E494B2F973C2400845F0E /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 1F50D7932F68005100A7755C /* Products */;
+			productRefGroup = A406D7332F90906300D26109 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1F50D7912F68005100A7755C /* Rep_Right */,
+				A406D7312F90906300D26109 /* SupabaseStarter */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1F50D7902F68005100A7755C /* Resources */ = {
+		A406D7302F90906300D26109 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -133,7 +141,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1F50D78E2F68005100A7755C /* Sources */ = {
+		A406D72E2F90906300D26109 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -143,7 +151,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		1F50D79B2F68005200A7755C /* Debug */ = {
+		A406D73B2F90906400D26109 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -178,7 +186,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = M968X6R748;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -196,7 +203,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -207,7 +214,7 @@
 			};
 			name = Debug;
 		};
-		1F50D79C2F68005200A7755C /* Release */ = {
+		A406D73C2F90906400D26109 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -242,7 +249,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = M968X6R748;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -254,7 +260,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -264,28 +270,27 @@
 			};
 			name = Release;
 		};
-		1F50D79E2F68005200A7755C /* Debug */ = {
+		A406D73E2F90906400D26109 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M968X6R748;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Rep-Right uses your camera to track posture during workouts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "T10.Rep-Right";
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.shruti.SupabaseStarter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -297,28 +302,27 @@
 			};
 			name = Debug;
 		};
-		1F50D79F2F68005200A7755C /* Release */ = {
+		A406D73F2F90906400D26109 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M968X6R748;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Rep-Right uses your camera to track posture during workouts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "T10.Rep-Right";
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.shruti.SupabaseStarter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -333,20 +337,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F50D78D2F68005100A7755C /* Build configuration list for PBXProject "Rep_Right" */ = {
+		A406D72D2F90906300D26109 /* Build configuration list for PBXProject "SupabaseStarter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1F50D79B2F68005200A7755C /* Debug */,
-				1F50D79C2F68005200A7755C /* Release */,
+				A406D73B2F90906400D26109 /* Debug */,
+				A406D73C2F90906400D26109 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F50D79D2F68005200A7755C /* Build configuration list for PBXNativeTarget "Rep_Right" */ = {
+		A406D73D2F90906400D26109 /* Build configuration list for PBXNativeTarget "SupabaseStarter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1F50D79E2F68005200A7755C /* Debug */,
-				1F50D79F2F68005200A7755C /* Release */,
+				A406D73E2F90906400D26109 /* Debug */,
+				A406D73F2F90906400D26109 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -354,7 +358,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		84DD5FB22FA06ACE0069B585 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+		A49E494B2F973C2400845F0E /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase/supabase-swift.git";
 			requirement = {
@@ -365,27 +369,27 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		84DD5FB32FA06ACE0069B585 /* Auth */ = {
+		A49E494C2F973C2400845F0E /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 84DD5FB22FA06ACE0069B585 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			package = A49E494B2F973C2400845F0E /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Auth;
 		};
-		84DD5FB52FA06ACE0069B585 /* PostgREST */ = {
+		A49E494E2F973C2400845F0E /* PostgREST */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 84DD5FB22FA06ACE0069B585 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			package = A49E494B2F973C2400845F0E /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = PostgREST;
 		};
-		84DD5FB72FA06ACE0069B585 /* Storage */ = {
+		A49E49502F973C2400845F0E /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 84DD5FB22FA06ACE0069B585 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Storage;
-		};
-		84DD5FB92FA06ACE0069B585 /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 84DD5FB22FA06ACE0069B585 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			package = A49E494B2F973C2400845F0E /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		A49E49762F977DD300845F0E /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A49E494B2F973C2400845F0E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 1F50D78A2F68005100A7755C /* Project object */;
+	rootObject = A406D72A2F90906300D26109 /* Project object */;
 }
