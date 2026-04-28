@@ -115,4 +115,5 @@ struct ScheduledWorkoutCard: View {
 #Preview {
     ScheduledWorkoutCard()
         .environment(WeeklySchedules())
+        .environment(WorkoutRouter())
 }

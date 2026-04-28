@@ -416,96 +416,109 @@ class Presets {
     var presets: [Preset] = []
     
     init() {
-        self.presets = Presets.generateDummyPresets()
+        let catalog = Exercises().exerciseList
+        
+        func exercises(named names: [String]) -> [Exercise] {
+            catalog.filter { names.contains($0.name) }
+        }
+        
+        func makePreset(
+            name: String,
+            image: String?,
+            exerciseNames: [String],
+            scheduledFor: Weekday?,
+            estTime: Int,
+            calories: Int,
+            isRestDay: Bool = false,
+            isWarmUp: Bool = false
+        ) -> Preset {
+            let selectedExercises = exercises(named: exerciseNames)
+            let equipments = Array(Set(selectedExercises.flatMap(\.equipments))).sorted()
+            
+            return Preset(
+                isRestDay: isRestDay,
+                name: name,
+                image: image,
+                exercises: selectedExercises,
+                isWarmpUp: isWarmUp,
+                scheduledFor: scheduledFor,
+                estTime: estTime,
+                equipments: equipments,
+                calories: calories
+            )
+        }
+        
+        presets = [
+            makePreset(
+                name: "Full Body Starter",
+                image: "FullBody",
+                exerciseNames: ["Push-Up", "Bodyweight Squat", "Dumbbell Row", "Plank"],
+                scheduledFor: .monday,
+                estTime: 40,
+                calories: 420
+            ),
+            makePreset(
+                name: "Upper Focus",
+                image: "Shoulders",
+                exerciseNames: ["Push-Up", "Bench Press", "Dumbbell Press", "Dumbbell Row", "Dead Hang"],
+                scheduledFor: .wednesday,
+                estTime: 38,
+                calories: 390
+            ),
+            makePreset(
+                name: "Lower Body Builder",
+                image: "Legs",
+                exerciseNames: ["Bodyweight Squat", "Wall Sit", "Lunge Hold", "Glute Bridge Hold", "Hip Abduction Hold"],
+                scheduledFor: .thursday,
+                estTime: 42,
+                calories: 430
+            ),
+            makePreset(
+                name: "Core Activation",
+                image: "Core",
+                exerciseNames: ["Forearm Plank", "Side Plank", "Crunches", "Leg Raise", "Hollow Body Hold", "L-Sit Hold"],
+                scheduledFor: .friday,
+                estTime: 32,
+                calories: 310
+            ),
+            makePreset(
+                name: "Back & Posture",
+                image: "Shoulders",
+                exerciseNames: ["Dumbbell Row", "Lat Pulldown", "Dead Hang", "Superman Hold", "Overhead Hold"],
+                scheduledFor: .tuesday,
+                estTime: 36,
+                calories: 360
+            ),
+            makePreset(
+                name: "Push Strength",
+                image: "PushUp",
+                exerciseNames: ["Push-Up", "Bench Press", "Dumbbell Press", "Overhead Hold", "Bicep Curl"],
+                scheduledFor: .saturday,
+                estTime: 34,
+                calories: 370
+            ),
+            makePreset(
+                name: "Active Recovery",
+                image: "Core",
+                exerciseNames: ["Jumping Jacks", "Shoulder Stretch", "Side Stretch", "Glute Bridge Hold"],
+                scheduledFor: .sunday,
+                estTime: 20,
+                calories: 120,
+                isRestDay: true,
+                isWarmUp: true
+            )
+        ]
     }
-    
-    // MARK: - Dummy Data Generator
-    private static func generateDummyPresets() -> [Preset] {
-        var generated: [Preset] = []
-        
-        // --- 1. The 6 Focus Area Presets ---
-        generated.append(Preset(
-            name: "Chest Builder",
-            image: "Chest",
-            exercises: filterExercises(keywords: ["Chest", "Pec"]),
-            isWarmpUp: false,
-            scheduledFor: .monday,
-            estTime: 30,
-            equipments: ["Dumbbell", "Bench", "Bodyweight"],
-            calories: 320
-        ))
-        
-        generated.append(Preset(
-            name: "Back Focus",
-            image: "Back",
-            exercises: filterExercises(keywords: ["Back", "Lat", "Rhomboid"]),
-            isWarmpUp: false,
-            scheduledFor: .tuesday,
-            estTime: 35,
-            equipments: ["Dumbbell", "Pull-up Bar", "Cable Machine"],
-            calories: 340
-        ))
-        
-        generated.append(Preset(
-            name: "Shoulder Strength",
-            image: "Shoulders",
-            exercises: filterExercises(keywords: ["Shoulder", "Delt"]),
-            isWarmpUp: false,
-            scheduledFor: .wednesday,
-            estTime: 25,
-            equipments: ["Dumbbell"],
-            calories: 250
-        ))
-        
-        generated.append(Preset(
-            name: "Arm Pump",
-            image: "Arms",
-            exercises: filterExercises(keywords: ["Bicep", "Tricep", "Forearm", "Arms"]),
-            isWarmpUp: false,
-            scheduledFor: .thursday,
-            estTime: 20,
-            equipments: ["Dumbbell"],
-            calories: 210
-        ))
-        
-        generated.append(Preset(
-            name: "Core & Stability",
-            image: "Core",
-            exercises: filterExercises(keywords: ["Core", "Ab", "Oblique"]),
-            isWarmpUp: false,
-            scheduledFor: .friday,
-            estTime: 25,
-            equipments: ["Mat"],
-            calories: 180
-        ))
-        
-        generated.append(Preset(
-            name: "Leg Day",
-            image: "Legs",
-            exercises: filterExercises(keywords: ["Quad", "Glute", "Hamstring", "Calf", "Leg"]),
-            isWarmpUp: false,
-            scheduledFor: .saturday,
-            estTime: 40,
-            equipments: ["Bodyweight", "Wall"],
-            calories: 420
-        ))
-        
-        // --- 2. The 6 Mixed/Beginner Presets ---
-        generated.append(Preset(
-            name: "Mix 1: Foundation",
-            image: "FullBody",
-            exercises: getMix(names: ["Push-Up", "Bodyweight Squat", "Plank", "Dead Hang", "Jumping Jacks"]),
-            isWarmpUp: false,
-            scheduledFor: .monday,
-            estTime: 35,
-            equipments: ["Bodyweight", "Pull-up Bar"],
-            calories: 350
-        ))
-        
-        generated.append(Preset(
-            name: "Mix 2: Strength Starter",
-            image: "FullBody",
-            exercises: getMix(names: ["Bench Press", "Wall Sit", "Superman Hold", "Crunches", "Bicep Curl"]),
+}
+
+@Observable
+class CustomPresetsDummyData{
+    var customPresets: [Preset] = [] {
+        didSet { PersistenceController.shared.saveCustomPresets(from: self) }
+    }/*[
+        Preset(
+            name: "Full body ",
+            exercises: Array(Exercises().exerciseList.prefix(3)),
             isWarmpUp: false,
             scheduledFor: .tuesday,
             estTime: 40,
@@ -612,6 +625,12 @@ class CustomPresetsDummyData {
     func delete(atOffsets offsets: IndexSet) {
         customPresets.remove(atOffsets: offsets)
     }
+    
+    func apply(presets: [Preset]) {
+        PersistenceController.shared.performRestore {
+            customPresets = presets
+        }
+    }
 }
 
 /* DEPRECATED: Replaced by the global @Observable UserProfileModel injected via environment.
@@ -621,16 +640,20 @@ class DummyUserProfiles {
 */
 
 @Observable
-class WeeklySchedules {
-    var schedules: [Weekday: Preset] = [
-        .wednesday: Preset(
-            name: "Full Body Starter",
-            exercises: Exercises().exerciseList, // Could also update this to use Presets().presets.first!
-            isWarmpUp: false,
-            scheduledFor: .monday,
-            estTime: 45,
-            equipments: ["Bodyweight", "Dumbbell", "Bench"],
-            calories: 450
-        )
-    ]
+class WeeklySchedules{
+    var schedules: [Weekday: Preset] = [:] {
+        didSet { PersistenceController.shared.saveWeeklySchedules(from: self) }
+    }
+    
+    func apply(_ recommendations: [ScheduledPresetRecommendation]) {
+        schedules = Dictionary(uniqueKeysWithValues: recommendations.map { recommendation in
+            (recommendation.weekday, recommendation.preset)
+        })
+    }
+    
+    func apply(snapshot: [Weekday: Preset]) {
+        PersistenceController.shared.performRestore {
+            schedules = snapshot
+        }
+    }
 }

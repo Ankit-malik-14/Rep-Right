@@ -8,7 +8,7 @@
 import Foundation
 import Observation
 
-struct CompletedExerciseRecord: Identifiable, Hashable {
+struct CompletedExerciseRecord: Identifiable, Hashable, Codable {
     let id: UUID
     let exerciseId: UUID
     let exerciseName: String
@@ -44,7 +44,7 @@ struct CompletedExerciseRecord: Identifiable, Hashable {
     }
 }
 
-struct CompletedPresetRecord: Identifiable, Hashable {
+struct CompletedPresetRecord: Identifiable, Hashable, Codable {
     let id: UUID
     let presetId: UUID
     let date: Date
@@ -119,10 +119,16 @@ struct FocusAreaLoadInsight: Identifiable, Hashable {
 
 @Observable
 class WorkoutSummaryManager {
-    var completedExercises: [CompletedExerciseRecord] = []
-    var completedSessions: [CompletedPresetRecord] = []
+    var completedExercises: [CompletedExerciseRecord] = [] {
+        didSet { PersistenceController.shared.saveSummary(from: self) }
+    }
+    var completedSessions: [CompletedPresetRecord] = [] {
+        didSet { PersistenceController.shared.saveSummary(from: self) }
+    }
     
-    var currentUserWeight: Double = 71.0
+    var currentUserWeight: Double = 71.0 {
+        didSet { PersistenceController.shared.saveSummary(from: self) }
+    }
     
     private var weekStart: Calendar {
         var calendar = Calendar.current
@@ -297,33 +303,15 @@ class WorkoutSummaryManager {
         from presets: [Preset],
         using catalog: [Exercise]
     ) -> Preset? {
-        presets
-            .filter { !$0.isRestDay && !$0.exercises.isEmpty }
-            .min { a, b in
-                muscleRecoveryStatus(for: a, using: catalog).count <
-                muscleRecoveryStatus(for: b, using: catalog).count
-            }
+        recommendedPresets(from: presets, using: catalog, limit: 1).first?.preset
     }
 
     func focusAreaLoadInsights(using catalog: [Exercise], now: Date = Date()) -> [FocusAreaLoadInsight] {
-        let counts = weeklyFocusAreaCounts(using: catalog, now: now)
-
-        return FocusArea.allCases.map { focusArea in
-            let weeklyExercises = counts[focusArea, default: 0]
-            let status: FocusAreaLoadStatus
-
-            if weeklyExercises > 12 {
-                status = .overtrained
-            } else if weeklyExercises >= 10 {
-                status = .onTrack
-            } else {
-                status = .undertrained
-            }
-
-            return FocusAreaLoadInsight(
-                focusArea: focusArea,
-                weeklyExercises: weeklyExercises,
-                status: status
+        recoveryMap(using: catalog, now: now).map { snapshot in
+            FocusAreaLoadInsight(
+                focusArea: snapshot.focusArea,
+                weeklyExercises: snapshot.weeklyLoad,
+                status: snapshot.status
             )
         }
     }
@@ -335,18 +323,19 @@ class WorkoutSummaryManager {
         }
     }
 
-    private func weeklyFocusAreaCounts(using catalog: [Exercise], now: Date = Date()) -> [FocusArea: Int] {
+    func weeklyFocusAreaCounts(using catalog: [Exercise], now: Date = Date()) -> [FocusArea: Int] {
         let startOfWeek = weekStart.date(
             from: weekStart.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)
         ) ?? weekStart.startOfDay(for: now)
 
         let weekRecords = completedExercises.filter { $0.date >= startOfWeek }
         let catalogById = Dictionary(uniqueKeysWithValues: catalog.map { ($0.id, $0) })
+        let catalogByName = Dictionary(uniqueKeysWithValues: catalog.map { ($0.name, $0) })
 
         var counts = Dictionary(uniqueKeysWithValues: FocusArea.allCases.map { ($0, 0) })
 
         for record in weekRecords {
-            guard let exercise = catalogById[record.exerciseId] else { continue }
+            guard let exercise = resolvedExercise(for: record, catalogById: catalogById, catalogByName: catalogByName) else { continue }
             if let focusArea = exercise.primaryFocusArea {
                 counts[focusArea, default: 0] += 1
             }
@@ -458,7 +447,9 @@ class WorkoutSummaryManager {
     // MARK: - Daily Calorie Metrics
     
     /// User-configurable daily calorie goal
-    var dailyCalorieGoal: Double = 500.0
+    var dailyCalorieGoal: Double = 500.0 {
+        didSet { PersistenceController.shared.saveSummary(from: self) }
+    }
     
     /// Total calories burned today, computed from all exercises logged today
     var todayCaloriesBurned: Double {
@@ -499,8 +490,10 @@ class WorkoutSummaryManager {
             
             // Find the primary target area for this day
             var areaCounts: [String: Int] = [:]
+            let catalogById = Dictionary(uniqueKeysWithValues: catalog.map { ($0.id, $0) })
+            let catalogByName = Dictionary(uniqueKeysWithValues: catalog.map { ($0.name, $0) })
             for record in dayExercises {
-                if let exercise = catalog.first(where: { $0.id == record.exerciseId }) {
+                if let exercise = resolvedExercise(for: record, catalogById: catalogById, catalogByName: catalogByName) {
                     for area in exercise.targetAreas {
                         areaCounts[area, default: 0] += 1
                     }
@@ -514,5 +507,31 @@ class WorkoutSummaryManager {
         }
         
         return result
+    }
+    
+    func apply(snapshot: PersistedWorkoutSummary) {
+        PersistenceController.shared.performRestore {
+            completedExercises = snapshot.completedExercises
+            completedSessions = snapshot.completedSessions
+            currentUserWeight = snapshot.currentUserWeight
+            dailyCalorieGoal = snapshot.dailyCalorieGoal
+        }
+    }
+    
+    func makeSnapshot() -> PersistedWorkoutSummary {
+        PersistedWorkoutSummary(
+            completedExercises: completedExercises,
+            completedSessions: completedSessions,
+            currentUserWeight: currentUserWeight,
+            dailyCalorieGoal: dailyCalorieGoal
+        )
+    }
+    
+    func resolvedExercise(
+        for record: CompletedExerciseRecord,
+        catalogById: [UUID: Exercise],
+        catalogByName: [String: Exercise]
+    ) -> Exercise? {
+        catalogById[record.exerciseId] ?? catalogByName[record.exerciseName]
     }
 }

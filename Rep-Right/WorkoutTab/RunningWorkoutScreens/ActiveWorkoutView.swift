@@ -406,7 +406,9 @@ struct ActiveWorkoutView: View {
             let currentTotalReps = completedSets.compactMap { Int($0.reps) }.reduce(0, +)
             
             // Get past history for this exercise
-            let pastRecords = summaryManager.completedExercises.filter { $0.exerciseId == exercise.id }
+            let pastRecords = summaryManager.completedExercises.filter {
+                $0.exerciseId == exercise.id || $0.exerciseName == exercise.name
+            }
             
             if pastRecords.isEmpty {
                 // If it's their first time doing it, let's treat it as a baseline, not a PR.

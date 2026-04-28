@@ -13,6 +13,7 @@ struct SchedulerCards: View {
     @Environment(WeeklySchedules.self) var weeklySchedules
     @Environment(WorkoutSummaryManager.self) var summaryManager
     @Environment(Exercises.self) var exercises
+    @Environment(Presets.self) private var presets
     @Environment(\.dismiss) private var dismiss
     var preset: Preset? {weeklySchedules.schedules[weekday]}
     @State var selectionSheet: Bool = false
@@ -166,6 +167,21 @@ struct SchedulerCards: View {
             
         }.padding().background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
             .padding(3)
+            .onAppear {
+                isRest = preset?.isRestDay ?? false
+            }
+            .onChange(of: preset?.id) { _, _ in
+                isRest = preset?.isRestDay ?? false
+            }
+            .onChange(of: isRest) { _, newValue in
+                guard newValue else { return }
+                if let recoveryPreset = weeklySchedules.schedules[weekday], recoveryPreset.isRestDay {
+                    return
+                }
+                if let activeRecovery = presets.presets.first(where: { $0.isRestDay }) {
+                    weeklySchedules.schedules[weekday] = activeRecovery
+                }
+            }
     }
     
     func restDayTips(for weekday: Weekday) -> [String] {
