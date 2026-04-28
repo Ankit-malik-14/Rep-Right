@@ -2,83 +2,54 @@ import SwiftUI
 
 struct SignUpView: View {
     @State private var email = ""
-    @State private var pass = false
     @State private var password = ""
-    
-    var body: some View {
-        VStack(spacing: 24) {
-            
-            Spacer()
-            
-            Text("Sign Up")
-                .font(.system(size: 40, weight: .bold))
-                .foregroundStyle(.primary)
-                .padding(.bottom, 20)
-            
-            
-            VStack(spacing: 16) {
-               
-                HStack {
-                    Image(systemName: "envelope.fill")
-                        .foregroundColor(.primary)
-                        .frame(width: 30)
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
-                        //.textInputAutocapitalization(.never)
-                        //.autocorrectionDisabled(true)
-                }
-                .padding()
-                .background(.quaternary)
-                .cornerRadius(12)
-                
-              
-                HStack {
-                    
-                    Image(systemName: "lock.fill")
-                        .foregroundColor(.primary)
-                        .frame(width: 30)
-                    if pass {
-                            TextField("Create Password", text: $password)
-                        } else {
-                            SecureField("Create Password", text: $password)
-                        }
-                    Button {
-                        pass.toggle()
-                    } label: {
-                        //TextField("",text: $password)
-                        if pass {
-                            Image(systemName: "eye.fill")
-                            
-                            } else {
-                            Image(systemName: "eye.slash.fill")
-                            }
-                    }.foregroundStyle(.primary)
+    @State private var isPasswordVisible = false
 
-                    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("Email", text: $email)
+                        .textContentType(.emailAddress)
+                        .keyboardType(.emailAddress)
+                        .autocorrectionDisabled()
+
+                    HStack {
+                        Group {
+                            if isPasswordVisible {
+                                TextField("Create Password", text: $password)
+                            } else {
+                                SecureField("Create Password", text: $password)
+                            }
+                        }
+                        .textContentType(.newPassword)
+
+                        Button {
+                            isPasswordVisible.toggle()
+                        } label: {
+                            Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                } footer: {
+                    Text("Your password must be at least 8 characters long.")
                 }
-                .padding()
-                .background(.quaternary)
-                .cornerRadius(12)
-                
+
+                Section {
+                    Button {
+                        print("Attempting to sign up with: \(email)")
+                    } label: {
+                        Text("Sign Up")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.orange)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
             }
-            .padding(.horizontal, 24)
-            
-            
-            Button(action: {
-                
-                print("Attempting to sign in with: \(email)")
-            }) {
-                Text("Sign Up")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.orange)
-                    .cornerRadius(12)
-            }
-            .padding(.horizontal, 24)
-            Spacer()
-            Spacer()
+            .navigationTitle("Sign Up")
         }
     }
 }

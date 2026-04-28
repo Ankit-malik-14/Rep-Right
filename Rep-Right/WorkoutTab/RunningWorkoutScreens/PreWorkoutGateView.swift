@@ -132,3 +132,24 @@ struct SmartPrepPromptCard: View {
     }
 }
 
+#Preview {
+    // 1. Create a mock preset
+    let mockPreset = Preset(
+        name: "Full Body Blast",
+        exercises: [],
+        isWarmpUp: false,
+        scheduledFor: nil,
+        estTime: 45,
+        equipments: ["Dumbbells"],
+        calories: 300,
+        
+    )
+
+    // 2. Inject environment objects and wrap in NavigationStack
+    NavigationStack {
+        PreWorkoutGateView(preset: mockPreset)
+    }
+    .environment(WorkoutSummaryManager())
+    .environment(Exercises())
+    .environment(WorkoutRouter())
+}

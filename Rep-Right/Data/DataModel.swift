@@ -80,7 +80,8 @@ struct Exercise: Identifiable,Equatable,Hashable {
         "Box Jump":             8.0,
         "Dynamic Warm-up":      3.5,
         "Battle Ropes":         10.0,
-        "Rowing":               7.0
+        "Rowing":               7.0,
+        
     ]
     
     /// Returns the MET value for this exercise.
@@ -90,7 +91,7 @@ struct Exercise: Identifiable,Equatable,Hashable {
     }
 }
 
-struct SetData : Hashable{
+struct SetData : Hashable, Codable{
     var sets: Int
     var reps: Int
     //needs optional weight, var wieght: Int?
@@ -220,13 +221,75 @@ class UserProfileModel {
     var name: String = "Ankit Malik"
     var age: Int = 21
     var gender: Genders = .male
+    var modelSensitivity: SensitivityLevels = .Medium
+    var fitnessLevel: FitnessLevel = .beginner
+    var weeklyGoalDays: Int = 3
+    
+    var unitSystem: UnitSystem = .metric
+    
+    // MARK: - Single Source of Truth (Always Metric)
+    // We keep these private so the rest of the app doesn't accidentally bypass the conversion logic.
+    private var storedWeightKg: Double = 71.0
+    private var storedHeightMeters: Double = 1.73
+    
+    // MARK: - Computed Bindings for UI
+    
+    /// Returns weight in kg or lbs based on the current `unitSystem`.
+    /// When the user types into the TextField, the `set` block automatically converts it back to kg for safe storage.
+    /// Returns weight in kg or lbs based on the current `unitSystem`.
+        var weight: Double {
+            get {
+                switch unitSystem {
+                case .metric:
+                    return (storedWeightKg * 10).rounded() / 10.0
+                case .imperial:
+                    let lbs = storedWeightKg * 2.20462
+                    return (lbs * 10).rounded() / 10.0 // Rounds to 1 decimal place
+                }
+            }
+            set {
+                switch unitSystem {
+                case .metric:
+                    storedWeightKg = newValue
+                case .imperial:
+                    storedWeightKg = newValue / 2.20462 // Convert lbs back to kg
+                }
+            }
+        }
+        
+        /// Returns height in meters or feet based on the current `unitSystem`.
+        var height: Double {
+            get {
+                switch unitSystem {
+                case .metric:
+                    return (storedHeightMeters * 100).rounded() / 100.0 // 2 decimal places for meters (e.g., 1.73)
+                case .imperial:
+                    let feet = storedHeightMeters * 3.28084
+                    return (feet * 10).rounded() / 10.0 // 1 decimal place for feet
+                }
+            }
+            set {
+                switch unitSystem {
+                case .metric:
+                    storedHeightMeters = newValue
+                case .imperial:
+                    storedHeightMeters = newValue / 3.28084 // Convert feet back to meters
+                }
+            }
+        }
+}
+/*class UserProfileModel {
+    var profilePicture: String? = "UserImage"
+    var name: String = "Ankit Malik"
+    var age: Int = 21
+    var gender: Genders = .male
     var weight: Double = 71.0
     var height: Double = 1.73
     var modelSensitivity: SensitivityLevels = .Medium
     var unitSystem: UnitSystem = .metric
     var fitnessLevel: FitnessLevel = .beginner
     var weeklyGoalDays: Int = 3
-}
+}*/
 
 /* DEPRECATED: Replaced by @Observable class UserProfileModel. Logic moved to unified model for MVVM.
 struct UserProfile:Hashable {
