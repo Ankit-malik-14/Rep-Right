@@ -3,88 +3,64 @@ import SwiftUI
 struct SignInView: View {
     @State private var email = ""
     @State private var password = ""
-    @State private var pass = false
-    
+    @State private var isPasswordVisible = false
+
     var body: some View {
-        VStack(spacing: 24) {
-            
-            Spacer()
-            
-            
-            Text("Sign In")
-                .font(.system(size: 40, weight: .bold))
-                .padding(.bottom, 20)
-            
-            
-            VStack(spacing: 16) {
-                
-                HStack {
-                    Image(systemName: "envelope.fill")
-                        .foregroundColor(.primary)
-                        .frame(width: 30)
+        NavigationStack {
+            Form {
+                Section {
                     TextField("Email", text: $email)
+                        .textContentType(.emailAddress)
                         .keyboardType(.emailAddress)
-                       // .textInputAutocapitalization(.never)
-                        //.autocorrectionDisabled(true)
-                }
-                .padding()
-                .background(.quaternary)
-                .cornerRadius(12)
-                
-               
-                HStack {
-                    
-                    Image(systemName: "lock.fill")
-                        .foregroundColor(.primary)
-                        .frame(width: 30)
-                    if pass {
-                            TextField("Password", text: $password)
-                        } else {
-                            SecureField("Password", text: $password)
-                        }
-                    Button {
-                        pass.toggle()
-                    } label: {
-                        //TextField("",text: $password)
-                        if pass {
-                            Image(systemName: "eye.fill")
-                            
+                        .autocorrectionDisabled()
+
+                    HStack {
+                        Group {
+                            if isPasswordVisible {
+                                TextField("Password", text: $password)
                             } else {
-                            Image(systemName: "eye.slash.fill")
+                                SecureField("Password", text: $password)
                             }
-                    }.foregroundStyle(.primary)
+                        }
+                        .textContentType(.password)
+
+                        Button {
+                            isPasswordVisible.toggle()
+                        } label: {
+                            Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
-                .padding()
-                .background(.quaternary)
-                .cornerRadius(12)
-                
+
+                Section {
+                    Button {
+                        print("Attempting to sign in with: \(email)")
+                    } label: {
+                        Text("Sign In")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.orange)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
+
+                Section {
+                    HStack {
+                        Spacer()
+                        Button("Forgot Password?") {
+                            // Action here
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+                }
             }
-            .padding(.horizontal, 24)
-            
-            Button(action: {
-                
-                print("Attempting to sign in with: \(email)")
-            }) {
-                Text("Sign In")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.orange)
-                    .cornerRadius(12)
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 10)
-            
-           
-            Button("Forgot Password?") {
-                // Action here
-            }
-            .font(.footnote)
-            .foregroundColor(.secondary)
-            .padding(.top, 8)
-            Spacer()
-            Spacer()
+            .navigationTitle("Sign In")
         }
     }
 }
@@ -92,4 +68,3 @@ struct SignInView: View {
 #Preview {
     SignInView()
 }
-

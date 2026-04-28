@@ -47,7 +47,7 @@ struct PresetHeaderCardView: View {
                     Image(image)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 500, height: 450)
+                        .frame(width: 600, height: 450)
                         .foregroundColor(.gray)
                         .offset(y:-100)
                     

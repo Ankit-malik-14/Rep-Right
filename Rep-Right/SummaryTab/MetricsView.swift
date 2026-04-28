@@ -51,7 +51,7 @@ struct MetricsView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .fill(.background.secondary)
         )
         .padding(.horizontal)
     }
@@ -95,7 +95,7 @@ struct MetricCard: View {
         .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .fill(Color(.systemBackground))
         )
     }
 }

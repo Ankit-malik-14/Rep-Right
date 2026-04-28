@@ -223,6 +223,9 @@ struct CustomPresetAdditionView: View {
                 HStack {
                     Text(presetName.trimmingCharacters(in: .whitespaces))
                         .font(.headline)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .layoutPriority(1)
                     Spacer()
                     Text("\(selectedExercises.count) exercises")
                         .font(.caption.weight(.semibold))

@@ -8,6 +8,7 @@ import SwiftUI
 struct WorkoutControlsSheet: View {
     @Bindable var manager: WorkoutSessionManager
     @Binding var selectedDetent: PresentationDetent
+    @Binding var showCalibration: Bool
     
     var body: some View {
         VStack(spacing: 16) {
@@ -43,45 +44,61 @@ struct WorkoutControlsSheet: View {
             .padding(.top, 8)
             
             // MARK: - SF Symbol Controls
-            HStack(spacing: 12) {
-                // Pause / Resume
-                Button {
-                    manager.toggleTimer()
-                } label: {
-                    Label(
-                        manager.isTimerRunning ? "Pause" : "Resume",
-                        systemImage: manager.isTimerRunning ? "pause.fill" : "play.fill"
-                    )
-                    .font(.subheadline.bold())
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
-                }
-                .foregroundStyle(.orange)
-                
-                // Skip Exercise
-                Button {
-                    manager.skipExercise()
-                } label: {
-                    Label("Skip", systemImage: "forward.fill")
+            VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    // Pause / Resume
+                    Button {
+                        manager.toggleTimer()
+                    } label: {
+                        Label(
+                            manager.isTimerRunning ? "Pause" : "Resume",
+                            systemImage: manager.isTimerRunning ? "pause.fill" : "play.fill"
+                        )
                         .font(.subheadline.bold())
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
                         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+                    }
+                    .foregroundStyle(.orange)
+                    
+                    // Assistance
+                    Button {
+                        showCalibration = true
+                    } label: {
+                        Label("Assistance", systemImage: "figure.walk.motion")
+                            .font(.subheadline.bold())
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(.blue.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                    }
+                    .foregroundStyle(.blue)
                 }
-                .foregroundStyle(.orange)
                 
-                // Finish Workout
-                Button {
-                    manager.finishWorkout()
-                } label: {
-                    Label("Finish", systemImage: "stop.fill")
-                        .font(.subheadline.bold())
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                HStack(spacing: 12) {
+                    // Skip Exercise
+                    Button {
+                        manager.skipExercise()
+                    } label: {
+                        Label("Skip", systemImage: "forward.fill")
+                            .font(.subheadline.bold())
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+                    }
+                    .foregroundStyle(.orange)
+                    
+                    // Finish Workout
+                    Button {
+                        manager.finishWorkout()
+                    } label: {
+                        Label("Finish", systemImage: "stop.fill")
+                            .font(.subheadline.bold())
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                    }
+                    .foregroundStyle(.red)
                 }
-                .foregroundStyle(.red)
             }
             .padding(.horizontal)
             
@@ -156,6 +173,9 @@ struct WorkoutControlsSheet: View {
             Spacer(minLength: 0)
         }
         .padding(.top)
+        .fullScreenCover(isPresented: $showCalibration) {
+            CaliberationScreen()
+        }
     }
 }
 
@@ -164,5 +184,5 @@ struct WorkoutControlsSheet: View {
         let m = WorkoutSessionManager(preset: Presets().presets[0])
         m.startWorkout()
         return m
-    }(), selectedDetent: .constant(.medium))
+    }(), selectedDetent: .constant(.medium), showCalibration: .constant(false))
 }

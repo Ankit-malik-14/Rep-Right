@@ -1,0 +1,527 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project Rep_Right.xcodeproj -scheme Rep-Right -sdk iphonesimulator -destination "generic/platform=iOS Simulator" build
+
+Build settings from command line:
+    SDKROOT = iphonesimulator26.4
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'Rep_Right' in project 'Rep_Right' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/mymac/Desktop/Rep-Right/Rep-Right/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: eb8c948c512c45fe3cb6cc4cb07d7147
+Build description path: /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/XCBuildData/eb8c948c512c45fe3cb6cc4cb07d7147.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache
+    cd /Users/mymac/Desktop/Rep-Right/Rep_Right.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -o /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache
+
+LinkAssetCatalog /Users/mymac/Desktop/Rep-Right/Rep-Right/Assets.xcassets (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-linkAssetCatalog --thinned /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_output/thinned --thinned-dependencies /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_generated_info.plist_unthinned --output /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.app --plist-output /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.app/Assets.car (in target 'Rep_Right' from project 'Rep_Right')
+
+ProcessInfoPlistFile /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.app/Info.plist /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/empty-Rep_Right.plist (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-infoPlistUtility /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/empty-Rep_Right.plist -producttype com.apple.product-type.application -genpkginfo /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/assetcatalog_generated_info.plist -o /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.app/Info.plist
+
+SwiftDriver Rep_Right normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Rep_Right -Onone @/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -target x86_64-apple-ios26.2-simulator -g -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -F /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache -output-file-map /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right_const_extract_protocols.json -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-generated-files.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-own-target-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-all-target-headers.hmap -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-project-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources-normal/x86_64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/x86_64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right-Swift.h -working-directory /Users/mymac/Desktop/Rep-Right -experimental-emit-module-separately -disable-cmo
+
+SwiftDriver Rep_Right normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Rep_Right -Onone @/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -target arm64-apple-ios26.2-simulator -g -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -F /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache -output-file-map /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right_const_extract_protocols.json -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-generated-files.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-own-target-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-all-target-headers.hmap -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-project-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources-normal/arm64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/arm64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-Swift.h -working-directory /Users/mymac/Desktop/Rep-Right -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal x86_64 Compiling\ SignUpView.swift,\ AccuracyMeterView.swift,\ GaugesView.swift,\ LevelView.swift,\ MotivationalQuote.swift,\ RiskView.swift,\ SuggestionView.swift,\ ExerciseAccuracyListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SigningTab/SignUpView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/AccuracyMeterView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/GaugesView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/LevelView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/MotivationalQuote.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/RiskView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/SuggestionView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyScreenofExercises/ExerciseAccuracyListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SigningTab/SignUpView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/AccuracyMeterView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/GaugesView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/LevelView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/MotivationalQuote.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/RiskView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/SuggestionView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyScreenofExercises/ExerciseAccuracyListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ OnboardingScreenView2.swift,\ OnboardingScreenView3.swift,\ OnboardingScreenView4.swift,\ SinglePageOnboardingView.swift,\ RecommendationEngine.swift,\ PresetSelectionView.swift,\ SchedulerCards.swift,\ SchedulerView.swift,\ SignInView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView2.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView3.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView4.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/SinglePageOnboardingView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/RecommendationSystem/RecommendationEngine.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/PresetSelectionView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/SchedulerCards.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/SchedulerView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SigningTab/SignInView.swift (in target 'Rep_Right' from project 'Rep_Right')
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView2.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView3.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView4.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/SinglePageOnboardingView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/RecommendationSystem/RecommendationEngine.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/PresetSelectionView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/SchedulerCards.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/SchedulerView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SigningTab/SignInView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ EnumRoutes.swift,\ BaseEntityDataModel.swift,\ DataModel.swift,\ Dummy.swift,\ DummyWorkoutSummaryData.swift,\ ExerciseCatalog.swift,\ MethodStore.swift,\ ObservableModels.swift,\ SummaryDataModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/AppRoutes/EnumRoutes.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/BaseEntityDataModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/DataModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/Dummy.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/DummyWorkoutSummaryData.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ExerciseCatalog.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/MethodStore.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ObservableModels.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/SummaryDataModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/AppRoutes/EnumRoutes.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/BaseEntityDataModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/DataModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/Dummy.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/DummyWorkoutSummaryData.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ExerciseCatalog.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/MethodStore.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ObservableModels.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/SummaryDataModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ CaloriesView.swift,\ MoveDataView.swift,\ ExerciseRingView.swift,\ MetricsTabViewContainer.swift,\ TotalTimeExerciseView.swift,\ CalendarView.swift,\ CalorieBreakdownView.swift,\ FormAccuracyReportView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/DailyCalorie/CaloriesView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/DailyCalorie/MoveDataView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/ExerciseRingView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/MetricsTabViewContainer.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/TotalTimeExerciseView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/CalendarView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/CalorieBreakdownView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/FormAccuracyReportView.swift (in target 'Rep_Right' from project 'Rep_Right')
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/DailyCalorie/CaloriesView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/DailyCalorie/MoveDataView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/ExerciseRingView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/MetricsTabViewContainer.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/TotalTimeExerciseView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/CalendarView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/CalorieBreakdownView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/FormAccuracyReportView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ ExerciseDisclosedListView.swift,\ BackContourDetector.swift,\ BackContourOverlayView.swift,\ CaliberationScreen.swift,\ CalibrationScreen2.swift,\ CameraFeedView.swift,\ ActiveWorkoutView.swift,\ PreWorkoutGateView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/ExerciseDisclosedListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourDetector.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourOverlayView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CaliberationScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CalibrationScreen2.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CameraFeedView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/ActiveWorkoutView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/PreWorkoutGateView.swift (in target 'Rep_Right' from project 'Rep_Right')
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/ExerciseDisclosedListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourDetector.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourOverlayView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CaliberationScreen.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CalibrationScreen2.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CameraFeedView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/ActiveWorkoutView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/PreWorkoutGateView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ FormInsightView.swift,\ MetricRingView.swift,\ MetricsView.swift,\ SummaryTabView.swift,\ WeeklyCalorieBurnView.swift,\ ProfileFormView.swift,\ UserProfile.swift,\ ExercisesView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/FormInsightView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricRingView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/SummaryTabView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/WeeklyCalorieBurnView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/UserProfileViews/ProfileFormView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/UserProfileViews/UserProfile.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/Exercise\ Infotainment/ExercisesView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/FormInsightView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricRingView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/SummaryTabView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/WeeklyCalorieBurnView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/UserProfileViews/ProfileFormView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/UserProfileViews/UserProfile.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/Exercise\ Infotainment/ExercisesView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ WorkoutControlsSheet.swift,\ WorkoutRestScreen.swift,\ WorkoutSessionManager.swift,\ ExerciseCardView.swift,\ ExerciseDetailView.swift,\ PresetHeaderCardView.swift,\ StatsCardView.swift,\ WarmUpCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutControlsSheet.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutRestScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutSessionManager.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/ExerciseCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/ExerciseDetailView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/PresetHeaderCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/StatsCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpCardView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutControlsSheet.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutRestScreen.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutSessionManager.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/ExerciseCardView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/ExerciseDetailView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/PresetHeaderCardView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/StatsCardView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpCardView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ CustomPreset.swift,\ DashboardComponents.swift,\ DefaultPresets.swift,\ ExerciseListView.swift,\ ScheduledWorkoutCard.swift,\ CustomPresetAdditionView.swift,\ CustomPresetsListView.swift,\ DefaultPresetListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/CustomPreset.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/DashboardComponents.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/DefaultPresets.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/ExerciseListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/ScheduledWorkoutCard.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/CustomPresetAdditionView/CustomPresetAdditionView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/CustomPresetsListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/DefaultPresetListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/CustomPreset.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/DashboardComponents.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/DefaultPresets.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/ExerciseListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/ScheduledWorkoutCard.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/CustomPresetAdditionView/CustomPresetAdditionView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/CustomPresetsListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/DefaultPresetListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 Compiling\ ViewStore.swift,\ UserCalorieIntake.swift,\ UserDataIntake.swift,\ ExerciseDetectionViewModel.swift,\ JointModelTestScreen.swift,\ PostureCheckView.swift,\ AppNameScreenView.swift,\ OnboardingContainerView.swift,\ OnboardingScreenView1.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ViewStore.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/DataIntake/UserCalorieIntake.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/DataIntake/UserDataIntake.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/ExerciseDetectionViewModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/JointModelTestScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/PostureCheckView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/AppNameScreenView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingContainerView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView1.swift (in target 'Rep_Right' from project 'Rep_Right')
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ViewStore.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/DataIntake/UserCalorieIntake.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/DataIntake/UserDataIntake.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/ExerciseDetectionViewModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/JointModelTestScreen.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/PostureCheckView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/AppNameScreenView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingContainerView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView1.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftEmitModule normal x86_64 Emitting\ module\ for\ Rep_Right (in target 'Rep_Right' from project 'Rep_Right')
+
+EmitSwiftModule normal x86_64 (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ Rep_Right (in target 'Rep_Right' from project 'Rep_Right')
+
+EmitSwiftModule normal arm64 (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftDriverJobDiscovery normal x86_64 Emitting module for Rep_Right (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftDriver\ Compilation\ Requirements Rep_Right normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Rep_Right -Onone @/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -target x86_64-apple-ios26.2-simulator -g -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -F /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache -output-file-map /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right_const_extract_protocols.json -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-generated-files.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-own-target-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-all-target-headers.hmap -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-project-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources-normal/x86_64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/x86_64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right-Swift.h -working-directory /Users/mymac/Desktop/Rep-Right -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal x86_64 Compiling WorkoutControlsSheet.swift, WorkoutRestScreen.swift, WorkoutSessionManager.swift, ExerciseCardView.swift, ExerciseDetailView.swift, PresetHeaderCardView.swift, StatsCardView.swift, WarmUpCardView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 Compiling\ ActiveWorkoutView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/ActiveWorkoutView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/ActiveWorkoutView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal arm64 Compiling\ GeneratedAssetSymbols.swift /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftDriverJobDiscovery normal x86_64 Compiling SignUpView.swift, AccuracyMeterView.swift, GaugesView.swift, LevelView.swift, MotivationalQuote.swift, RiskView.swift, SuggestionView.swift, ExerciseAccuracyListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 Compiling\ WorkoutControlsSheet.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutControlsSheet.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutControlsSheet.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal arm64 Compiling\ JointModelTestScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/JointModelTestScreen.swift (in target 'Rep_Right' from project 'Rep_Right')
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c /Users/mymac/Desktop/Rep-Right/Rep-Right/AppRoutes/EnumRoutes.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/BaseEntityDataModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/DataModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/Dummy.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/DummyWorkoutSummaryData.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ExerciseCatalog.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/MethodStore.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ObservableModels.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/SummaryDataModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Data/ViewStore.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/DataIntake/UserCalorieIntake.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/DataIntake/UserDataIntake.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/ExerciseDetectionViewModel.swift -primary-file /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/JointModelTestScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/PostureCheckView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/AppNameScreenView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingContainerView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView1.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView2.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView3.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/OnboardingScreenView4.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/OnboardingScreens/SinglePageOnboardingView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/RecommendationSystem/RecommendationEngine.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/PresetSelectionView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/SchedulerCards.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SchedulerViews/SchedulerView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SigningTab/SignInView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SigningTab/SignUpView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/AccuracyMeterView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/GaugesView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/LevelView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/MotivationalQuote.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/RiskView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyMeter/SuggestionView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/AccuracyScreenofExercises/ExerciseAccuracyListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/DailyCalorie/CaloriesView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/DailyCalorie/MoveDataView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/ExerciseRingView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/MetricsTabViewContainer.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsTab/TotalTimeExerciseView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/CalendarView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/CalorieBreakdownView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/FormAccuracyReportView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/FormInsightView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricRingView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/MetricsView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/SummaryTabView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/SummaryTab/WeeklyCalorieBurnView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/UserProfileViews/ProfileFormView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/UserProfileViews/UserProfile.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/Exercise\ Infotainment/ExercisesView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/CustomPreset.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/DashboardComponents.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/DefaultPresets.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/ExerciseListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/HomeScreenElements/ScheduledWorkoutCard.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/CustomPresetAdditionView/CustomPresetAdditionView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/CustomPresetsListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/DefaultPresetListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/ListViews/ExerciseDisclosedListView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourDetector.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourOverlayView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CaliberationScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CalibrationScreen2.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/CameraFeedView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/ActiveWorkoutView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/PreWorkoutGateView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutControlsSheet.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutRestScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/RunningWorkoutScreens/WorkoutSessionManager.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/ExerciseCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/ExerciseDetailView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/PresetHeaderCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/StatsCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpCardView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpExercise.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpExerciseRowView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/ContentView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/HomeView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Rep_RightApp.swift /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/GeneratedAssetSymbols.swift -emit-dependencies-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/JointModelTestScreen.d -emit-const-values-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/JointModelTestScreen.swiftconstvalues -emit-reference-dependencies-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/JointModelTestScreen.swiftdeps -serialize-diagnostics-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/JointModelTestScreen.dia -emit-localized-strings -emit-localized-strings-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64 -target arm64-apple-ios26.2-simulator -module-can-import-version DeveloperToolsSupport 23.40.26 23.40.26 -module-can-import-version SwiftUI 7.4.27.1 7.4.27 -module-can-import-version UIKit 9126.4.27.1 9126.4.27 -disable-cross-import-overlay-search -swift-module-cross-import AVKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/AVKit.framework/Modules/AVKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import AVKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk/System/Library/Frameworks/AVKit.framework/Modules/AVKit.swiftcrossimport/SwiftUI.swiftoverlay -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libTipKitMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#TipKitMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-dependencies-2.json -debug-module-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftmodule -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -I /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -F /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -swift-version 5 -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right_const_extract_protocols.json -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -default-isolation\=MainActor -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/mymac/Desktop/Rep-Right -enable-anonymous-context-mangled-names -file-compilation-dir /Users/mymac/Desktop/Rep-Right -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-generated-files.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-own-target-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-all-target-headers.hmap -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-project-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources-normal/arm64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/arm64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name Rep_Right -frontend-parseable-output -disable-clang-spi -clang-target arm64-apple-ios26.4-simulator -target-sdk-version 26.4 -target-sdk-name iphonesimulator26.4 -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -o /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/JointModelTestScreen.o -index-unit-output-path /Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/JointModelTestScreen.o -index-store-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Index.noindex/DataStore -index-system-modules
+
+SwiftCompile normal arm64 /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/JointModelTestScreen.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+/Users/mymac/Desktop/Rep-Right/Rep-Right/New posture detection/JointModelTestScreen.swift:19:40: error: 'captureSession' is inaccessible due to 'private' protection level
+            if let session = viewModel.captureSession {
+                                       ^~~~~~~~~~~~~~
+/Users/mymac/Desktop/Rep-Right/Rep-Right/New posture detection/ExerciseDetectionViewModel.swift:86:17: note: 'captureSession' declared here
+    private var captureSession: AVCaptureSession?
+                ^
+/Users/mymac/Desktop/Rep-Right/Rep-Right/New posture detection/JointModelTestScreen.swift:204:43: warning: 'main' was deprecated in iOS 26.0: Use a UIScreen instance found through context instead (i.e, view.window.windowScene.screen), or for properties like UIScreen.scale with trait equivalents, use a traitCollection found through context.
+        let view = UIView(frame: UIScreen.main.bounds)
+                                          ^
+
+SwiftCompile normal x86_64 Compiling\ WarmUpExercise.swift,\ WarmUpExerciseRowView.swift,\ WorkoutDetailView.swift,\ WorkoutScreen.swift,\ ContentView.swift,\ HomeView.swift,\ Rep_RightApp.swift,\ GeneratedAssetSymbols.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpExercise.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpExerciseRowView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutScreen.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/ContentView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/HomeView.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/Rep_RightApp.swift /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpExercise.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailViewElements/WarmUpExerciseRowView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutTabFlow/Elements/WorkoutDetailView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/WorkoutScreen.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/ContentView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/HomeView.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Desktop/Rep-Right/Rep-Right/Rep_RightApp.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal x86_64 /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftDriverJobDiscovery normal x86_64 Compiling OnboardingScreenView2.swift, OnboardingScreenView3.swift, OnboardingScreenView4.swift, SinglePageOnboardingView.swift, RecommendationEngine.swift, PresetSelectionView.swift, SchedulerCards.swift, SchedulerView.swift, SignInView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 Compiling\ ExerciseDetectionViewModel.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/ExerciseDetectionViewModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 /Users/mymac/Desktop/Rep-Right/Rep-Right/New\ posture\ detection/ExerciseDetectionViewModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftCompile normal arm64 Compiling\ BackContourDetector.swift /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourDetector.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftCompile normal arm64 /Users/mymac/Desktop/Rep-Right/Rep-Right/WorkoutTab/PostureDetection/BackContourDetector.swift (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for Rep_Right (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling EnumRoutes.swift, BaseEntityDataModel.swift, DataModel.swift, Dummy.swift, DummyWorkoutSummaryData.swift, ExerciseCatalog.swift, MethodStore.swift, ObservableModels.swift, SummaryDataModel.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling CaloriesView.swift, MoveDataView.swift, ExerciseRingView.swift, MetricsTabViewContainer.swift, TotalTimeExerciseView.swift, CalendarView.swift, CalorieBreakdownView.swift, FormAccuracyReportView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling FormInsightView.swift, MetricRingView.swift, MetricsView.swift, SummaryTabView.swift, WeeklyCalorieBurnView.swift, ProfileFormView.swift, UserProfile.swift, ExercisesView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+SwiftDriver\ Compilation\ Requirements Rep_Right normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Rep_Right -Onone @/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.4.sdk -target arm64-apple-ios26.2-simulator -g -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -F /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.4-23E237-686eebb5dc1d8ecb277353a59184f4aa.sdkstatcache -output-file-map /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/mymac/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right_const_extract_protocols.json -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-generated-files.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-own-target-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-all-target-headers.hmap -Xcc -iquote -Xcc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Rep_Right-project-headers.hmap -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources-normal/arm64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/arm64 -Xcc -I/Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-Swift.h -working-directory /Users/mymac/Desktop/Rep-Right -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling GeneratedAssetSymbols.swift (in target 'Rep_Right' from project 'Rep_Right')
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/x86_64-apple-ios-simulator.swiftmodule /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftmodule (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftmodule /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/x86_64-apple-ios-simulator.swiftmodule
+
+SwiftMergeGeneratedHeaders /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/Rep_Right-Swift.h /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-Swift.h /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right-Swift.h (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-swiftHeaderTool -arch arm64 /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right-Swift.h -arch x86_64 /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right-Swift.h -o /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/DerivedSources/Rep_Right-Swift.h
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/x86_64-apple-ios-simulator.swiftdoc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftdoc (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftdoc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/x86_64-apple-ios-simulator.swiftdoc
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/x86_64-apple-ios-simulator.abi.json /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.abi.json (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.abi.json /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/x86_64-apple-ios-simulator.abi.json
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/arm64-apple-ios-simulator.swiftmodule /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftmodule (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftmodule /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/arm64-apple-ios-simulator.swiftmodule
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/arm64-apple-ios-simulator.swiftdoc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftdoc (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftdoc /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/arm64-apple-ios-simulator.swiftdoc
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/arm64-apple-ios-simulator.abi.json /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.abi.json (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.abi.json /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftsourceinfo (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/x86_64/Rep_Right.swiftsourceinfo /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo
+
+Copy /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftsourceinfo (in target 'Rep_Right' from project 'Rep_Right')
+    cd /Users/mymac/Desktop/Rep-Right
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Intermediates.noindex/Rep_Right.build/Debug-iphonesimulator/Rep_Right.build/Objects-normal/arm64/Rep_Right.swiftsourceinfo /Users/mymac/Library/Developer/Xcode/DerivedData/Rep_Right-gsybqvpyoetaavclrawtqvkwqnlv/Build/Products/Debug-iphonesimulator/Rep_Right.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal x86_64 Compiling CustomPreset.swift, DashboardComponents.swift, DefaultPresets.swift, ExerciseListView.swift, ScheduledWorkoutCard.swift, CustomPresetAdditionView.swift, CustomPresetsListView.swift, DefaultPresetListView.swift (in target 'Rep_Right' from project 'Rep_Right')
+
