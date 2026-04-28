@@ -33,7 +33,8 @@ struct FormInsightView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .fill(.background.secondary)
+                .fill(.background.tertiary)
+                
         )
         .padding(.horizontal)
     }
