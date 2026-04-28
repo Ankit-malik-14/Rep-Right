@@ -12,15 +12,21 @@ struct DefaultPresets: View {
     var body: some View {
         VStack(spacing: 5){
             HStack{
-                Text("Presets")
-                    .font(.title)
-                    .bold()
-
-                Spacer()
                 NavigationLink(value: WorkoutRoute.defaultPresetsList) {
-                    Text("See all")
-                }.tint(.orange)
-            }.padding(.horizontal)
+                    HStack{
+                        Text("Presets")
+                            .font(.title)
+                            .foregroundStyle(.black)
+                            .bold()
+                        Image(systemName: "chevron.right")
+                            .font(.title3)
+                            .tint(.orange)
+                            .padding(.top,4)
+                    }
+                }
+                Spacer()
+            }
+            .padding(.horizontal)
             
             ScrollView(.horizontal) {
 //                HStack {

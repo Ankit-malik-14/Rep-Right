@@ -6,12 +6,20 @@ struct MetricsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text("Metrics")
-                .font(.title2)
-                .bold()
-                .foregroundStyle(.primary)
-                .padding(.horizontal, 20)
-                .padding(.top)
+            NavigationLink(value: SummaryRoute.metricRing) {
+                HStack{
+                    Text("Metrics")
+                        .font(.title2)
+                        .bold()
+                        .foregroundStyle(.black)
+                        .padding(.leading, 20)
+                        .padding(.top)
+                    Image(systemName: "chevron.right")
+                        .font(.headline)
+                        .padding(.top,18)
+                        .tint(.orange)
+                }
+            }
             
             HStack(spacing: 10) {
                 MetricCard(
