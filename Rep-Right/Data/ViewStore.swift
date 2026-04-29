@@ -129,6 +129,7 @@ struct PresetTileViewType: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 67, height: 64)
+                        .clipShape(.rect(cornerRadius: 16))
                         .foregroundStyle(.background.secondary)
                         
                         .padding(6)
