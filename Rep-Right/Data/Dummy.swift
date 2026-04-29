@@ -578,29 +578,26 @@ class CustomPresetsDummyData{
             exercises: Array(Exercises().exerciseList.prefix(3)),
             isWarmpUp: false,
             scheduledFor: .tuesday,
-            estTime: 40,
-            equipments: ["Dumbbell", "Bench", "Wall"],
-            calories: 380
-        ))
-        
-        generated.append(Preset(
-            name: "Mix 3: Push & Pull",
-            image: "FullBody",
-            exercises: getMix(names: ["Dumbbell Press", "Lunge Hold", "Lat Pulldown", "Leg Raise", "Overhead Hold"]),
-            isWarmpUp: false,
-            scheduledFor: .wednesday,
-            estTime: 35,
-            equipments: ["Dumbbell", "Cable Machine", "Mat"],
-            calories: 340
-        ))
-        
-        generated.append(Preset(
-            name: "Mix 4: Balance & Core",
-            image: "FullBody",
-            exercises: getMix(names: ["Dumbbell Row", "Glute Bridge Hold", "Forearm Plank", "Shoulder Stretch", "Push-Up"]),
+            estTime: 25,
+            equipments: ["Bodyweight"],
+            calories: 260
+        ),
+        Preset(
+            name: "Push + Core",
+            image: "Core",
+            exercises: Exercises().exerciseList.filter { ["Push-Up", "Plank"].contains($0.name) },
             isWarmpUp: false,
             scheduledFor: .thursday,
-            estTime: 30,
+            estTime: 20,
+            equipments: ["Bodyweight", "Mat"],
+            calories: 220
+        ),
+        Preset(
+            name: "Back Focus",
+            exercises: Exercises().exerciseList.filter { ["Dumbbell Row", "Plank"].contains($0.name) },
+            isWarmpUp: false,
+            scheduledFor: .saturday,
+            estTime: 25,
             equipments: ["Dumbbell", "Bench", "Mat"],
             calories: 250
         ),
@@ -610,50 +607,17 @@ class CustomPresetsDummyData{
             exercises: [],
             isWarmpUp: true,
             scheduledFor: .sunday,
-            estTime: 20,
-            equipments: [],
-            calories: 120
-        ))
-        
-        return generated
-    }
-    
-    // MARK: - Filtering Helpers
-    
-    /// Finds up to 6 exercises that contain any of the provided target area keywords.
-    private static func filterExercises(keywords: [String], limit: Int = 6) -> [Exercise] {
-        let all = Exercises().exerciseList
-        let matched = all.filter { exercise in
-            exercise.targetAreas.contains { area in
-                keywords.contains { keyword in
-                    area.localizedCaseInsensitiveContains(keyword)
-                }
-            }
-        }
-        return Array(matched.prefix(limit))
-    }
-    
-    /// Hand-picks specific exercises by exact name from the database.
-    private static func getMix(names: [String]) -> [Exercise] {
-        let all = Exercises().exerciseList
-        return names.compactMap { name in
-            all.first { $0.name == name }
-        }
-    }
-}
-
-@Observable
-class CustomPresetsDummyData {
-    var customPresets: [Preset] = []
-    
-    func add(_ preset: Preset) {
+            estTime: 15,
+            equipments: ["Mat"],
+            calories: 100
+        )
+    ]*/
+    func add(_ preset: Preset){
         customPresets.append(preset)
     }
-    
-    func delete(_ preset: Preset) {
-        customPresets.removeAll { $0.id == preset.id }
+    func delete(_ preset: Preset){
+        customPresets.removeAll{$0.id == preset.id}
     }
-    
     func delete(atOffsets offsets: IndexSet) {
         customPresets.remove(atOffsets: offsets)
     }
@@ -670,7 +634,6 @@ class DummyUserProfiles {
     var user = UserProfile(profilePicture: "UserImage", name: "Ankit Malik", age: 21, gender: .male , weight: 71, height: 1.73, modelSensitivity: .Medium, unitSystem: .metric)
 }
 */
-
 @Observable
 class WeeklySchedules{
     var schedules: [Weekday: Preset] = [:] {
