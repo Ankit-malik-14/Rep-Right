@@ -9,14 +9,16 @@ import SwiftUI
 
 struct MetricsTabViewContainer: View {
     var body: some View {
-    ScrollView{
-            VStack(spacing: 20){
+        ScrollView {
+            VStack(spacing: 16) {
                 ExerciseRingView()
-                Spacer()
-                Spacer()
-            TotalTimeExerciseView()
-            }.navigationTitle("Metrics")
-    }
+                TotalTimeExerciseView()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+            .navigationTitle("Metrics")
+            .background(Color(.systemGroupedBackground))
+        }
     }
 }
 
@@ -27,4 +29,3 @@ struct MetricsTabViewContainer: View {
             .environment(Exercises())
     }
 }
-

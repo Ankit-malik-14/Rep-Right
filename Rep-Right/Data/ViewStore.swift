@@ -18,6 +18,49 @@ enum PresetViewType {
     case small
 }
 
+enum AppCardMetrics {
+    static let cornerRadius: CGFloat = 20
+    static let tileHeight: CGFloat = 185
+    static let tileWidth: CGFloat = 168
+    static let compactCornerRadius: CGFloat = 16
+}
+
+struct AppCardModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(
+                RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius, style: .continuous)
+                    .fill(Color(UIColor.secondarySystemBackground))
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius, style: .continuous)
+                    .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+            }
+    }
+}
+
+struct AppPrimaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 50)
+            .foregroundStyle(.white)
+            .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Color.orange.opacity(configuration.isPressed ? 0.82 : 1))
+            )
+            .scaleEffect(configuration.isPressed ? 0.99 : 1)
+            .animation(.easeOut(duration: 0.16), value: configuration.isPressed)
+    }
+}
+
+extension View {
+    func appCardStyle() -> some View {
+        modifier(AppCardModifier())
+    }
+}
+
 //MARK: - Assistance Availability Indicator
 
 @ViewBuilder
@@ -75,15 +118,15 @@ struct PresetTileViewType: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 185)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .frame(height: AppCardMetrics.tileHeight)
+                .clipShape(RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius))
 
                 LinearGradient(
                     colors: [.black.opacity(0.08), .black.opacity(0.45)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .clipShape(RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius))
 
                 VStack(alignment: .leading, spacing: 8) {
                     if showsSelection {
@@ -111,14 +154,11 @@ struct PresetTileViewType: View {
                     .padding(14)
                 }
             }
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.background.secondary)
-            )
-            .frame(height: 185)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .frame(width: AppCardMetrics.tileWidth, height: AppCardMetrics.tileHeight)
+            .clipShape(RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius))
+            .appCardStyle()
             .overlay {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius)
                     .stroke(isSelected ? .orange : .clear, lineWidth: 2)
             }
         case .small:
@@ -129,13 +169,13 @@ struct PresetTileViewType: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 67, height: 64)
-                        .clipShape(.rect(cornerRadius: 16))
+                        .clipShape(.rect(cornerRadius: AppCardMetrics.compactCornerRadius))
                         .foregroundStyle(.background.secondary)
                         
                         .padding(6)
                 }
                 else{
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: AppCardMetrics.compactCornerRadius)
                         .frame(width: 67, height: 64)
                         .foregroundStyle(.background.secondary)
                         .padding(6)

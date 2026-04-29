@@ -11,103 +11,97 @@ struct ScheduledWorkoutCard: View {
     @Environment(WeeklySchedules.self) var weeklySchedules
     @Environment(WorkoutRouter.self) private var router
     
-    func focousPrinter(areas : [String])-> String{
-        var result = ""
-        for i in areas{
-            result.append(i)
-            if areas.last != i{
-                result = result + ", "
-            }
-        }
-        return result
+    private func focusPrinter(areas: [String]) -> String {
+        areas.joined(separator: ", ")
     }
     
-    var todaysSchedule: Preset? {
+    private var todaysSchedule: Preset? {
         let day = Calendar.current.component(.weekday, from: Date())
-        let pair = weeklySchedules.schedules.first(where: {$0.key.rawValue == day} )
-        if let value = pair?.value{
-            return value
-        }
-        return nil
+        return weeklySchedules.schedules.first(where: { $0.key.rawValue == day })?.value
     }
     
     var body: some View {
-        if let todaysSchedule = todaysSchedule{
-            VStack{
-                ZStack(alignment: .topLeading){
-                    //Base rectangle -- IMAGE MASK
-                    RoundedRectangle(cornerRadius: 20)
-                        .foregroundStyle(.background.secondary)
-                        .frame(width: .infinity, height: 255)
-                        .padding()
-
+        if let todaysSchedule {
+            VStack {
+                ZStack(alignment: .topLeading) {
+                    Group {
+                        if let imageName = todaysSchedule.image {
+                            Image(imageName)
+                                .resizable()
+                                .scaledToFill()
+                        } else {
+                            RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius)
+                                .fill(Color(.tertiarySystemFill))
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 255)
+                    .clipShape(RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius, style: .continuous))
                     
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundStyle(.background.secondary)
-                            .frame(width:.infinity, height: 255)
-                            .overlay{
-                                VStack(alignment: .leading){
-                                    assisstanceAvailablityTag(type: .iconAndText)
-                                        .padding()
-                                    Spacer()
-                                    UnevenRoundedRectangle(bottomLeadingRadius: 20,bottomTrailingRadius: 20)
-                                        .foregroundStyle(.background.tertiary)
-                                        .frame(width: .infinity, height: 120)
-                                        .shadow(radius: 5)
-                                        .overlay {
-                                            
-                                            //Vstack for info part
-                                            VStack(alignment: .leading, spacing: -20){
-                                                HStack{
-                                                    VStack(alignment: .leading){
-                                                        
-                                                        Text("Today's Routine")
-                                                            .foregroundStyle(.orange)
-                                                            .font(.footnote).fontWeight(.heavy)
-                                                        Text(todaysSchedule.name)
-                                                            .font(.title3.bold())
-                                                        
-                                                    }
-                                                    .padding()
-                                                    
-                                                    Spacer()
-                                                    
-                                                    
-                                                    VStack(alignment: .trailing){
-                                                        Text("Duration")
-                                                            .font(.caption)
-                                                            .fontWeight(.bold)
-                                                        Text("\(todaysSchedule.estTime) min")
-                                                            .font(.caption)
-                                                            
-                                                        
-                                                    }
-                                                    .padding()
-                                                }
-        
-                                                HStack{
-                                                    
-                                                    Text(focousPrinter(areas: todaysSchedule.focousArea))
-                                                        .font(.subheadline)
-                                                        .foregroundStyle(.secondary)
-                                                    Spacer()
-                                                    Button {
-                                                        router.push(.preWorkoutGate(todaysSchedule))
-                                                    } label: {
-                                                        Text("Start Workout")
-                                                    }.buttonStyle(.borderedProminent)
-                                                        .tint(.orange)
-                                                    
-                                                } // end of hstack focus area+button
-                                                .padding()
-                                            }
-                                            
-                                        }
+                    LinearGradient(
+                        colors: [.clear, .black.opacity(0.2), .black.opacity(0.72)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: AppCardMetrics.cornerRadius, style: .continuous))
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        assisstanceAvailablityTag(type: .iconAndText)
+                            .padding(16)
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .leading, spacing: 14) {
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Today's Routine")
+                                        .foregroundStyle(.orange)
+                                        .font(.footnote.weight(.heavy))
+                                    Text(todaysSchedule.name)
+                                        .font(.title3.bold())
+                                        .foregroundStyle(.white)
+                                }
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    Text("Duration")
+                                        .font(.caption.weight(.bold))
+                                        .foregroundStyle(.white.opacity(0.8))
+                                    Text("\(todaysSchedule.estTime) min")
+                                        .font(.caption)
+                                        .foregroundStyle(.white)
                                 }
                             }
-                            .padding()
+                            
+                            HStack(alignment: .bottom, spacing: 12) {
+                                Text(focusPrinter(areas: todaysSchedule.focousArea))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white.opacity(0.84))
+                                    .lineLimit(2)
+                                
+                                Spacer(minLength: 12)
+                                
+                                Button {
+                                    router.push(.preWorkoutGate(todaysSchedule))
+                                } label: {
+                                    Text("Start Workout")
+                                        .font(.headline)
+                                        .padding(.horizontal, 8)
+                                }
+                                .buttonStyle(AppPrimaryButtonStyle())
+                                .frame(maxWidth: 150)
+                            }
+                        }
+                        .padding(16)
+                        .background(.ultraThinMaterial, in: UnevenRoundedRectangle(bottomLeadingRadius: AppCardMetrics.cornerRadius, bottomTrailingRadius: AppCardMetrics.cornerRadius))
+                    }
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 255)
+                .appCardStyle()
             }
+            .padding(.horizontal)
         }
     }
 }

@@ -48,30 +48,30 @@ struct CustomPresetsListView: View {
         }
         .navigationTitle("Custom")
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                if !preset.customPresets.isEmpty {
-                    Button(isSelectionMode ? "Cancel" : "Select") {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isSelectionMode.toggle()
-                            if !isSelectionMode {
-                                selectedPresetIDs.removeAll()
+            ToolbarItem(placement: .topBarTrailing) {
+                HStack(spacing: 14) {
+                    if !preset.customPresets.isEmpty {
+                        Button(isSelectionMode ? "Cancel" : "Select") {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isSelectionMode.toggle()
+                                if !isSelectionMode {
+                                    selectedPresetIDs.removeAll()
+                                }
                             }
+                        }
+                    }
+                    
+                    if !isSelectionMode {
+                        Button {
+                            showAddSheet = true
+                        } label: {
+                            Image(systemName: "plus")
                         }
                     }
                 }
             }
             
-            ToolbarItem(placement: .topBarTrailing) {
-                if !isSelectionMode {
-                    Button {
-                        showAddSheet = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            
-            ToolbarItem(placement: .bottomBar) {
+            ToolbarItem(placement: .topBarLeading) {
                 if isSelectionMode {
                     Button(role: .destructive) {
                         deleteSelectedPresets()

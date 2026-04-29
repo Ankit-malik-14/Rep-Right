@@ -66,20 +66,12 @@ struct FormAccuracyReportView: View {
             
             NavigationLink(value: SummaryRoute.exerciseAccuracyList) {
                 Text("View Detailed Form Trends")
-                    .font(.subheadline)
-                    .foregroundStyle(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(.orange)
-                    .cornerRadius(10)
             }
+            .buttonStyle(AppPrimaryButtonStyle())
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
+        .appCardStyle()
         .padding(.horizontal)
     }
     

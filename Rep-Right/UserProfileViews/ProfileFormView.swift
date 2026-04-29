@@ -42,8 +42,8 @@ struct ProfileFormView: View {
                         .frame(width: 85, height: 85)
                         .foregroundStyle(Color(uiColor: .systemGray4))
                     
-                    VStack(spacing: 4) {
-                        Text(profile.name.isEmpty ? "New User" : profile.name)
+                VStack(spacing: 4) {
+                        Text(profile.name.isEmpty ? "Rep-Right User" : profile.name)
                             .font(.title2.weight(.semibold))
                         
                         Text("Rep-Right Member")
@@ -117,16 +117,6 @@ struct ProfileFormView: View {
             
             // MARK: Fitness Goals
             Section("Fitness Goals") {
-                Picker(selection: $profile.fitnessLevel) {
-                    ForEach(FitnessLevel.allCases, id: \.self) { level in
-                        Text(level.rawValue).tag(level)
-                    }
-                } label: {
-                    Label("Fitness Level", systemImage: "figure.run")
-                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .orange))
-                }
-                .disabled(!isEditing)
-                
                 if isEditing {
                     Stepper(value: $profile.weeklyGoalDays, in: 1...7) {
                         Label("Weekly Goal: \(profile.weeklyGoalDays) days", systemImage: "target")

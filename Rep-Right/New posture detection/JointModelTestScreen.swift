@@ -150,60 +150,18 @@ struct JointModelInfoSheet: View {
     var exerciseName: String
     
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
-            Text("\(exerciseName) Assistance")
-                .font(.title2.bold())
-                .padding(.top)
-            
-            HStack {
-                VStack {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundStyle(.background.secondary)
-                            .frame(width: 80, height: 90)
-                        Image(systemName: "figure.walk")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 50)
-                    }
-                    Text("Full body")
-                        .font(.callout.bold())
-                }
-                .padding()
-            }
-            
-            VStack {
-                Text("This exercise uses the joint-based assistance model for posture feedback and set tracking.")
-                    .multilineTextAlignment(.center)
-                    .padding()
-                Text("Place the camera so your full body stays visible. A side angle usually works best for \(exerciseName.lowercased()).")
-                    .multilineTextAlignment(.center)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            
-            Spacer()
-            
-            Button {
-                showSheet = false
-            } label: {
-                Text("Start Test")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundStyle(.white)
-                    .cornerRadius(12)
-            }
-            .padding(.horizontal)
-            
-            Button("Cancel", role: .cancel) {
-                showSheet = false
-            }
-            .padding(.top, 8)
-            .padding(.bottom)
-        }
+        AssistanceSetupSheet(
+            showSheet: $showSheet,
+            title: "\(exerciseName) Assistance",
+            primaryButtonTitle: "Continue",
+            headline: "Set your camera before calibration begins.",
+            detail: "This exercise uses the joint-based assistance model. Keep your full body visible, and use a side angle whenever possible for cleaner posture tracking.",
+            steps: [
+                AssistanceSetupStep(title: "Hip Height", systemImage: "lines.measurement.vertical"),
+                AssistanceSetupStep(title: "Full body", systemImage: "figure.stand"),
+                AssistanceSetupStep(title: "6-8 feet", systemImage: "ruler")
+            ]
+        )
     }
 }
 
@@ -213,15 +171,7 @@ struct JointModelTimerOverlay: View {
     @State private var timeRemaining = 3
     
     var body: some View {
-        ZStack {
-            Color.black.opacity(0.4).ignoresSafeArea()
-            
-            Text("\(timeRemaining)")
-                .font(.system(size: 100, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-                .contentTransition(.numericText())
-                .animation(.easeInOut, value: timeRemaining)
-        }
+        AssistanceCountdownOverlay(timeRemaining: timeRemaining, title: "Detection starting...")
         .onAppear {
             startCountdown()
         }

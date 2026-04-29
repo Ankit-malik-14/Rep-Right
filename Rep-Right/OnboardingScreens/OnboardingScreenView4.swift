@@ -1,245 +1,153 @@
 import SwiftUI
 
-//struct OnboardingScreenView4: View {
-//    @Environment(UserProfileModel.self) private var userProfile
-//    @Binding var hasSeen: Bool
-//    
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 30) {
-//            Text("Personalise your plan")
-//                .font(.largeTitle.bold())
-//                .padding(.top, 40)
-//            
-//            Text("What is your current fitness level?")
-//                .font(.headline)
-//            
-//            VStack(spacing: 15) {
-//                FitnessLevelCard(level: .beginner, title: "Beginner", description: "Just starting out or returning after a long break", isSelected: userProfile.fitnessLevel == .beginner) {
-//                    userProfile.fitnessLevel = .beginner
-//                }
-//                
-//                FitnessLevelCard(level: .intermediate, title: "Intermediate", description: "Consistent training for 6+ months", isSelected: userProfile.fitnessLevel == .intermediate) {
-//                    userProfile.fitnessLevel = .intermediate
-//                }
-//                
-//                FitnessLevelCard(level: .advanced, title: "Advanced", description: "Training regularly for 2+ years", isSelected: userProfile.fitnessLevel == .advanced) {
-//                    userProfile.fitnessLevel = .advanced
-//                }
-//            }
-//            
-//            Text("How many days a week do you want to train?")
-//                .font(.headline)
-//                .padding(.top, 20)
-//            
-//            Picker("Days per week", selection: Bindable(userProfile).weeklyGoalDays) {
-//                ForEach(1...7, id: \.self) { day in
-//                    Text("\(day) days").tag(day)
-//                }
-//            }
-//            .pickerStyle(.segmented)
-//            
-//            Spacer()
-//            
-//            Button {
-//                hasSeen = true
-//            } label: {
-//                Text("Get Started")
-//                    .font(.headline)
-//                    .foregroundColor(.white)
-//                    .frame(maxWidth: .infinity)
-//                    .padding(.vertical, 16)
-//                    .background(Color.orange)
-//                    .cornerRadius(12)
-//            }
-//        }
-//        .padding()
-//    }
-//}
-//
-//struct FitnessLevelCard: View {
-//    let level: FitnessLevel
-//    let title: String
-//    let description: String
-//    let isSelected: Bool
-//    let action: () -> Void
-//    
-//    var body: some View {
-//        Button(action: action) {
-//            HStack {
-//                VStack(alignment: .leading, spacing: 5) {
-//                    Text(title)
-//                        .font(.headline)
-//                        .foregroundColor(isSelected ? .orange : .primary)
-//                    Text(description)
-//                        .font(.subheadline)
-//                        .foregroundColor(.secondary)
-//                        .multilineTextAlignment(.leading)
-//                }
-//                Spacer()
-//                if isSelected {
-//                    Image(systemName: "checkmark.circle.fill")
-//                        .foregroundColor(.orange)
-//                        .font(.title2)
-//                } else {
-//                    Image(systemName: "circle")
-//                        .foregroundColor(.gray)
-//                        .font(.title2)
-//                }
-//            }
-//            .padding()
-//            .background(isSelected ? Color.orange.opacity(0.1) : Color(UIColor.secondarySystemBackground))
-//            .cornerRadius(12)
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 12)
-//                    .stroke(isSelected ? Color.orange : Color.clear, lineWidth: 2)
-//            )
-//        }
-//        .buttonStyle(.plain)
-//    }
-//}
-
-import SwiftUI
-
 struct OnboardingScreenView4: View {
     @Environment(UserProfileModel.self) private var userProfile
-    @Binding var hasSeen: Bool
-
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    let onComplete: () -> Void
+    
+    @State private var weightInput: Double = 70
+    @State private var weeklyCalorieGoalInput: Double = 400
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-
-            // Header
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Personalise")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(.black)
-                Text("Your Plan")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(.orange)
-            }
-            .padding(.top, 36)
-            .padding(.horizontal, 28)
-            .padding(.bottom, 32)
-
+        NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 32) {
+                VStack(alignment: .leading, spacing: 28) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Personalise")
+                            .font(.system(size: 34, weight: .bold))
+                            .foregroundStyle(.black)
+                        Text("Your Plan")
+                            .font(.system(size: 34, weight: .bold))
+                            .foregroundStyle(.orange)
+                    }
+                    .padding(.top, 20)
                     
-                    
-                    // Motivational quote
                     VStack(alignment: .leading, spacing: 10) {
                         Image(systemName: "quote.opening")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundStyle(.orange)
-
+                        
                         Text("The only bad workout is the one that didn't happen.")
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundStyle(.black)
                             .fixedSize(horizontal: false, vertical: true)
-
-                        Text("— Every coach, ever")
-                            .font(.system(size: 14))
+                        
+                        Text("These settings help Rep-Right estimate calories better and give you a clearer weekly benchmark.")
+                            .font(.system(size: 15))
                             .foregroundStyle(.gray)
                     }
                     .padding(24)
                     .background(Color.orange.opacity(0.07))
-                    .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .padding(.horizontal, 28)
-                }
-                .padding(.bottom, 40)
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                     
-                    // Fitness level section
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("What is your current fitness level?")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(.black)
-                            .padding(.horizontal, 28)
-
-                        VStack(spacing: 12) {
-                            FitnessLevelCard(
-                                level: .beginner,
-                                title: "Beginner",
-                                description: "Just starting out",
-                                isSelected: userProfile.fitnessLevel == .beginner
-                            ) { userProfile.fitnessLevel = .beginner }
-
-                            FitnessLevelCard(
-                                level: .intermediate,
-                                title: "Intermediate",
-                                description: "Consistent training for 6+ months",
-                                isSelected: userProfile.fitnessLevel == .intermediate
-                            ) { userProfile.fitnessLevel = .intermediate }
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Calculation Inputs")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("Weight (kg)")
+                                Spacer()
+                                TextField("0", value: $weightInput, format: .number)
+                                    .multilineTextAlignment(.trailing)
+                                    .keyboardType(.decimalPad)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 14)
+                            
+                            Divider()
+                                .padding(.leading, 16)
+                            
+                            HStack {
+                                Text("Weekly Calorie Goal")
+                                Spacer()
+                                TextField("400", value: $weeklyCalorieGoalInput, format: .number)
+                                    .multilineTextAlignment(.trailing)
+                                    .keyboardType(.numberPad)
+                                    .foregroundStyle(.secondary)
+                                Text("kcal")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 14)
                         }
-                        .padding(.horizontal, 28)
+                        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                        }
                     }
-
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Calorie Goal Guide")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Use your weekly goal as a motivating benchmark, not a strict requirement.")
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.primary)
+                            
+                            Text("For context:")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            
+                            Text("Walking 1 km usually burns about 45-70 kcal.")
+                            Text("A light 30-minute workout often burns around 150-250 kcal.")
+                            Text("A harder 45-60 minute session may burn around 300-500 kcal.")
+                        }
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .padding(18)
+                        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                        }
+                    }
+                    
+                    Text("These are defaults you can change later from the app. Nothing here is tied to account creation.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 32)
             }
-
-            Spacer()
-        }
-        .overlay(alignment: .bottom) {
-            VStack(spacing: 0) {
-                LinearGradient(
-                    colors: [Color.white.opacity(0), Color.white],
-                    startPoint: .top, endPoint: .bottom
-                )
-                .frame(height: 32)
-
+            .background(Color(.systemGroupedBackground))
+            .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom) {
                 Button {
-                    hasSeen = true
+                    applyInputs()
+                    onComplete()
                 } label: {
                     Text("Get Started")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(Color.orange)
-                        .clipShape(Capsule())
-                        .padding(.horizontal, 28)
                 }
-                .padding(.bottom, 36)
-                .background(Color.white)
+                .buttonStyle(AppPrimaryButtonStyle())
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 20)
+                .background(.bar)
             }
         }
-        .background(Color.white)
+        .onAppear {
+            userProfile.unitSystem = .metric
+            weightInput = userProfile.weightInKilograms
+            weeklyCalorieGoalInput = summaryManager.dailyCalorieGoal
+        }
     }
-}
-
-struct FitnessLevelCard: View {
-    let level: FitnessLevel
-    let title: String
-    let description: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(alignment: .top, spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(isSelected ? .orange : .black)
-                    Text(description)
-                        .font(.system(size: 14))
-                        .foregroundStyle(.gray)
-                        .multilineTextAlignment(.leading)
-                }
-                Spacer()
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(isSelected ? .orange : .gray)
-                    .font(.title2)
-            }
-            .padding(16)
-            .background(isSelected ? Color.orange.opacity(0.08) : Color(.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? Color.orange : Color.clear, lineWidth: 2)
-            )
-        }
-        .buttonStyle(.plain)
+    
+    private func applyInputs() {
+        userProfile.unitSystem = .metric
+        userProfile.weight = max(1, weightInput)
+        summaryManager.currentUserWeight = userProfile.weightInKilograms
+        summaryManager.dailyCalorieGoal = max(1, weeklyCalorieGoalInput)
     }
 }
 
 #Preview {
-    OnboardingScreenView4(hasSeen: .constant(false))
+    OnboardingScreenView4(onComplete: {})
         .environment(UserProfileModel())
+        .environment(WorkoutSummaryManager())
 }

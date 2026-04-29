@@ -516,7 +516,7 @@ class Presets {
             ),
             makePreset(
                 name: "Upper Focus",
-                image: "Shoulders",
+                image: "UpperFocous",
                 exerciseNames: ["Push-Up", "Bench Press", "Dumbbell Press", "Dumbbell Row", "Dead Hang"],
                 scheduledFor: .wednesday,
                 estTime: 38,
@@ -540,7 +540,7 @@ class Presets {
             ),
             makePreset(
                 name: "Back & Posture",
-                image: "Shoulders",
+                image: "Back",
                 exerciseNames: ["Dumbbell Row", "Lat Pulldown", "Dead Hang", "Superman Hold", "Overhead Hold"],
                 scheduledFor: .tuesday,
                 estTime: 36,

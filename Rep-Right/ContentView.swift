@@ -19,16 +19,10 @@ struct ContentView: View {
                 AppNameScreenView()
                     .transition(.opacity)
             } else if !hasSeenOnboarding {
-                OnboardingContainerView(onboardingCheck: $hasSeenOnboarding)
+                OnboardingScreenView(hasSeenOnboarding: $hasSeenOnboarding)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             } else {
                 HomeView()
-//                    .environment(Presets())
-//                    .environment(Exercises())
-//                    .environment(WeeklySchedules())
-//                    .environment(CustomPresetsDummyData())
-//                    .environment(WorkoutSummaryManager())
-//                    .environment(UserProfileModel())
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             }
         }

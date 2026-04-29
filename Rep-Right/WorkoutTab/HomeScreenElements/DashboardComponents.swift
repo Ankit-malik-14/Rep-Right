@@ -61,6 +61,7 @@ struct RecoveryMapCard: View {
     @Environment(WorkoutSummaryManager.self) private var summaryManager
     @Environment(Exercises.self) private var exercises
     @Environment(Presets.self) private var presets
+    @State private var isExpanded = false
 
     private let focusAreaColors: [String: Color] = [
         FocusArea.back.rawValue: Color(red: 22/255, green: 176/255, blue: 221/255),
@@ -89,6 +90,23 @@ struct RecoveryMapCard: View {
                 }
 
                 Spacer()
+
+                if !summaryManager.completedExercises.isEmpty {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isExpanded.toggle()
+                        }
+                    } label: {
+                        Label(isExpanded ? "Collapse" : "Expand", systemImage: isExpanded ? "chevron.up" : "chevron.down")
+                            .labelStyle(.iconOnly)
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 36, height: 36)
+                            .background(Color(.tertiarySystemFill), in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(isExpanded ? "Collapse recovery map" : "Expand recovery map")
+                }
             }
 
             if summaryManager.completedExercises.isEmpty {
@@ -105,62 +123,60 @@ struct RecoveryMapCard: View {
                 .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 16))
             } else {
                 VStack(alignment: .leading, spacing: 16) {
-                    Chart(activeChartData, id: \.category) { item in
-                        SectorMark(
-                            angle: .value("Exercises", item.value),
-                            innerRadius: .ratio(0.7),
-                            angularInset: 2.0
-                        )
-                        .foregroundStyle(by: .value("Focus Area", item.category))
-                        .cornerRadius(5)
-                    }
-                    .chartForegroundStyleScale(
-                        domain: activeChartData.map { $0.category },
-                        range: activeChartData.map { focusAreaColors[$0.category] ?? .gray }
-                    )
-                    .chartLegend(position: .bottom, alignment: .center)
-                    .frame(height: 250)
-                    .chartBackground { chartProxy in
-                        GeometryReader { geometry in
-                            if let plotFrame = chartProxy.plotFrame {
-                                let frame = geometry[plotFrame]
-                                VStack(spacing: 4) {
-                                    Text("Total")
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                    Text(Int(totalTracked), format: .number)
-                                        .font(.system(size: 34, weight: .bold, design: .rounded))
-                                }
-                                .position(x: frame.midX, y: frame.midY)
-                            }
-                        }
-                    }
-
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                        ForEach(insights.indices, id: \.self) { index in
-                            FocusAreaCounterCard(
-                                insight: insights[index],
-                                snapshot: recoverySnapshots[index],
-                                color: focusAreaColors[insights[index].focusArea.rawValue] ?? .gray
-                            )
-                        }
-                    }
-
                     Text(overallRecommendation(for: recoverySnapshots))
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.primary)
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 16))
+
+                    if isExpanded {
+                        Chart(activeChartData, id: \.category) { item in
+                            SectorMark(
+                                angle: .value("Exercises", item.value),
+                                innerRadius: .ratio(0.7),
+                                angularInset: 2.0
+                            )
+                            .foregroundStyle(by: .value("Focus Area", item.category))
+                            .cornerRadius(5)
+                        }
+                        .chartForegroundStyleScale(
+                            domain: activeChartData.map { $0.category },
+                            range: activeChartData.map { focusAreaColors[$0.category] ?? .gray }
+                        )
+                        .chartLegend(position: .bottom, alignment: .center)
+                        .frame(height: 250)
+                        .chartBackground { chartProxy in
+                            GeometryReader { geometry in
+                                if let plotFrame = chartProxy.plotFrame {
+                                    let frame = geometry[plotFrame]
+                                    VStack(spacing: 4) {
+                                        Text("Total")
+                                            .font(.caption2)
+                                            .foregroundStyle(.secondary)
+                                        Text(Int(totalTracked), format: .number)
+                                            .font(.system(size: 34, weight: .bold, design: .rounded))
+                                    }
+                                    .position(x: frame.midX, y: frame.midY)
+                                }
+                            }
+                        }
+
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                            ForEach(insights.indices, id: \.self) { index in
+                                FocusAreaCounterCard(
+                                    insight: insights[index],
+                                    snapshot: recoverySnapshots[index],
+                                    color: focusAreaColors[insights[index].focusArea.rawValue] ?? .gray
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
         .padding(16)
-        //.frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
+        .appCardStyle()
         .padding(.horizontal)
     }
 
@@ -260,8 +276,7 @@ struct QuickActionCard: View {
         }
         .padding()
         .frame(width: 110, height: 80, alignment: .bottomLeading)
-        .background(Color(UIColor.secondarySystemBackground))
-        .cornerRadius(12)
+        .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
 
@@ -301,8 +316,7 @@ struct SmartRecommendationCard: View {
                     }
                 }
                 .padding()
-                .background(Color(UIColor.secondarySystemBackground))
-                .cornerRadius(12)
+                .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .padding(.horizontal)
                 .opacity(isVisible ? 1 : 0)
                 .offset(y: isVisible ? 0 : 20)
@@ -359,8 +373,8 @@ struct SmartWeekScheduleCard: View {
                 Button("Apply") {
                     weeklySchedules.apply(recommendedSchedule)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.orange)
+                .buttonStyle(AppPrimaryButtonStyle())
+                .frame(maxWidth: 110)
             }
             
             ForEach(recommendedSchedule.prefix(3)) { day in
@@ -379,7 +393,7 @@ struct SmartWeekScheduleCard: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
+        .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .padding(.horizontal)
     }
     

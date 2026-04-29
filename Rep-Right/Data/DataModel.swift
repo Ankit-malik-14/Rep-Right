@@ -270,10 +270,10 @@ class UserProfileModel {
     var profilePicture: String? = "UserImage" {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
-    var name: String = "Ankit Malik" {
+    var name: String = "" {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
-    var age: Int = 21 {
+    var age: Int = 25 {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
     var gender: Genders = .male {
@@ -295,10 +295,10 @@ class UserProfileModel {
     
     // MARK: - Single Source of Truth (Always Metric)
     // We keep these private so the rest of the app doesn't accidentally bypass the conversion logic.
-    private var storedWeightKg: Double = 71.0 {
+    private var storedWeightKg: Double = 70.0 {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
-    private var storedHeightMeters: Double = 1.73 {
+    private var storedHeightMeters: Double = 1.70 {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
     

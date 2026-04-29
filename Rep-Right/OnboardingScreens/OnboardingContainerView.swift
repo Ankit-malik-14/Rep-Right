@@ -14,7 +14,9 @@ struct OnboardingContainerView: View {
                 OnboardingScreenView3()
             }
             Tab("onboarding4",image: ""){
-                OnboardingScreenView4(hasSeen: $onboardingCheck)
+                OnboardingScreenView4 {
+                    onboardingCheck = true
+                }
             }
         }.tabViewStyle(.page)
             .ignoresSafeArea()

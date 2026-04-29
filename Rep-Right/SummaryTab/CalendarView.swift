@@ -15,45 +15,55 @@ struct CalendarView: View {
     @State private var selectedDate = Date()
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 18) {
             HStack {
                 Button(action: { showCalendar.toggle() }) {
                     HStack(spacing: 4) {
                         Text(headerTitle)
                             .font(.system(size: 18, weight: .bold))
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.primary)
                         Image(systemName: "chevron.right")
                             .font(.system(size: 14, weight: .bold))
                             .foregroundStyle(.orange)
                     }
                 }
+                .buttonStyle(.plain)
 
                 Spacer()
 
-                HStack(spacing: 20) {
+                HStack(spacing: 10) {
                     Button(action: { weekOffset -= 1; loadWeek() }) {
                         Image(systemName: "chevron.left")
+                            .font(.subheadline.weight(.bold))
                             .foregroundStyle(.orange)
+                            .frame(width: 34, height: 34)
+                            .background(Color(.tertiarySystemFill), in: Circle())
                     }
+                    .buttonStyle(.plain)
                     Button(action: { weekOffset += 1; loadWeek() }) {
                         Image(systemName: "chevron.right")
+                            .font(.subheadline.weight(.bold))
                             .foregroundStyle(.orange)
+                            .frame(width: 34, height: 34)
+                            .background(Color(.tertiarySystemFill), in: Circle())
                     }
+                    .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 18)
 
             HStack {
                 ForEach(weekData) { day in
-                    
                     DayView(day: day)
-                  
                 }
             }
+            .padding(.horizontal, 10)
 
-            Divider().padding(.horizontal)
+            Divider().padding(.horizontal, 18)
         }
-        .padding(.vertical, 20)
+        .padding(.vertical, 18)
+        .appCardStyle()
+        .padding(.horizontal)
         .onAppear { loadWeek() }
         .sheet(isPresented: $showCalendar) {
             VStack {
@@ -72,7 +82,7 @@ struct CalendarView: View {
                     }
                 Spacer()
             }
-            .presentationDetents([.medium, .large])
+                .presentationDetents([.medium, .large])
         }
     }
 
@@ -128,9 +138,10 @@ struct DayView: View {
                 .font(.system(size: 20, weight: .medium))
                 .foregroundStyle(day.status == "current" || day.status == "future" ? Color.primary : Color.orange)
                 .frame(width: 44, height: 44)
-                .background(day.status == "current" ? Color.orange : day.status == "streak" ? Color.orange.opacity(0.15) : Color.clear)
+                .background(day.status == "current" ? Color.orange : day.status == "streak" ? Color.orange.opacity(0.15) : Color(.tertiarySystemFill).opacity(day.status == "future" ? 0.6 : 0))
                 .clipShape(Circle())
         }
+        .frame(maxWidth: .infinity)
     }
 }
 

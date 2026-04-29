@@ -22,12 +22,10 @@ struct ExerciseRingView: View {
         let total = stats.reduce(0.0) { $0 + $1.value }
 
         VStack(spacing: 40) {
-
             Text("Total Exercises")
                 .font(.headline)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
 
             if stats.isEmpty {
                 ContentUnavailableView("No Exercises Yet", systemImage: "dumbbell", description: Text("Complete workouts to see your breakdown"))
@@ -64,7 +62,8 @@ struct ExerciseRingView: View {
                 }
             }
         }
-        .padding()
+        .padding(20)
+        .appCardStyle()
     }
 }
 
