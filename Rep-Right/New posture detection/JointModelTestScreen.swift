@@ -15,6 +15,9 @@ struct JointModelTestScreen: View {
     @State private var showSheet: Bool = true
     @State private var isFinishingSet = false
     
+    var exerciseName: String = "Plank"
+    var exerciseRuleName: String? = nil
+    var usesStaticHoldProgress: Bool = true
     var targetReps: Int? = nil
     var initialElapsedSeconds: Int = 0
     var onSetFinished: ((AssistanceSessionResult) -> Void)? = nil
@@ -79,8 +82,11 @@ struct JointModelTestScreen: View {
             }
         }
         .onAppear {
-            // Default to Plank for testing
-            viewModel.currentExerciseId = 1
+            viewModel.configureExercise(
+                name: exerciseName,
+                preferredRuleName: exerciseRuleName,
+                usesStaticHoldProgress: usesStaticHoldProgress
+            )
             viewModel.initialElapsedSeconds = initialElapsedSeconds
             viewModel.elapsedSeconds = initialElapsedSeconds
             viewModel.elapsedFormatted = String(format: "%02d:%02d", initialElapsedSeconds / 60, initialElapsedSeconds % 60)
@@ -93,7 +99,7 @@ struct JointModelTestScreen: View {
         .sheet(isPresented: $showSheet, onDismiss: {
             phase = .detectingPerson
         }) {
-            JointModelInfoSheet(showSheet: $showSheet)
+            JointModelInfoSheet(showSheet: $showSheet, exerciseName: exerciseName)
                 .presentationDetents([.fraction(0.7), .large])
                 .interactiveDismissDisabled()
         }
@@ -141,10 +147,11 @@ struct JointModelTestScreen: View {
 
 struct JointModelInfoSheet: View {
     @Binding var showSheet: Bool
+    var exerciseName: String
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
-            Text("Joint Model Testing")
+            Text("\(exerciseName) Assistance")
                 .font(.title2.bold())
                 .padding(.top)
             
@@ -166,10 +173,10 @@ struct JointModelInfoSheet: View {
             }
             
             VStack {
-                Text("This is an isolated test environment for the new dynamic joint-based posture model.")
+                Text("This exercise uses the joint-based assistance model for posture feedback and set tracking.")
                     .multilineTextAlignment(.center)
                     .padding()
-                Text("Place the camera facing you sideways to test the Plank exercise.")
+                Text("Place the camera so your full body stays visible. A side angle usually works best for \(exerciseName.lowercased()).")
                     .multilineTextAlignment(.center)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)

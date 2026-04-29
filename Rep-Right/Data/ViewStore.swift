@@ -58,25 +58,68 @@ func assisstanceAvailablityTag(type: assistanceTagType) -> some View{
 struct PresetTileViewType: View {
     var preset: Preset
     var type: PresetViewType
+    var showsSelection: Bool = false
+    var isSelected: Bool = false
     var body: some View {
         switch type {
         case .large:
             ZStack(alignment: .topLeading){
-                
-                if preset.image != nil{
-                    Image(preset.image!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 160, height: 185)
-                        .foregroundStyle(.background.secondary)
+                Group {
+                    if let imageName = preset.image {
+                        Image(imageName)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        RoundedRectangle(cornerRadius: 16)
+                            .foregroundStyle(.background.secondary)
+                    }
                 }
-                else{
-                    RoundedRectangle(cornerRadius: 16)
-                        .frame(width: 160, height: 185)
-                        .foregroundStyle(.background.secondary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 185)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                LinearGradient(
+                    colors: [.black.opacity(0.08), .black.opacity(0.45)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                VStack(alignment: .leading, spacing: 8) {
+                    if showsSelection {
+                        HStack {
+                            Spacer()
+                            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                                .font(.title3)
+                                .foregroundStyle(isSelected ? .orange : .white.opacity(0.9))
+                                .padding(12)
+                        }
+                    }
+
+                    Spacer()
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(preset.name)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .lineLimit(2)
+
+                        Text("\(preset.exercises.count) Exercises")
+                            .font(.footnote)
+                            .foregroundStyle(.white.opacity(0.85))
+                    }
+                    .padding(14)
                 }
-                Text(preset.name).padding()
-                
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .foregroundStyle(.background.secondary)
+            )
+            .frame(height: 185)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(isSelected ? .orange : .clear, lineWidth: 2)
             }
         case .small:
             HStack(alignment: .center){

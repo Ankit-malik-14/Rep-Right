@@ -25,6 +25,8 @@ class Exercises{
                 "Inhale on the way down, exhale as you press up."
             ],
             assistanceAvailable: true,
+            assistanceModel: .joint,
+            assistanceRuleName: "High Plank (Push-up Hold)",
             demoVideo: URL(string: "https://example.com/videos/pushup.mp4"),
             image: "PushUp",
             setData: [
@@ -48,6 +50,9 @@ class Exercises{
                         "Keep arms relaxed at sides or on thighs."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Wall Sit",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "WallSit",
                     setData: [SetData(sets: 3, reps: 45)]
@@ -68,6 +73,9 @@ class Exercises{
                         "Drive through heels, not toes."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Glute Bridge Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "GluteBridge",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -88,6 +96,9 @@ class Exercises{
                         "Keep your core slightly braced to prevent swinging."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Dead Hang",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "DeadHang",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -108,6 +119,9 @@ class Exercises{
                         "Squeeze glutes to protect your lower back."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Overhead Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "OverheadHold",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -128,6 +142,9 @@ class Exercises{
                         "Squeeze core and glutes throughout."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Low Plank (Forearm Plank)",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                      image: "Plank",
                     setData: [SetData(sets: 3, reps: 45)]
@@ -148,6 +165,9 @@ class Exercises{
                         "Keep your neck neutral; don't crane it up or down."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Side Plank",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "SidePlank",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -168,6 +188,9 @@ class Exercises{
                         "Keep shoulders back and chest up."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Lunge Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "Lunges",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -188,6 +211,9 @@ class Exercises{
                         "Focus your gaze on a fixed point to help balance."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Standing Hip Abduction Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "HipAbduction",
                     setData: [SetData(sets: 3, reps: 20)]
@@ -208,6 +234,9 @@ class Exercises{
                         "Tighten your core as hard as possible."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "L-Sit Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "LSitHold",
                     setData: [SetData(sets: 3, reps: 15)]
@@ -228,6 +257,9 @@ class Exercises{
                         "If too hard, bend your knees to reduce the lever arm."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Hollow Body Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "HollowBodyHold",
                     setData: [SetData(sets: 3, reps: 20)]
@@ -248,6 +280,9 @@ class Exercises{
                         "Focus on squeezing glutes, not just arching the back."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Superman Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     setData: [SetData(sets: 3, reps: 20)]
                 ),
@@ -266,7 +301,8 @@ class Exercises{
                 "Maintain a neutral spine; avoid rounding your back.",
                 "Control the descent; don’t bounce at the bottom."
             ],
-            assistanceAvailable: false,
+            assistanceAvailable: true,
+            assistanceModel: .contour,
             demoVideo: URL(string: "https://example.com/videos/bodyweight_squat.mp4"),
             image: "Squats",
             setData: [
@@ -288,7 +324,8 @@ class Exercises{
                 "Lead with the elbow and keep the wrist neutral.",
                 "Exhale as you row, inhale as you lower."
             ],
-            assistanceAvailable: false,
+            assistanceAvailable: true,
+            assistanceModel: .contour,
             demoVideo: URL(string: "https://example.com/videos/dumbbell_row.mp4"),
             image: "DumbellRow",
             setData: [
@@ -310,6 +347,9 @@ class Exercises{
                 "Squeeze glutes lightly to stabilize pelvis."
             ],
             assistanceAvailable: true,
+            assistanceModel: .joint,
+            assistanceRuleName: "Plank",
+            assistanceUsesStaticHold: true,
             demoVideo: URL(string: "https://example.com/videos/plank.mp4"),
             image: "Plank",
             setData: [
@@ -345,6 +385,8 @@ class Exercises{
                     executionSteps: ["Lie back, lift shoulders off floor."],
                     tips: ["Do not pull on neck."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Hollow Body Hold",
                     demoVideo: nil,
                     image: "Crunches",
                     setData: [SetData(sets: 3, reps: 20)]
@@ -367,6 +409,8 @@ class Exercises{
                     executionSteps: ["Jump feet out, hands over head."],
                     tips: ["Maintain rhythm."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Overhead Hold",
                     demoVideo: nil,
                     image: "JumpingJacks",
                     setData: [SetData(sets: 3, reps: 50)]
@@ -389,6 +433,8 @@ class Exercises{
                     executionSteps: ["Lift legs while lying flat."],
                     tips: ["Keep lower back pressed down."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Hollow Body Hold",
                     demoVideo: nil,
                     image: "LegRaise",
                     setData: [SetData(sets: 3, reps: 15)]
@@ -400,6 +446,9 @@ class Exercises{
                     executionSteps: ["Pull arm across chest."],
                     tips: ["Keep shoulder down."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Overhead Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "ShoulderStrech",
                     setData: [SetData(sets: 1, reps: 30)] // seconds
@@ -411,6 +460,9 @@ class Exercises{
                     executionSteps: ["Reach arm overhead to side."],
                     tips: ["Keep hips square."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Side Plank",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "SideStretch",
                     setData: [SetData(sets: 1, reps: 30)] // seconds

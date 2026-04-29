@@ -18,6 +18,11 @@ private func stableExerciseUUID(from name: String) -> UUID {
     ))
 }
 
+enum AssistanceModelKind: String, Hashable, Codable {
+    case contour
+    case joint
+}
+
 struct Exercise: Identifiable, Equatable, Hashable, Codable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {
         lhs.id == rhs.id
@@ -29,6 +34,9 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
     var executionSteps: [String]
     var tips: [String]
     var assistanceAvailable: Bool
+    var assistanceModel: AssistanceModelKind? = nil
+    var assistanceRuleName: String? = nil
+    var assistanceUsesStaticHold: Bool = false
     var demoVideo: URL?
     var image: String?
     var setData: [SetData]
@@ -45,6 +53,9 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
         executionSteps: [String],
         tips: [String],
         assistanceAvailable: Bool,
+        assistanceModel: AssistanceModelKind? = nil,
+        assistanceRuleName: String? = nil,
+        assistanceUsesStaticHold: Bool = false,
         demoVideo: URL?,
         image: String? = nil,
         setData: [SetData]
@@ -56,6 +67,9 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
         self.executionSteps = executionSteps
         self.tips = tips
         self.assistanceAvailable = assistanceAvailable
+        self.assistanceModel = assistanceModel
+        self.assistanceRuleName = assistanceRuleName
+        self.assistanceUsesStaticHold = assistanceUsesStaticHold
         self.demoVideo = demoVideo
         self.image = image
         self.setData = setData
