@@ -1,6 +1,5 @@
 *.xcuserstate
-
-
+*.DS_Store
 *.pbcproj
 /Rep-Right.xcodeproj
 *.xcuserstate
