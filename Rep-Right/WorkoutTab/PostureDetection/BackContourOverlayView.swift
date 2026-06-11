@@ -28,11 +28,14 @@ struct WorkoutCameraOverlayView: View {
     let onUtilityTap: () -> Void
     let onFinishTap: () -> Void
     
-    @State private var dismissedFeedbackKey: String?
+    @State private var displayedFeedbackMessage: String?
+    @State private var pendingFeedbackMessage: String?
+    @State private var suppressedFeedbackMessage: String?
+    @State private var feedbackSuppressedUntil: Date = .distantPast
     
     var body: some View {
         VStack(spacing: 0) {
-            if let feedbackTitle, let feedbackMessage, shouldShowFeedback(message: feedbackMessage) {
+            if let feedbackTitle, let activeFeedbackMessage {
                 HStack(spacing: 16) {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(accentColor.opacity(0.18))
@@ -47,7 +50,7 @@ struct WorkoutCameraOverlayView: View {
                         Text(feedbackTitle)
                             .font(.headline)
                             .foregroundStyle(accentColor)
-                        Text(feedbackMessage)
+                        Text(activeFeedbackMessage)
                             .font(.title3.weight(.medium))
                             .foregroundStyle(.primary)
                     }
@@ -55,7 +58,10 @@ struct WorkoutCameraOverlayView: View {
                     Spacer(minLength: 12)
                     
                     Button("Dismiss") {
-                        dismissedFeedbackKey = feedbackMessage
+                        suppressedFeedbackMessage = activeFeedbackMessage
+                        feedbackSuppressedUntil = Date().addingTimeInterval(6)
+                        displayedFeedbackMessage = nil
+                        pendingFeedbackMessage = nil
                     }
                     .font(.headline)
                     .foregroundStyle(.red)
@@ -100,6 +106,12 @@ struct WorkoutCameraOverlayView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 28)
         }
+        .onAppear {
+            updateDisplayedFeedback(using: normalizedFeedbackMessage)
+        }
+        .onChange(of: normalizedFeedbackMessage) { _, newValue in
+            updateDisplayedFeedback(using: newValue)
+        }
     }
     
     private var repText: String {
@@ -125,7 +137,37 @@ struct WorkoutCameraOverlayView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28))
     }
     
-    private func shouldShowFeedback(message: String) -> Bool {
-        dismissedFeedbackKey != message
+    private var normalizedFeedbackMessage: String? {
+        guard let feedbackMessage else { return nil }
+        let trimmed = feedbackMessage.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
+    
+    private var activeFeedbackMessage: String? {
+        displayedFeedbackMessage
+    }
+    
+    private func updateDisplayedFeedback(using message: String?) {
+        guard let message else {
+            pendingFeedbackMessage = nil
+            displayedFeedbackMessage = nil
+            return
+        }
+        
+        if message == displayedFeedbackMessage || message == pendingFeedbackMessage {
+            return
+        }
+        
+        if Date() < feedbackSuppressedUntil, message == suppressedFeedbackMessage {
+            return
+        }
+        
+        pendingFeedbackMessage = message
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+            guard pendingFeedbackMessage == message else { return }
+            guard normalizedFeedbackMessage == message else { return }
+            guard !(Date() < feedbackSuppressedUntil && message == suppressedFeedbackMessage) else { return }
+            displayedFeedbackMessage = message
+        }
     }
 }

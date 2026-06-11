@@ -8,11 +8,11 @@ struct FormInsightView: View {
         HStack(alignment: .top, spacing: 15) {
             ZStack {
                 Circle()
-                    .fill(Color.orange.opacity(0.5))
+                    .fill(Color.orange.opacity(0.18))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: "lightbulb.fill")
-                    .foregroundColor(.primary)
+                    .foregroundColor(.orange)
                     .font(.system(size: 18))
             }
             
@@ -31,11 +31,7 @@ struct FormInsightView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(.background.tertiary)
-                
-        )
+        .appCardStyle()
         .padding(.horizontal)
     }
 }

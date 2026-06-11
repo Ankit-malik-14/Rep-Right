@@ -46,13 +46,7 @@ struct ExerciseCardView: View {
             }
         }
         .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-        )
-//        .background(Color(UIColor.systemGray6).opacity(0.5))
-        
-        .cornerRadius(16)
+        .appCardStyle()
     }
 }
 

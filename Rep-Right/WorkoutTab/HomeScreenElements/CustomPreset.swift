@@ -18,11 +18,11 @@ struct CustomPreset: View {
                             Text("Create custom presets")
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                //.foregroundColor()
+                                .foregroundStyle(.primary)
                             
                             Text("You can create a custom workout preset as per your needs.")
                                 .font(.caption)
-                                //.foregroundColor(.gray)
+                                .foregroundStyle(.secondary)
                         }
                         .padding(.horizontal)
                         .padding(.top)
@@ -38,20 +38,15 @@ struct CustomPreset: View {
                                 Text("Create Preset")
                                     .font(.footnote)
                             }
-                            .popover(isPresented: $showScreen, content: {
-                                CustomPresetAdditionView(isPresented: $showScreen)
-                            })
-                            .foregroundColor(.orange)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(.black.opacity(0.4))
-                            .cornerRadius(12)
+                        }
+                        .buttonStyle(AppPrimaryButtonStyle())
+                        .popover(isPresented: $showScreen) {
+                            CustomPresetAdditionView(isPresented: $showScreen)
                         }
                         .padding(.horizontal)
                         .padding(.bottom)
                     }
-            .background(.gray.opacity(0.2))
-                    .cornerRadius(16)
+                    .background(Color(UIColor.systemGray6), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                     .padding(.horizontal)
                 
         }
@@ -76,10 +71,11 @@ struct CustomPreset: View {
                 .padding(.horizontal)
                 ScrollView(.horizontal){
                     HStack{
-                        ForEach(0..<min(preset.customPresets.count, 3),id: \.self){ idx in
-                            NavigationLink(value: WorkoutRoute.presetDetail(preset.customPresets[idx])) {
-                                PresetTileViewType(preset: preset.customPresets[idx], type: .large)
-                            }.buttonStyle(.plain)
+                        ForEach(Array(preset.customPresets.prefix(3))) { customPreset in
+                            NavigationLink(value: WorkoutRoute.presetDetail(customPreset)) {
+                                PresetTileViewType(preset: customPreset, type: .large)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.horizontal)

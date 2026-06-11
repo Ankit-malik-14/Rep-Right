@@ -9,52 +9,25 @@ import SwiftUI
 
 struct DefaultPresetListView: View {
     var presets: Presets
+    private let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+    
     var body: some View {
-        ScrollView{
-            VStack{
-                ForEach(presets.presets){ preset in
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(presets.presets) { preset in
                     NavigationLink(value: WorkoutRoute.presetDetail(preset)) {
                         PresetTileViewType(preset: preset, type: .large)
-                            .background(RoundedRectangle(cornerRadius: 16).foregroundStyle(.background.secondary)).padding(.horizontal)
-//                        HStack(alignment: .center){
-//                            //Image Placeholder
-//                            RoundedRectangle(cornerRadius: 16)
-//                                .frame(width: 67, height: 64)
-//                                .foregroundStyle(.background.secondary)
-//                                .padding(6)
-//                            VStack(alignment: .leading){
-//                                Text(preset.name)
-//                                    .font(.headline)
-//                                HStack{
-//                                    Text(arrayToString(arrayOfStrings: preset.focousArea))
-//                                    
-//                                    Text("•")
-//                                    Text("\(preset.exercises.count) Exercises")
-//                                }.font(.footnote).foregroundStyle(.secondary)
-//                            }
-//                            Spacer()
-//                        }.background(.background.secondary,in: RoundedRectangle(cornerRadius: 20)).padding(.horizontal)
-                    }.buttonStyle(.plain)
-                    
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-            
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(role: .destructive){
-                        //
-                    } label: {
-                        Image(systemName: "trash")
-                    }
-                    Button{
-                        //
-                    }
-                    label: {
-                        Image(systemName: "square.and.pencil")
-                    }
-                }
-            }.navigationTitle("Presets")
-        }.padding(.vertical)
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+            .navigationTitle("Presets")
+        }
     }
 }
 
@@ -64,4 +37,3 @@ struct DefaultPresetListView: View {
             .environment(Presets())
     }
 }
-

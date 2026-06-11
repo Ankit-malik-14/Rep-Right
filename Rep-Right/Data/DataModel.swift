@@ -18,6 +18,11 @@ private func stableExerciseUUID(from name: String) -> UUID {
     ))
 }
 
+enum AssistanceModelKind: String, Hashable, Codable {
+    case contour
+    case joint
+}
+
 struct Exercise: Identifiable, Equatable, Hashable, Codable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {
         lhs.id == rhs.id
@@ -29,6 +34,9 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
     var executionSteps: [String]
     var tips: [String]
     var assistanceAvailable: Bool
+    var assistanceModel: AssistanceModelKind? = nil
+    var assistanceRuleName: String? = nil
+    var assistanceUsesStaticHold: Bool = false
     var demoVideo: URL?
     var image: String?
     var setData: [SetData]
@@ -45,6 +53,9 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
         executionSteps: [String],
         tips: [String],
         assistanceAvailable: Bool,
+        assistanceModel: AssistanceModelKind? = nil,
+        assistanceRuleName: String? = nil,
+        assistanceUsesStaticHold: Bool = false,
         demoVideo: URL?,
         image: String? = nil,
         setData: [SetData]
@@ -56,6 +67,9 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
         self.executionSteps = executionSteps
         self.tips = tips
         self.assistanceAvailable = assistanceAvailable
+        self.assistanceModel = assistanceModel
+        self.assistanceRuleName = assistanceRuleName
+        self.assistanceUsesStaticHold = assistanceUsesStaticHold
         self.demoVideo = demoVideo
         self.image = image
         self.setData = setData
@@ -256,10 +270,10 @@ class UserProfileModel {
     var profilePicture: String? = "UserImage" {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
-    var name: String = "Ankit Malik" {
+    var name: String = "" {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
-    var age: Int = 21 {
+    var age: Int = 25 {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
     var gender: Genders = .male {
@@ -281,10 +295,10 @@ class UserProfileModel {
     
     // MARK: - Single Source of Truth (Always Metric)
     // We keep these private so the rest of the app doesn't accidentally bypass the conversion logic.
-    private var storedWeightKg: Double = 71.0 {
+    private var storedWeightKg: Double = 70.0 {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
-    private var storedHeightMeters: Double = 1.73 {
+    private var storedHeightMeters: Double = 1.70 {
         didSet { PersistenceController.shared.saveProfile(from: self) }
     }
     
