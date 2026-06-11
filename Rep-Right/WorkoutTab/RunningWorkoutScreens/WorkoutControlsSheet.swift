@@ -72,6 +72,8 @@ struct WorkoutControlsSheet: View {
                             .background(.blue.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
                     }
                     .foregroundStyle(.blue)
+                    .disabled(!(manager.currentExercise?.assistanceAvailable ?? false))
+                    .opacity((manager.currentExercise?.assistanceAvailable ?? false) ? 1 : 0.45)
                 }
                 
                 HStack(spacing: 12) {
@@ -174,13 +176,29 @@ struct WorkoutControlsSheet: View {
         }
         .padding(.top)
         .fullScreenCover(isPresented: $showCalibration) {
-            CaliberationScreen(
-                targetReps: manager.currentActiveSetTargetReps,
-                initialElapsedSeconds: Int(manager.elapsedTime),
-                onSetFinished: { result in
-                    manager.recordAssistanceResult(result)
+            Group {
+                if manager.currentExercise?.assistanceModel == .joint,
+                   let exercise = manager.currentExercise {
+                    JointModelTestScreen(
+                        exerciseName: exercise.name,
+                        exerciseRuleName: exercise.assistanceRuleName,
+                        usesStaticHoldProgress: exercise.assistanceUsesStaticHold,
+                        targetReps: manager.currentActiveSetTargetReps,
+                        initialElapsedSeconds: Int(manager.elapsedTime),
+                        onSetFinished: { result in
+                            manager.recordAssistanceResult(result)
+                        }
+                    )
+                } else {
+                    CaliberationScreen(
+                        targetReps: manager.currentActiveSetTargetReps,
+                        initialElapsedSeconds: Int(manager.elapsedTime),
+                        onSetFinished: { result in
+                            manager.recordAssistanceResult(result)
+                        }
+                    )
                 }
-            )
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ struct CalorieBreakdownView: View {
                     statPill(label: "Target", value: "\(Int(data.dailyCalorieGoal))", unit: "kcal")
                 }
                 .padding(.vertical, 12)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 
                 // MARK: - Bar Chart (Apple Fitness aesthetic)
                 Chart {
@@ -107,7 +107,7 @@ struct CalorieBreakdownView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             }
             .padding()
         }

@@ -38,9 +38,9 @@ struct StatsCardView: View {
                         Image(systemName: "calendar")
                         Text("Schedule workout")
                     }
-                    .font(.subheadline)
-                    .foregroundColor(.orange)
                 }
+                .buttonStyle(.borderedProminent)
+                .tint(.orange)
                 .sheet(isPresented: $showScheduler, content: {
                     SchedulerView(contextPreset: preset)
                 })
@@ -49,9 +49,7 @@ struct StatsCardView: View {
                 Spacer().frame(height: 16)
             }
         }
-        //.frame(width: .infinity)
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(20)
+        .background(Color(UIColor.systemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 15, x: 0, y: 10)
     }
 }

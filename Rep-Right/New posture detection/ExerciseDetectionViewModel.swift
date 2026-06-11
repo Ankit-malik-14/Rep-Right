@@ -98,6 +98,9 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     
     private var exerciseRules: [ExerciseRule] = []
     var currentExerciseId: Int = 1
+    var currentExerciseName: String = "Plank"
+    var currentExerciseRuleName: String?
+    var usesStaticHoldProgress: Bool = true
     
     // EMA smoothing
     private var previousJoints: [String: CGPoint] = [:]
@@ -113,6 +116,7 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     // Elapsed set timer
     var elapsedSeconds: Int = 0
     private var elapsedTimer: Timer?
+    private var holdProgressTimer: Timer?
     
     // Camera toggle for front/back
     private var cameraPosition: AVCaptureDevice.Position = .front
@@ -148,6 +152,8 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     func stopElapsedTimer() {
         elapsedTimer?.invalidate()
         elapsedTimer = nil
+        holdProgressTimer?.invalidate()
+        holdProgressTimer = nil
     }
     
     func startElapsedTimer() {
@@ -174,6 +180,9 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
         peakTrackedY = nil
         isDescending = false
         startElapsedTimer()
+        if usesStaticHoldProgress {
+            startHoldProgressTimer()
+        }
     }
     
     func finishSetTracking() {
@@ -199,6 +208,27 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             .prefix(3)
             .map { Self.descriptiveInsight(for: $0.key) }
     }
+    
+    func configureExercise(name: String, preferredRuleName: String?, usesStaticHoldProgress: Bool) {
+        currentExerciseName = name
+        currentExerciseRuleName = preferredRuleName
+        self.usesStaticHoldProgress = usesStaticHoldProgress
+        
+        if let preferredRuleName,
+           let matched = exerciseRules.firstIndex(where: { $0.name.caseInsensitiveCompare(preferredRuleName) == .orderedSame }) {
+            currentExerciseId = matched + 1
+            return
+        }
+        
+        if let matched = exerciseRules.firstIndex(where: {
+            $0.name.caseInsensitiveCompare(name) == .orderedSame ||
+            $0.name.lowercased().contains(name.lowercased())
+        }) {
+            currentExerciseId = matched + 1
+        } else {
+            currentExerciseId = 1
+        }
+    }
 
     private func loadExerciseRules() {
         guard let url = Bundle.main.url(forResource: "ExerciseRuleset", withExtension: "json"),
@@ -210,6 +240,18 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             print("Loaded generic rules successfully!")
         } else {
             print("Failed to decode ExerciseRuleset.json")
+        }
+    }
+    
+    private func startHoldProgressTimer() {
+        holdProgressTimer?.invalidate()
+        holdProgressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                guard self.usesStaticHoldProgress,
+                      self.analysisResult?.isCorrect == true else { return }
+                self.repCount += 1
+            }
         }
     }
     
@@ -325,7 +367,9 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
         DispatchQueue.main.async {
             self.currentPose = detected
             self.jointOverlayPoints = Array(rawJoints.values.map { $0.point })
-            self.updateRepCount(using: mappedJoints)
+            if !self.usesStaticHoldProgress {
+                self.updateRepCount(using: mappedJoints)
+            }
             self.evaluateRules(mappedJoints: mappedJoints)
         }
     }
@@ -400,14 +444,62 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     }
     
     private func evaluateRules(mappedJoints: [String: CGPoint]) {
-        guard currentExerciseId > 0 && currentExerciseId <= exerciseRules.count else { return }
-        let exercise = exerciseRules[currentExerciseId - 1]
-        guard let rules = exercise.generic_rules else { return }
+        guard let exercise = selectedExerciseRule() else { return }
         
         var errorFlags: [String] = []
         var computedAngles: [String: Float] = [:]
         
-        // Angle Rules
+        if let rules = exercise.generic_rules {
+            let evaluation = evaluateGenericRules(rules, exercise: exercise, mappedJoints: mappedJoints)
+            errorFlags = evaluation.flags
+            computedAngles = evaluation.angles
+        } else {
+            let evaluation = evaluateCustomRules(for: exercise, mappedJoints: mappedJoints)
+            errorFlags = evaluation.flags
+            computedAngles = evaluation.angles
+        }
+        
+        let result = ExerciseAnalysisResult(
+            exerciseId: exercise.id,
+            exerciseName: currentExerciseName,
+            isCorrect: errorFlags.isEmpty,
+            confidence: max(0, 1.0 - Float(errorFlags.count) * 0.15),
+            flags: errorFlags,
+            jointCoordinates: mappedJoints,
+            jointAngles: computedAngles
+        )
+        self.analysisResult = result
+        analyzedFrameCount += 1
+        if errorFlags.isEmpty {
+            correctFrameCount += 1
+        } else {
+            for flag in Set(errorFlags) {
+                feedbackCounts[flag, default: 0] += 1
+            }
+        }
+    }
+    
+    private func selectedExerciseRule() -> ExerciseRule? {
+        if let currentExerciseRuleName,
+           let exact = exerciseRules.first(where: { $0.name.caseInsensitiveCompare(currentExerciseRuleName) == .orderedSame }) {
+            return exact
+        }
+        
+        if currentExerciseId > 0 && currentExerciseId <= exerciseRules.count {
+            return exerciseRules[currentExerciseId - 1]
+        }
+        
+        return exerciseRules.first
+    }
+    
+    private func evaluateGenericRules(
+        _ rules: GenericRules,
+        exercise: ExerciseRule,
+        mappedJoints: [String: CGPoint]
+    ) -> (flags: [String], angles: [String: Float]) {
+        var errorFlags: [String] = []
+        var computedAngles: [String: Float] = [:]
+        
         for rule in rules.angle_rules ?? [] {
             if let a = mappedJoints[rule.joint_a],
                let b = mappedJoints[rule.joint_b],
@@ -422,7 +514,6 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             }
         }
         
-        // Alignment Rules
         for rule in rules.alignment_rules ?? [] {
             if let a = mappedJoints[rule.joint_a],
                let b = mappedJoints[rule.joint_b] {
@@ -433,7 +524,6 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             }
         }
         
-        // Relative Rules
         for rule in rules.relative_rules ?? [] {
             if let joint = mappedJoints[rule.joint],
                let ref = mappedJoints[rule.reference] {
@@ -456,23 +546,110 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             }
         }
         
-        let result = ExerciseAnalysisResult(
-            exerciseId: exercise.id,
-            exerciseName: exercise.name,
-            isCorrect: errorFlags.isEmpty,
-            confidence: max(0, 1.0 - Float(errorFlags.count) * 0.15),
-            flags: errorFlags,
-            jointCoordinates: mappedJoints,
-            jointAngles: computedAngles
-        )
-        self.analysisResult = result
-        analyzedFrameCount += 1
-        if errorFlags.isEmpty {
-            correctFrameCount += 1
-        } else {
-            for flag in Set(errorFlags) {
-                feedbackCounts[flag, default: 0] += 1
+        return (errorFlags, computedAngles)
+    }
+    
+    private func evaluateCustomRules(
+        for exercise: ExerciseRule,
+        mappedJoints: [String: CGPoint]
+    ) -> (flags: [String], angles: [String: Float]) {
+        var flags: [String] = []
+        var angles: [String: Float] = [:]
+        
+        func appendFlag(_ key: String) {
+            flags.append(exercise.flags[key] ?? key)
+        }
+        
+        func angle(_ a: String, _ b: String, _ c: String, store key: String) -> Float? {
+            guard let pointA = mappedJoints[a],
+                  let pointB = mappedJoints[b],
+                  let pointC = mappedJoints[c] else { return nil }
+            let computed = calculateAngle(a: pointA, b: pointB, c: pointC)
+            angles[key] = computed
+            return computed
+        }
+        
+        switch exercise.name {
+        case "Dead Hang":
+            if let elbowAngle = angle("shoulder", "elbow", "wrist", store: "elbow_angle"), elbowAngle < 150 {
+                appendFlag("elbows_bent")
+            }
+            if let wrist = mappedJoints["wrist"], let shoulder = mappedJoints["shoulder"], wrist.y > shoulder.y {
+                appendFlag("wrists_below_shoulders")
+            }
+        case "Overhead Hold":
+            if let elbowAngle = angle("shoulder", "elbow", "wrist", store: "elbow_angle"), elbowAngle < 150 {
+                appendFlag("elbows_bent")
+            }
+            if let wrist = mappedJoints["wrist"], let shoulder = mappedJoints["shoulder"], wrist.y > shoulder.y - 0.15 {
+                appendFlag("wrists_forward")
+            }
+        case "High Plank (Push-up Hold)":
+            if let torsoAngle = angle("shoulder", "hip", "knee", store: "hip_angle"), torsoAngle < 155 {
+                appendFlag("body_misaligned")
+            }
+            if let elbowAngle = angle("shoulder", "elbow", "wrist", store: "elbow_angle"), elbowAngle < 150 {
+                appendFlag("elbows_bent")
+            }
+        case "Low Plank (Forearm Plank)":
+            if let torsoAngle = angle("shoulder", "hip", "knee", store: "hip_angle"), torsoAngle < 155 {
+                appendFlag("body_misaligned")
+            }
+            if let elbowAngle = angle("shoulder", "elbow", "wrist", store: "elbow_angle"),
+               !(70.0...110.0).contains(elbowAngle) {
+                appendFlag("elbows_not_90")
+            }
+        case "Side Plank":
+            if let shoulder = mappedJoints["shoulder"],
+               let hip = mappedJoints["hip"],
+               let ankle = mappedJoints["ankle"] {
+                if abs(shoulder.x - hip.x) > 0.12 || abs(hip.x - ankle.x) > 0.12 {
+                    appendFlag("not_straight_line")
+                }
+                if hip.y > max(shoulder.y, ankle.y) + 0.05 {
+                    appendFlag("hip_sagging")
+                }
+            }
+        case "Lunge Hold":
+            if let kneeAngle = angle("hip", "knee", "ankle", store: "knee_angle"),
+               !(80.0...105.0).contains(kneeAngle) {
+                appendFlag("front_knee_angle_incorrect")
+            }
+            if let shoulder = mappedJoints["shoulder"], let hip = mappedJoints["hip"], abs(shoulder.x - hip.x) > 0.14 {
+                appendFlag("torso_tilted")
+            }
+        case "Standing Hip Abduction Hold":
+            if let hip = mappedJoints["hip"], let ankle = mappedJoints["ankle"], abs(ankle.x - hip.x) < 0.08 {
+                appendFlag("leg_not_raised_enough")
+            }
+        case "L-Sit Hold":
+            if let hipAngle = angle("shoulder", "hip", "knee", store: "hip_angle"),
+               !(70.0...110.0).contains(hipAngle) {
+                appendFlag("hip_angle_incorrect")
+            }
+            if let kneeAngle = angle("hip", "knee", "ankle", store: "knee_angle"), kneeAngle < 150 {
+                appendFlag("legs_sagging")
+            }
+        case "Hollow Body Hold":
+            if let hip = mappedJoints["hip"], let ankle = mappedJoints["ankle"], ankle.y > hip.y + 0.05 {
+                appendFlag("legs_not_raised")
+            }
+            if let shoulder = mappedJoints["shoulder"], let hip = mappedJoints["hip"], shoulder.y > hip.y - 0.02 {
+                appendFlag("arms_not_overhead")
+            }
+        case "Superman Hold":
+            if let wrist = mappedJoints["wrist"], let hip = mappedJoints["hip"], wrist.y > hip.y {
+                appendFlag("arms_not_elevated")
+            }
+            if let ankle = mappedJoints["ankle"], let hip = mappedJoints["hip"], ankle.y > hip.y {
+                appendFlag("legs_not_elevated")
+            }
+        default:
+            if let torsoAngle = angle("shoulder", "hip", "knee", store: "hip_angle"), torsoAngle < 150 {
+                appendFlag("back_not_straight")
             }
         }
+        
+        return (Array(Set(flags)), angles)
     }
 }

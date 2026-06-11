@@ -25,32 +25,34 @@ struct SchedulerView: View {
     }
     
     var body: some View {
-        //NavigationStack{
+        NavigationStack{
         VStack(alignment: .leading){
-                Text("Scheduler")
-                    .font(.largeTitle).bold()
-                    .padding([.top,.leading,.trailing])
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Need a routine? Your smart week rotates fresh muscle groups and schedules recovery automatically.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Button("Apply Recovery-Based Week") {
-                        schedules.apply(recommendedSchedule)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.orange)
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 8)
+//                Text("Scheduler")
+//                    .font(.largeTitle).bold()
+//                    .padding([.top,.leading,.trailing])
+                
                 ScrollView{
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Need a routine? Your smart week rotates fresh muscle groups and schedules recovery automatically.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Button("Smart Schedule") {
+                            schedules.apply(recommendedSchedule)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.orange)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
                     ForEach(Weekday.allCases,id: \.self){ weekday in
                         SchedulerCards(weekday: weekday, contextPreset: contextPreset)
                             .padding(.horizontal)
                     }
                 }
             }
-                //.navigationTitle("Scheduler")
-        //}
+                .navigationTitle("Scheduler")
+                
+        }
     }
 }
 

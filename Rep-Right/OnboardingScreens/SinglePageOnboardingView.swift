@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUI
 
 struct OnboardingScreenView: View {
-
+    @Binding var hasSeenOnboarding: Bool
     @State private var showPersonalise = false
 
     struct Feature {
@@ -117,12 +117,16 @@ struct OnboardingScreenView: View {
         .background(Color.white)
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $showPersonalise) {
-            OnboardingScreenView4(hasSeen: .constant(false))
+            OnboardingScreenView4 {
+                hasSeenOnboarding = true
+                showPersonalise = false
+            }
         }
     }
 }
 
 #Preview {
-    OnboardingScreenView()
+    OnboardingScreenView(hasSeenOnboarding: .constant(false))
         .environment(UserProfileModel())
+        .environment(WorkoutSummaryManager())
 }
