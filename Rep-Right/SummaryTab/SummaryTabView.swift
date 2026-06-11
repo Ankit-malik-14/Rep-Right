@@ -3,16 +3,16 @@ import SwiftUI
 struct SummaryTabView: View {
     var body: some View {
         NavigationStack {
-            ScrollView{
-                VStack(spacing: 20) {
+            ScrollView {
+                VStack(spacing: 16) {
                     CalendarView()
                     MetricsView()
                     WeeklyCalorieBurnView()
                     FormInsightView()
                     FormAccuracyReportView()
-                    
                 }
-            .padding(.bottom)
+                .padding(.top, 8)
+                .padding(.bottom, 24)
             }
             // MARK: - Single navigation destination for the entire Summary tab
             .navigationDestination(for: SummaryRoute.self) { route in
@@ -32,6 +32,7 @@ struct SummaryTabView: View {
                 }
             }
             .navigationTitle("Summary")
+            .background(Color(.systemGroupedBackground))
 //            .toolbar {
 //                ToolbarItem(placement: .topBarTrailing) {
 //                    NavigationLink(value: SummaryRoute.profile) {

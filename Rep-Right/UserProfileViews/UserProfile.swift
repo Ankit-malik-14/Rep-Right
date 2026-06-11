@@ -1,4 +1,4 @@
-/* DEPRECATED: Replaced by ProfileFormView which uses @Bindable MVVM architecture.
+/*  Replaced by ProfileFormView which uses @Bindable MVVM architecture.
 //
 //  UserProfile.swift
 //  RepRightScreens

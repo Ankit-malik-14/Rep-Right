@@ -15,6 +15,9 @@ struct JointModelTestScreen: View {
     @State private var showSheet: Bool = true
     @State private var isFinishingSet = false
     
+    var exerciseName: String = "Plank"
+    var exerciseRuleName: String? = nil
+    var usesStaticHoldProgress: Bool = true
     var targetReps: Int? = nil
     var initialElapsedSeconds: Int = 0
     var onSetFinished: ((AssistanceSessionResult) -> Void)? = nil
@@ -79,8 +82,11 @@ struct JointModelTestScreen: View {
             }
         }
         .onAppear {
-            // Default to Plank for testing
-            viewModel.currentExerciseId = 1
+            viewModel.configureExercise(
+                name: exerciseName,
+                preferredRuleName: exerciseRuleName,
+                usesStaticHoldProgress: usesStaticHoldProgress
+            )
             viewModel.initialElapsedSeconds = initialElapsedSeconds
             viewModel.elapsedSeconds = initialElapsedSeconds
             viewModel.elapsedFormatted = String(format: "%02d:%02d", initialElapsedSeconds / 60, initialElapsedSeconds % 60)
@@ -93,7 +99,7 @@ struct JointModelTestScreen: View {
         .sheet(isPresented: $showSheet, onDismiss: {
             phase = .detectingPerson
         }) {
-            JointModelInfoSheet(showSheet: $showSheet)
+            JointModelInfoSheet(showSheet: $showSheet, exerciseName: exerciseName)
                 .presentationDetents([.fraction(0.7), .large])
                 .interactiveDismissDisabled()
         }
@@ -141,62 +147,21 @@ struct JointModelTestScreen: View {
 
 struct JointModelInfoSheet: View {
     @Binding var showSheet: Bool
+    var exerciseName: String
     
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
-            Text("Joint Model Testing")
-                .font(.title2.bold())
-                .padding(.top)
-            
-            HStack {
-                VStack {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundStyle(.background.secondary)
-                            .frame(width: 80, height: 90)
-                        Image(systemName: "figure.walk")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 50)
-                    }
-                    Text("Full body")
-                        .font(.callout.bold())
-                }
-                .padding()
-            }
-            
-            VStack {
-                Text("This is an isolated test environment for the new dynamic joint-based posture model.")
-                    .multilineTextAlignment(.center)
-                    .padding()
-                Text("Place the camera facing you sideways to test the Plank exercise.")
-                    .multilineTextAlignment(.center)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            
-            Spacer()
-            
-            Button {
-                showSheet = false
-            } label: {
-                Text("Start Test")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundStyle(.white)
-                    .cornerRadius(12)
-            }
-            .padding(.horizontal)
-            
-            Button("Cancel", role: .cancel) {
-                showSheet = false
-            }
-            .padding(.top, 8)
-            .padding(.bottom)
-        }
+        AssistanceSetupSheet(
+            showSheet: $showSheet,
+            title: "\(exerciseName) Assistance",
+            primaryButtonTitle: "Continue",
+            headline: "Set your camera before calibration begins.",
+            detail: "This exercise uses the joint-based assistance model. Keep your full body visible, and use a side angle whenever possible for cleaner posture tracking.",
+            steps: [
+                AssistanceSetupStep(title: "Hip Height", systemImage: "lines.measurement.vertical"),
+                AssistanceSetupStep(title: "Full body", systemImage: "figure.stand"),
+                AssistanceSetupStep(title: "6-8 feet", systemImage: "ruler")
+            ]
+        )
     }
 }
 
@@ -206,15 +171,7 @@ struct JointModelTimerOverlay: View {
     @State private var timeRemaining = 3
     
     var body: some View {
-        ZStack {
-            Color.black.opacity(0.4).ignoresSafeArea()
-            
-            Text("\(timeRemaining)")
-                .font(.system(size: 100, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-                .contentTransition(.numericText())
-                .animation(.easeInOut, value: timeRemaining)
-        }
+        AssistanceCountdownOverlay(timeRemaining: timeRemaining, title: "Detection starting...")
         .onAppear {
             startCountdown()
         }

@@ -24,11 +24,10 @@ struct TotalTimeExerciseView: View {
         let maxMinutes = stats.map { $0.minutes }.max() ?? 60
 
         VStack(alignment: .leading, spacing: 20) {
-
             Text("Weekly Activity")
                 .font(.headline)
                 .foregroundStyle(.secondary)
-                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             if stats.isEmpty {
                 ContentUnavailableView("No Activity Yet", systemImage: "chart.bar", description: Text("Complete workouts this week to see your activity"))
@@ -44,14 +43,11 @@ struct TotalTimeExerciseView: View {
                 }
                 .chartYScale(domain: 0...max(60, maxMinutes))
                 .frame(height: 300)
-                .padding()
-                .cornerRadius(16)
-                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-                .padding(.horizontal)
+                .padding(.vertical, 8)
             }
-
-            Spacer()
         }
+        .padding(20)
+        .appCardStyle()
     }
 }
 

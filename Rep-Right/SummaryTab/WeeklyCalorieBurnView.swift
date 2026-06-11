@@ -25,7 +25,7 @@ struct WeeklyCalorieBurnView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 NavigationLink(value: SummaryRoute.calorieBreakdown) {
-                    HStack{
+                    HStack(spacing: 6) {
                         Text("Weekly Calorie Burn")
                             .font(.title2)
                             .foregroundStyle(.black)
@@ -99,10 +99,7 @@ struct WeeklyCalorieBurnView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
+        .appCardStyle()
         .padding(.horizontal)
     }
 }
