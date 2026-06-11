@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Rep_RightApp: App {
@@ -16,11 +17,26 @@ struct Rep_RightApp: App {
     // Fetched from SummaryDataModel: Initialize global state manager
     var summaryManager = WorkoutSummaryManager() 
     var profileModel = UserProfileModel()
+    let sharedModelContainer: ModelContainer
+    
+    init() {
+        do {
+            sharedModelContainer = try ModelContainer(for: PersistedAppState.self)
+            try PersistenceController.shared.configure(
+                container: sharedModelContainer,
+                summaryManager: summaryManager,
+                weeklySchedules: weeklySchedules,
+                customPresets: customPresetData,
+                profileModel: profileModel
+            )
+        } catch {
+            fatalError("Failed to configure SwiftData persistence: \(error)")
+        }
+    }
     
     var body: some Scene {
         WindowGroup {
-//            JointModelTestScreen()
-            HomeView()
+            ContentView()
                 .environment(presets)
                 .environment(customPresetData)
                 .environment(exercises)
@@ -29,7 +45,7 @@ struct Rep_RightApp: App {
                 .environment(summaryManager)
                 // UPDATED: Removed deprecated DummyUserProfiles, keeping profileModel
                 .environment(profileModel)
+                .modelContainer(sharedModelContainer)
         }
     }
 }
-

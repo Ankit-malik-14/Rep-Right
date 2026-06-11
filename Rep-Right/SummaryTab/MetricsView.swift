@@ -5,54 +5,46 @@ struct MetricsView: View {
     @Environment(WorkoutSummaryManager.self) private var summaryManager
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 12) {
             NavigationLink(value: SummaryRoute.metricRing) {
-                HStack{
+                HStack(spacing: 6) {
                     Text("Metrics")
                         .font(.title2)
                         .bold()
                         .foregroundStyle(.black)
-                        .padding(.leading, 20)
-                        .padding(.top)
                     Image(systemName: "chevron.right")
                         .font(.headline)
-                        .padding(.top,18)
                         .tint(.orange)
                 }
             }
-            
             HStack(spacing: 10) {
-                MetricCard(
-                    icon: "dumbbell.fill",
-                    title: "Exercise",
-                    // Fetched from SummaryDataModel: total exercises this week
-                    value: "\(summaryManager.totalExercisesCurrentWeek)",
-                    change: ""
-                )
-
-                MetricCard(
-                    icon: "timer",
-                    title: "Time",
-                    // Fetched from SummaryDataModel: total time this week in hours
-                    value: String(format: "%.1f", summaryManager.totalTimeCurrentWeekInHours),
-                    change: ""
-                )
-
-                MetricCard(
-                    icon: "calendar",
-                    title: "Streak",
-                    // Fetched from SummaryDataModel: current active streak
-                    value: "\(summaryManager.currentStreak)",
-                    change: ""
-                )
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+                    MetricCard(
+                        icon: "dumbbell.fill",
+                        title: "Exercise",
+                        // Fetched from SummaryDataModel: total exercises this week
+                        value: "\(summaryManager.totalExercisesCurrentWeek)",
+                        change: ""
+                    )
+                    
+                    MetricCard(
+                        icon: "timer",
+                        title: "Time",
+                        // Fetched from SummaryDataModel: total time this week in hours
+                        value: String(format: "%.1f", summaryManager.totalTimeCurrentWeekInHours),
+                        change: ""
+                    )
+                    
+                    MetricCard(
+                        icon: "calendar",
+                        title: "Streak",
+                        // Fetched from SummaryDataModel: current active streak
+                        value: "\(summaryManager.currentStreak)",
+                        change: ""
+                    )
+                }
+            .padding(16)
+            .appCardStyle()
         }
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(.background.secondary)
-        )
         .padding(.horizontal)
     }
 }
@@ -93,10 +85,11 @@ struct MetricCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color(.systemBackground))
-        )
+        .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+        }
     }
 }
 

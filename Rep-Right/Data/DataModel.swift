@@ -5,8 +5,25 @@
 //  Created by Ankit Malik on 2026-03-16.
 //
 import Foundation
+import CryptoKit
 
-struct Exercise: Identifiable,Equatable,Hashable {
+private func stableExerciseUUID(from name: String) -> UUID {
+    let digest = SHA256.hash(data: Data("exercise:\(name)".utf8))
+    let bytes = Array(digest.prefix(16))
+    return UUID(uuid: (
+        bytes[0], bytes[1], bytes[2], bytes[3],
+        bytes[4], bytes[5], bytes[6], bytes[7],
+        bytes[8], bytes[9], bytes[10], bytes[11],
+        bytes[12], bytes[13], bytes[14], bytes[15]
+    ))
+}
+
+enum AssistanceModelKind: String, Hashable, Codable {
+    case contour
+    case joint
+}
+
+struct Exercise: Identifiable, Equatable, Hashable, Codable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {
         lhs.id == rhs.id
     }
@@ -17,12 +34,45 @@ struct Exercise: Identifiable,Equatable,Hashable {
     var executionSteps: [String]
     var tips: [String]
     var assistanceAvailable: Bool
+    var assistanceModel: AssistanceModelKind? = nil
+    var assistanceRuleName: String? = nil
+    var assistanceUsesStaticHold: Bool = false
     var demoVideo: URL?
     var image: String?
     var setData: [SetData]
     var primaryFocusArea: FocusArea? {
         guard let firstTarget = targetAreas.first else { return nil }
         return FocusArea.from(targetArea: firstTarget)
+    }
+    
+    init(
+        id: UUID? = nil,
+        name: String,
+        targetAreas: [String],
+        equipments: [String],
+        executionSteps: [String],
+        tips: [String],
+        assistanceAvailable: Bool,
+        assistanceModel: AssistanceModelKind? = nil,
+        assistanceRuleName: String? = nil,
+        assistanceUsesStaticHold: Bool = false,
+        demoVideo: URL?,
+        image: String? = nil,
+        setData: [SetData]
+    ) {
+        self.id = id ?? stableExerciseUUID(from: name)
+        self.name = name
+        self.targetAreas = targetAreas
+        self.equipments = equipments
+        self.executionSteps = executionSteps
+        self.tips = tips
+        self.assistanceAvailable = assistanceAvailable
+        self.assistanceModel = assistanceModel
+        self.assistanceRuleName = assistanceRuleName
+        self.assistanceUsesStaticHold = assistanceUsesStaticHold
+        self.demoVideo = demoVideo
+        self.image = image
+        self.setData = setData
     }
     
     // MARK: - MET Value Lookup
@@ -98,7 +148,7 @@ struct SetData : Hashable, Codable{
     //needs duration for timed exercises, var durationInSec: Int?
 }
 
-enum FocusArea: String, CaseIterable, Hashable {
+enum FocusArea: String, CaseIterable, Hashable, Codable {
     case shoulder = "Shoulder"
     case back = "Back"
     case chest = "Chest"
@@ -149,7 +199,7 @@ enum FocusArea: String, CaseIterable, Hashable {
 }
 
 // Used by ActiveWorkoutView
-struct WorkoutSet: Identifiable {
+struct WorkoutSet: Identifiable, Codable {
     let id = UUID()
     var setNumber: Int
     var weight: String
@@ -157,7 +207,7 @@ struct WorkoutSet: Identifiable {
     var isCompleted: Bool = false
 }
 
-struct Preset: Identifiable, Equatable, Hashable {
+struct Preset: Identifiable, Equatable, Hashable, Codable {
     static func == (lhs: Preset, rhs: Preset) -> Bool {
         lhs.id == rhs.id
     }
@@ -208,7 +258,7 @@ extension Preset {
     }
 }
 
-enum FitnessLevel: String, CaseIterable, Hashable {
+enum FitnessLevel: String, CaseIterable, Hashable, Codable {
     case beginner = "Beginner"
     case intermediate = "Intermediate"
     case advanced = "Advanced"
@@ -217,20 +267,40 @@ enum FitnessLevel: String, CaseIterable, Hashable {
 // UPDATED: Consolidated UserProfile struct into an @Observable class to act as the single source of truth.
 @Observable
 class UserProfileModel {
-    var profilePicture: String? = "UserImage"
-    var name: String = "Ankit Malik"
-    var age: Int = 21
-    var gender: Genders = .male
-    var modelSensitivity: SensitivityLevels = .Medium
-    var fitnessLevel: FitnessLevel = .beginner
-    var weeklyGoalDays: Int = 3
+    var profilePicture: String? = "UserImage" {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    var name: String = "" {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    var age: Int = 25 {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    var gender: Genders = .male {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    var modelSensitivity: SensitivityLevels = .Medium {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    var fitnessLevel: FitnessLevel = .beginner {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    var weeklyGoalDays: Int = 3 {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
     
-    var unitSystem: UnitSystem = .metric
+    var unitSystem: UnitSystem = .metric {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
     
     // MARK: - Single Source of Truth (Always Metric)
     // We keep these private so the rest of the app doesn't accidentally bypass the conversion logic.
-    private var storedWeightKg: Double = 71.0
-    private var storedHeightMeters: Double = 1.73
+    private var storedWeightKg: Double = 70.0 {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
+    private var storedHeightMeters: Double = 1.70 {
+        didSet { PersistenceController.shared.saveProfile(from: self) }
+    }
     
     // MARK: - Computed Bindings for UI
     
@@ -277,6 +347,40 @@ class UserProfileModel {
                 }
             }
         }
+    
+    var weightInKilograms: Double {
+        storedWeightKg
+    }
+    
+    func apply(snapshot: PersistedUserProfile) {
+        PersistenceController.shared.performRestore {
+            profilePicture = snapshot.profilePicture
+            name = snapshot.name
+            age = snapshot.age
+            gender = snapshot.gender
+            modelSensitivity = snapshot.modelSensitivity
+            fitnessLevel = snapshot.fitnessLevel
+            weeklyGoalDays = snapshot.weeklyGoalDays
+            unitSystem = snapshot.unitSystem
+            storedWeightKg = snapshot.storedWeightKg
+            storedHeightMeters = snapshot.storedHeightMeters
+        }
+    }
+    
+    func makeSnapshot() -> PersistedUserProfile {
+        PersistedUserProfile(
+            profilePicture: profilePicture,
+            name: name,
+            age: age,
+            gender: gender,
+            modelSensitivity: modelSensitivity,
+            fitnessLevel: fitnessLevel,
+            weeklyGoalDays: weeklyGoalDays,
+            unitSystem: unitSystem,
+            storedWeightKg: storedWeightKg,
+            storedHeightMeters: storedHeightMeters
+        )
+    }
 }
 /*class UserProfileModel {
     var profilePicture: String? = "UserImage"
@@ -317,7 +421,7 @@ extension EnvironmentValues {
 
 //MARK: - Enums
 
-enum Weekday: Int, CaseIterable{
+enum Weekday: Int, CaseIterable, Codable{
     case sunday = 1
     case monday = 2
     case tuesday = 3
@@ -327,12 +431,12 @@ enum Weekday: Int, CaseIterable{
     case saturday = 7
 }
 
-enum Genders: String, CaseIterable,Hashable{
+enum Genders: String, CaseIterable, Hashable, Codable {
     case male = "Male"
     case female = "Female"
 }
 
-enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible,Hashable{
+enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible, Hashable, Codable {
     var description: String{
         switch self {
             case .Low: return "Low"
@@ -345,7 +449,7 @@ enum SensitivityLevels: Double, CaseIterable, CustomStringConvertible,Hashable{
     case High = 2
 }
 
-enum UnitSystem: String, CaseIterable,Hashable{
+enum UnitSystem: String, CaseIterable, Hashable, Codable {
     case metric = "Metric"
     case imperial = "Imperial"
 }

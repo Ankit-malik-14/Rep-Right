@@ -1,17 +1,19 @@
 //
-//  Dumy.swift
+//  Dummy.swift
 //  Rep-Right
 //
 //  Created by Ankit Malik on 2026-03-17.
 //
+
 import Foundation
 import SwiftUI
+
 @Observable
-class Exercises{
+class Exercises {
     var exerciseList: [Exercise] = [
         Exercise(
             name: "Push-Up",
-            targetAreas: ["Chest", "Triceps", "Shoulders", "Core"],
+            targetAreas: ["Chest", "Triceps", "Shoulders"],
             equipments: [],
             executionSteps: [
                 "Start in a high plank with hands slightly wider than shoulder-width.",
@@ -25,6 +27,8 @@ class Exercises{
                 "Inhale on the way down, exhale as you press up."
             ],
             assistanceAvailable: true,
+            assistanceModel: .joint,
+            assistanceRuleName: "High Plank (Push-up Hold)",
             demoVideo: URL(string: "https://example.com/videos/pushup.mp4"),
             image: "PushUp",
             setData: [
@@ -48,6 +52,9 @@ class Exercises{
                         "Keep arms relaxed at sides or on thighs."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Wall Sit",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "WallSit",
                     setData: [SetData(sets: 3, reps: 45)]
@@ -68,13 +75,16 @@ class Exercises{
                         "Drive through heels, not toes."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Glute Bridge Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "GluteBridge",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
                     name: "Dead Hang",
-                    targetAreas: ["Lats", "Shoulders", "Forearms", "Core"],
+                    targetAreas: ["Lats", "Shoulders", "Forearms"],
                     equipments: ["Pull-up Bar"],
                     executionSteps: [
                         "Grip the bar slightly wider than shoulder-width.",
@@ -88,13 +98,16 @@ class Exercises{
                         "Keep your core slightly braced to prevent swinging."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Dead Hang",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "DeadHang",
                     setData: [SetData(sets: 3, reps: 30)]
                 ),
         Exercise(
                     name: "Overhead Hold",
-                    targetAreas: ["Shoulders", "Triceps", "Core"],
+                    targetAreas: ["Shoulders", "Triceps", "Upper Back"],
                     equipments: ["Dumbbell", "Barbell"],
                     executionSteps: [
                         "Stand tall with feet shoulder-width apart.",
@@ -108,6 +121,9 @@ class Exercises{
                         "Squeeze glutes to protect your lower back."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Overhead Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "OverheadHold",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -128,6 +144,9 @@ class Exercises{
                         "Squeeze core and glutes throughout."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Low Plank (Forearm Plank)",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                      image: "Plank",
                     setData: [SetData(sets: 3, reps: 45)]
@@ -148,6 +167,9 @@ class Exercises{
                         "Keep your neck neutral; don't crane it up or down."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Side Plank",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "SidePlank",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -168,6 +190,9 @@ class Exercises{
                         "Keep shoulders back and chest up."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Lunge Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "Lunges",
                     setData: [SetData(sets: 3, reps: 30)]
@@ -188,6 +213,9 @@ class Exercises{
                         "Focus your gaze on a fixed point to help balance."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Standing Hip Abduction Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "HipAbduction",
                     setData: [SetData(sets: 3, reps: 20)]
@@ -208,6 +236,9 @@ class Exercises{
                         "Tighten your core as hard as possible."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "L-Sit Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "LSitHold",
                     setData: [SetData(sets: 3, reps: 15)]
@@ -228,6 +259,9 @@ class Exercises{
                         "If too hard, bend your knees to reduce the lever arm."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Hollow Body Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "HollowBodyHold",
                     setData: [SetData(sets: 3, reps: 20)]
@@ -248,6 +282,9 @@ class Exercises{
                         "Focus on squeezing glutes, not just arching the back."
                     ],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Superman Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     setData: [SetData(sets: 3, reps: 20)]
                 ),
@@ -266,12 +303,11 @@ class Exercises{
                 "Maintain a neutral spine; avoid rounding your back.",
                 "Control the descent; don’t bounce at the bottom."
             ],
-            assistanceAvailable: false,
+            assistanceAvailable: true,
+            assistanceModel: .contour,
             demoVideo: URL(string: "https://example.com/videos/bodyweight_squat.mp4"),
             image: "Squats",
-            setData: [
-                SetData(sets: 4, reps: 15)
-            ]
+            setData: [SetData(sets: 4, reps: 15)]
         ),
         Exercise(
             name: "Dumbbell Row",
@@ -288,12 +324,11 @@ class Exercises{
                 "Lead with the elbow and keep the wrist neutral.",
                 "Exhale as you row, inhale as you lower."
             ],
-            assistanceAvailable: false,
+            assistanceAvailable: true,
+            assistanceModel: .contour,
             demoVideo: URL(string: "https://example.com/videos/dumbbell_row.mp4"),
             image: "DumbellRow",
-            setData: [
-                SetData(sets: 3, reps: 10)
-            ]
+            setData: [SetData(sets: 3, reps: 10)]
         ),
         Exercise(
             name: "Plank",
@@ -310,6 +345,9 @@ class Exercises{
                 "Squeeze glutes lightly to stabilize pelvis."
             ],
             assistanceAvailable: true,
+            assistanceModel: .joint,
+            assistanceRuleName: "Plank",
+            assistanceUsesStaticHold: true,
             demoVideo: URL(string: "https://example.com/videos/plank.mp4"),
             image: "Plank",
             setData: [
@@ -345,6 +383,8 @@ class Exercises{
                     executionSteps: ["Lie back, lift shoulders off floor."],
                     tips: ["Do not pull on neck."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Hollow Body Hold",
                     demoVideo: nil,
                     image: "Crunches",
                     setData: [SetData(sets: 3, reps: 20)]
@@ -357,7 +397,7 @@ class Exercises{
                     tips: ["Control descent."],
                     assistanceAvailable: false,
                     demoVideo: nil,
-                    image: "DumbbellPress",
+                    image: "DumbellPress",
                     setData: [SetData(sets: 3, reps: 10)]
                 ),
                 Exercise(
@@ -367,6 +407,8 @@ class Exercises{
                     executionSteps: ["Jump feet out, hands over head."],
                     tips: ["Maintain rhythm."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Overhead Hold",
                     demoVideo: nil,
                     image: "JumpingJacks",
                     setData: [SetData(sets: 3, reps: 50)]
@@ -389,6 +431,8 @@ class Exercises{
                     executionSteps: ["Lift legs while lying flat."],
                     tips: ["Keep lower back pressed down."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Hollow Body Hold",
                     demoVideo: nil,
                     image: "LegRaise",
                     setData: [SetData(sets: 3, reps: 15)]
@@ -400,6 +444,9 @@ class Exercises{
                     executionSteps: ["Pull arm across chest."],
                     tips: ["Keep shoulder down."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Overhead Hold",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "ShoulderStrech",
                     setData: [SetData(sets: 1, reps: 30)] // seconds
@@ -411,6 +458,9 @@ class Exercises{
                     executionSteps: ["Reach arm overhead to side."],
                     tips: ["Keep hips square."],
                     assistanceAvailable: true,
+                    assistanceModel: .joint,
+                    assistanceRuleName: "Side Plank",
+                    assistanceUsesStaticHold: true,
                     demoVideo: nil,
                     image: "SideStretch",
                     setData: [SetData(sets: 1, reps: 30)] // seconds
@@ -420,63 +470,109 @@ class Exercises{
 
 @Observable
 class Presets {
-    var presets: [Preset] = [
-        Preset(
-            name: "Full Body",
-            image: "FullBody",
-            exercises: Exercises().exerciseList,
-            isWarmpUp: false,
-            scheduledFor: .monday,
-            estTime: 45,
-            equipments: ["Bodyweight", "Dumbbell", "Bench"],
-            calories: 450
-        ),
-        Preset(
-            name: "Upper Focus",
-            image: "Shoulders",
-            exercises: [],
-            isWarmpUp: false,
-            scheduledFor: .wednesday,
-            estTime: 35,
-            equipments: ["Bodyweight", "Dumbbell", "Bench"],
-            calories: 380
-        ),
-        Preset(
-            name: "Core & Stability",
-            image: "Core",
-            exercises: Exercises().exerciseList,
-            isWarmpUp: false,
-            scheduledFor: .friday,
-            estTime: 30,
-            equipments: ["Mat", "Bodyweight"],
-            calories: 300
-        ),
-        Preset(
-            isRestDay: true,
-            name: "Active Recovery",
-            exercises: [],
-            isWarmpUp: true,
-            scheduledFor: .sunday,
-            estTime: 20,
-            equipments: [],
-            calories: 120
-        ),
-        Preset(
-            name: "Lower Body Builder",
-            image: "Legs",
-            exercises: Exercises().exerciseList,
-            isWarmpUp: false,
-            scheduledFor: .thursday,
-            estTime: 40,
-            equipments: ["Bodyweight", "Mat"],
-            calories: 420
-        )
-    ]
+    var presets: [Preset] = []
+    
+    init() {
+        let catalog = Exercises().exerciseList
+        
+        func exercises(named names: [String]) -> [Exercise] {
+            catalog.filter { names.contains($0.name) }
+        }
+        
+        func makePreset(
+            name: String,
+            image: String?,
+            exerciseNames: [String],
+            scheduledFor: Weekday?,
+            estTime: Int,
+            calories: Int,
+            isRestDay: Bool = false,
+            isWarmUp: Bool = false
+        ) -> Preset {
+            let selectedExercises = exercises(named: exerciseNames)
+            let equipments = Array(Set(selectedExercises.flatMap(\.equipments))).sorted()
+            
+            return Preset(
+                isRestDay: isRestDay,
+                name: name,
+                image: image,
+                exercises: selectedExercises,
+                isWarmpUp: isWarmUp,
+                scheduledFor: scheduledFor,
+                estTime: estTime,
+                equipments: equipments,
+                calories: calories
+            )
+        }
+        
+        presets = [
+            makePreset(
+                name: "Full Body Starter",
+                image: "FullBody",
+                exerciseNames: ["Push-Up", "Bodyweight Squat", "Dumbbell Row", "Plank"],
+                scheduledFor: .monday,
+                estTime: 40,
+                calories: 420
+            ),
+            makePreset(
+                name: "Upper Focus",
+                image: "UpperFocous",
+                exerciseNames: ["Push-Up", "Bench Press", "Dumbbell Press", "Dumbbell Row", "Dead Hang"],
+                scheduledFor: .wednesday,
+                estTime: 38,
+                calories: 390
+            ),
+            makePreset(
+                name: "Lower Body Builder",
+                image: "Legs",
+                exerciseNames: ["Bodyweight Squat", "Wall Sit", "Lunge Hold", "Glute Bridge Hold", "Hip Abduction Hold"],
+                scheduledFor: .thursday,
+                estTime: 42,
+                calories: 430
+            ),
+            makePreset(
+                name: "Core Activation",
+                image: "Core",
+                exerciseNames: ["Forearm Plank", "Side Plank", "Crunches", "Leg Raise", "Hollow Body Hold", "L-Sit Hold"],
+                scheduledFor: .friday,
+                estTime: 32,
+                calories: 310
+            ),
+            makePreset(
+                name: "Back & Posture",
+                image: "Back",
+                exerciseNames: ["Dumbbell Row", "Lat Pulldown", "Dead Hang", "Superman Hold", "Overhead Hold"],
+                scheduledFor: .tuesday,
+                estTime: 36,
+                calories: 360
+            ),
+            makePreset(
+                name: "Push Strength",
+                image: "PushUp",
+                exerciseNames: ["Push-Up", "Bench Press", "Dumbbell Press", "Overhead Hold", "Bicep Curl"],
+                scheduledFor: .saturday,
+                estTime: 34,
+                calories: 370
+            ),
+            makePreset(
+                name: "Active Recovery",
+                image: "Core",
+                exerciseNames: ["Jumping Jacks", "Shoulder Stretch", "Side Stretch", "Glute Bridge Hold"],
+                scheduledFor: .sunday,
+                estTime: 20,
+                calories: 120,
+                isRestDay: true,
+                isWarmUp: true
+            )
+        ]
+    }
 }
 
 @Observable
 class CustomPresetsDummyData{
-    var customPresets: [Preset] = []/*[
+    var customPresets: [Preset] = [] {
+        didSet { PersistenceController.shared.saveCustomPresets(from: self) }
+    }/*[
         Preset(
             name: "Full body ",
             exercises: Array(Exercises().exerciseList.prefix(3)),
@@ -525,6 +621,12 @@ class CustomPresetsDummyData{
     func delete(atOffsets offsets: IndexSet) {
         customPresets.remove(atOffsets: offsets)
     }
+    
+    func apply(presets: [Preset]) {
+        PersistenceController.shared.performRestore {
+            customPresets = presets
+        }
+    }
 }
 
 /* DEPRECATED: Replaced by the global @Observable UserProfileModel injected via environment.
@@ -534,15 +636,19 @@ class DummyUserProfiles {
 */
 @Observable
 class WeeklySchedules{
-    var schedules: [Weekday: Preset] = [.wednesday:Preset(
-        name: "Full Body Starter",
-        exercises: Exercises().exerciseList,
-        isWarmpUp: false,
-        scheduledFor: .monday,
-        estTime: 45,
-        /*focousArea: ["Full Body"],*/
-        equipments: ["Bodyweight", "Dumbbell", "Bench"],
-        calories: 450
-    )]
+    var schedules: [Weekday: Preset] = [:] {
+        didSet { PersistenceController.shared.saveWeeklySchedules(from: self) }
+    }
+    
+    func apply(_ recommendations: [ScheduledPresetRecommendation]) {
+        schedules = Dictionary(uniqueKeysWithValues: recommendations.map { recommendation in
+            (recommendation.weekday, recommendation.preset)
+        })
+    }
+    
+    func apply(snapshot: [Weekday: Preset]) {
+        PersistenceController.shared.performRestore {
+            schedules = snapshot
+        }
+    }
 }
-

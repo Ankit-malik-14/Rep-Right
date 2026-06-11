@@ -362,7 +362,7 @@ struct ActiveWorkoutView: View {
         let count = max(attemptedExercises.count, 1)
         let timePerExercise = manager.elapsedTime / Double(count)
         
-        let exerciseData: [(exerciseId: UUID, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
+        let exerciseData: [(exerciseId: UUID, exerciseName: String, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?, formAccuracy: Double?, formInsights: [String]?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
             // Retrieve this exercise's archived sets (not the current exercise's sets)
             let archived = manager.completedSetsArchive[idx] ?? []
             let completedOnly = archived.filter(\.isCompleted)
@@ -375,15 +375,19 @@ struct ActiveWorkoutView: View {
                 durationInSeconds: timePerExercise,
                 weightInKg: weight
             )
+            let assistanceScore = manager.assistanceScore(for: idx)
             let setData = completedOnly.map {
                 SetData(sets: 1, reps: Int($0.reps) ?? $0.targetReps)
             }
             return (
                 exerciseId: exercise.id,
+                exerciseName: exercise.name,
                 actualSet: setData,
                 startTime: Date().addingTimeInterval(-manager.elapsedTime),
                 endTime: Date(),
-                caloriesBurned: Optional(cals)
+                caloriesBurned: Optional(cals),
+                formAccuracy: assistanceScore?.accuracy,
+                formInsights: assistanceScore?.insights
             )
         }
         summaryManager.logWorkout(presetId: preset.id, exercises: exerciseData)
@@ -402,7 +406,9 @@ struct ActiveWorkoutView: View {
             let currentTotalReps = completedSets.compactMap { Int($0.reps) }.reduce(0, +)
             
             // Get past history for this exercise
-            let pastRecords = summaryManager.completedExercises.filter { $0.exerciseId == exercise.id }
+            let pastRecords = summaryManager.completedExercises.filter {
+                $0.exerciseId == exercise.id || $0.exerciseName == exercise.name
+            }
             
             if pastRecords.isEmpty {
                 // If it's their first time doing it, let's treat it as a baseline, not a PR.

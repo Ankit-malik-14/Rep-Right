@@ -16,10 +16,10 @@ struct HomeView: View {
             Tab("Summary", systemImage: "list.clipboard.fill"){
                 SummaryTabView()
             }
-//            Tab("Profile", systemImage: "person.fill"){
-//                ProfileFormView()
-//            }
-        }
+            Tab("Profile", systemImage: "person.fill"){
+                ProfileFormView()
+            }
+        }.tint(.orange)
     }
 }
 
