@@ -25,20 +25,20 @@ struct SummaryTabView: View {
                     UserCalorieIntake()
                 case .exerciseAccuracyList:
                     ExerciseAccuracyListView()
-                case .accuracyMeter(let value, let name):
-                    AccuracyMeterView(value: value, exerciseName: name)
+                case .accuracyMeter(let value, let name, let insights):
+                    AccuracyMeterView(value: value, exerciseName: name, insights: insights)
                 case .profile:
                     ProfileFormView()
                 }
             }
             .navigationTitle("Summary")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(value: SummaryRoute.profile) {
-                        Image(systemName: "person.circle.fill")
-                    }
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    NavigationLink(value: SummaryRoute.profile) {
+//                        Image(systemName: "person.circle.fill")
+//                    }
+//                }
+//            }
         }
     }
 }

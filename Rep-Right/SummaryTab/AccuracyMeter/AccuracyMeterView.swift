@@ -3,8 +3,8 @@ import SwiftUI
 struct AccuracyMeterView: View {
 
     @State var value: Double
-    // Fetched from DataModel: exercise name passed from parent navigation
     var exerciseName: String
+    var insights: [String] = []
     
 //    var body: some View {
 //        VStack{
@@ -45,7 +45,12 @@ struct AccuracyMeterView: View {
             Divider()
                 .padding(.vertical)
 
-            RiskView()
+            SuggestionView(suggestions: insights)
+            
+            Divider()
+                .padding(.vertical)
+            
+            RiskView(risks: derivedRisks)
         }
         .navigationTitle(exerciseName)
         .navigationBarTitleDisplayMode(.inline)
@@ -53,6 +58,17 @@ struct AccuracyMeterView: View {
             withAnimation(.easeOut(duration: 0.4)) {
                 animatedValue = value
             }
+        }
+    }
+    
+    private var derivedRisks: [String] {
+        switch value {
+        case ..<35:
+            return ["Form breakdown is high. Reduce load and slow the tempo until the movement is stable."]
+        case ..<70:
+            return ["Inconsistent positioning may limit progress. Review the cues below before your next set."]
+        default:
+            return ["Low injury risk detected from the assisted session. Focus on maintaining this pattern."]
         }
     }
 }
@@ -102,6 +118,6 @@ struct LiveSuggestionView: View {
 }
 
 #Preview {
-    AccuracyMeterView(value: 54.7, exerciseName: "Deadlift"/*staticValue: 72.0*/)
+    AccuracyMeterView(value: 54.7, exerciseName: "Deadlift", insights: ["Brace your core before each rep.", "Keep your shoulders stacked over the bar."])
 
 }

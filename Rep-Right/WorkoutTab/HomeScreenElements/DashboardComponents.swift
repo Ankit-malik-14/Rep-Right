@@ -72,6 +72,7 @@ struct RecoveryMapCard: View {
     ]
 
     var body: some View {
+        let recoverySnapshots = summaryManager.recoveryMap(using: exercises.exerciseList)
         let insights = summaryManager.focusAreaLoadInsights(using: exercises.exerciseList)
         let chartData = summaryManager.weeklyFocusAreaChartData(using: exercises.exerciseList)
         let activeChartData = chartData.filter { $0.value > 0 }
@@ -82,7 +83,7 @@ struct RecoveryMapCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Label("Recovery Map", systemImage: "figure.strengthtraining.traditional")
                         .font(.subheadline.bold())
-                    Text(summaryManager.completedExercises.isEmpty ? "All six focus areas are fresh." : "Weekly exercise load by focus area.")
+                    Text(summaryManager.completedExercises.isEmpty ? "All six focus areas are fresh." : "Weekly muscle load and recovery readiness.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -136,15 +137,16 @@ struct RecoveryMapCard: View {
                     }
 
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                        ForEach(insights) { insight in
+                        ForEach(insights.indices, id: \.self) { index in
                             FocusAreaCounterCard(
-                                insight: insight,
-                                color: focusAreaColors[insight.focusArea.rawValue] ?? .gray
+                                insight: insights[index],
+                                snapshot: recoverySnapshots[index],
+                                color: focusAreaColors[insights[index].focusArea.rawValue] ?? .gray
                             )
                         }
                     }
 
-                    Text(overallRecommendation(for: insights))
+                    Text(overallRecommendation(for: recoverySnapshots))
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.primary)
                         .padding(12)
@@ -162,12 +164,12 @@ struct RecoveryMapCard: View {
         .padding(.horizontal)
     }
 
-    private func overallRecommendation(for insights: [FocusAreaLoadInsight]) -> String {
+    private func overallRecommendation(for insights: [RecoveryFocusSnapshot]) -> String {
         let overloaded = insights.filter { $0.status == .overtrained }.map(\.focusArea.rawValue)
-        let onTrack = insights.filter { $0.status == .onTrack }.map(\.focusArea.rawValue)
+        let recovering = insights.filter { $0.recoveryHoursRemaining > 0 }.map(\.focusArea.rawValue)
         let sortedByLoad = insights.sorted {
-            if $0.weeklyExercises != $1.weeklyExercises {
-                return $0.weeklyExercises < $1.weeklyExercises
+            if $0.weeklyLoad != $1.weeklyLoad {
+                return $0.weeklyLoad < $1.weeklyLoad
             }
             return $0.focusArea.rawValue < $1.focusArea.rawValue
         }
@@ -176,13 +178,13 @@ struct RecoveryMapCard: View {
             return "\(formattedList(overloaded)) are above the weekly 12-exercise limit. Ease off and let them recover."
         }
 
-        if onTrack.count >= 2 {
-            return "\(formattedList(onTrack)) are right in the 10-12 exercise sweet spot. Keep the rest rotating around them."
+        if !recovering.isEmpty {
+            return "\(formattedList(recovering)) still carry short-term fatigue. Rotate to fresher focus areas for your next session."
         }
 
         if let weakestFocus = sortedByLoad.first {
             let presetText = recommendedPresetText(for: weakestFocus.focusArea)
-            return "Your \(weakestFocus.focusArea.rawValue.lowercased()) count is \(weakestFocus.weeklyExercises). You should do \(weakestFocus.focusArea.rawValue.lowercased()) exercises with \(presetText)."
+            return "Your \(weakestFocus.focusArea.rawValue.lowercased()) load is only \(weakestFocus.weeklyLoad) this week. A good next move is \(presetText)."
         }
 
         return "Your weekly volume is balanced. Keep rotating focus areas instead of stacking the same one again."
@@ -216,6 +218,7 @@ struct RecoveryMapCard: View {
 
 private struct FocusAreaCounterCard: View {
     let insight: FocusAreaLoadInsight
+    let snapshot: RecoveryFocusSnapshot
     let color: Color
 
     var body: some View {
@@ -231,7 +234,7 @@ private struct FocusAreaCounterCard: View {
                     .font(.caption.bold())
             }
 
-            Text(insight.recommendation)
+            Text(snapshot.guidance)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
@@ -271,7 +274,10 @@ struct SmartRecommendationCard: View {
     @State private var isVisible = false
 
     var body: some View {
-        if let bestPreset = summaryManager.smartPresetRecommendation(from: presets.presets, using: exercises.exerciseList) {
+        let recommendations = summaryManager.recommendedPresets(from: presets.presets, using: exercises.exerciseList)
+        
+        if let bestRecommendation = recommendations.first {
+            let bestPreset = bestRecommendation.preset
             VStack(alignment: .leading) {
                 Text("Recommended for You")
                     .font(.headline)
@@ -281,7 +287,9 @@ struct SmartRecommendationCard: View {
                     VStack(alignment: .leading) {
                         Text(bestPreset.name)
                             .font(.title3.bold())
-                        Text(recommendationText(for: bestPreset))
+                        Text(bestRecommendation.headline)
+                            .font(.subheadline.weight(.semibold))
+                        Text(bestRecommendation.reason)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -309,19 +317,6 @@ struct SmartRecommendationCard: View {
         }
     }
 
-    private func recommendationText(for preset: Preset) -> String {
-        if summaryManager.completedExercises.isEmpty {
-            return "Your target muscles are fresh. Start with this preset to build your first training week."
-        }
-
-        let warnings = summaryManager.muscleRecoveryStatus(for: preset, using: exercises.exerciseList)
-        if warnings.isEmpty {
-            return "Ready to train based on your recovery."
-        }
-
-        return "Best match right now with the lightest recovery overlap."
-    }
-
     private func seedSuggestedWorkoutIfNeeded(with preset: Preset) {
         guard summaryManager.completedExercises.isEmpty else { return }
         guard let today = Weekday(rawValue: Calendar.current.component(.weekday, from: Date())) else { return }
@@ -330,5 +325,73 @@ struct SmartRecommendationCard: View {
         var scheduledPreset = preset
         scheduledPreset.scheduledFor = today
         weeklySchedules.schedules[today] = scheduledPreset
+    }
+}
+
+struct SmartWeekScheduleCard: View {
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    @Environment(Presets.self) private var presets
+    @Environment(Exercises.self) private var exercises
+    @Environment(WeeklySchedules.self) private var weeklySchedules
+    @Environment(UserProfileModel.self) private var profile
+    
+    private var recommendedSchedule: [ScheduledPresetRecommendation] {
+        summaryManager.generatedWeeklySchedule(
+            from: presets.presets,
+            using: exercises.exerciseList,
+            trainingDays: profile.weeklyGoalDays
+        )
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Smart Weekly Routine")
+                        .font(.headline)
+                    Text("A recovery-aware plan for your next \(profile.weeklyGoalDays)-day week.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                Button("Apply") {
+                    weeklySchedules.apply(recommendedSchedule)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.orange)
+            }
+            
+            ForEach(recommendedSchedule.prefix(3)) { day in
+                HStack {
+                    Text(label(for: day.weekday))
+                        .font(.caption.bold())
+                        .frame(width: 34, alignment: .leading)
+                        .foregroundStyle(.secondary)
+                    Text(day.preset.name)
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
+                    Text(day.preset.isRestDay ? "Recover" : "\(day.preset.estTime) min")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
+        .padding(.horizontal)
+    }
+    
+    private func label(for weekday: Weekday) -> String {
+        switch weekday {
+        case .sunday: return "Sun"
+        case .monday: return "Mon"
+        case .tuesday: return "Tue"
+        case .wednesday: return "Wed"
+        case .thursday: return "Thu"
+        case .friday: return "Fri"
+        case .saturday: return "Sat"
+        }
     }
 }

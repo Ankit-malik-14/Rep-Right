@@ -35,11 +35,11 @@ struct PresetHeaderCardView: View {
                 if upper.contains(image){
                     Image(image)
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: 600, height: 450)
+//                        .scaledToFit()
+                        .frame(width: 350, height: 450)
                         .foregroundColor(.gray)
                         .offset(y:150)
-                    
+                        .cornerRadius(20)
                         .padding(.top, 20)
                         .padding(.bottom, 60)
                 }
@@ -47,10 +47,10 @@ struct PresetHeaderCardView: View {
                     Image(image)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 600, height: 450)
+                        .frame(width: 350, height: 450)
                         .foregroundColor(.gray)
                         .offset(y:-100)
-                    
+                        .cornerRadius(20)
                         .padding(.top, 20)
                         .padding(.bottom, 60)
                 }

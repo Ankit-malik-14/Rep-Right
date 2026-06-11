@@ -62,11 +62,6 @@ struct OnboardingScreenView3: View {
             }
             
             Spacer()
-            // Add instructions to swipe
-            Text("Swipe to continue")
-                .font(.footnote)
-                .foregroundColor(.gray)
-                .padding(.bottom, 20)
         }
     }
 }

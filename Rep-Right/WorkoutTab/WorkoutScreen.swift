@@ -31,6 +31,9 @@ struct WorkoutScreen: View {
                     SmartRecommendationCard()
                         .padding(.bottom, 8)
                     
+                    SmartWeekScheduleCard()
+                        .padding(.bottom, 8)
+                    
                     // Fetched from DataModel: User's custom presets data model
                     CustomPreset(preset: customPresets)
                         //.padding(.horizontal)
@@ -79,12 +82,12 @@ struct WorkoutScreen: View {
             }
             .navigationTitle("Workouts")
             .toolbar{
-                ToolbarItem(placement: .topBarTrailing){
-                    NavigationLink(value: WorkoutRoute.profile) {
-                        Image(systemName: "person.circle.fill")
-                    }
-                }
-                ToolbarItem(placement:.topBarLeading) {
+//                ToolbarItem(placement: .topBarTrailing){
+//                    NavigationLink(value: WorkoutRoute.profile) {
+//                        Image(systemName: "person.circle.fill")
+//                    }
+//                }
+                ToolbarItem(placement:.topBarTrailing) {
                     Image(systemName: "calendar")
                         .onTapGesture {
                             showScheduler = true

@@ -18,6 +18,17 @@ struct ExerciseSetEntry: Identifiable {
     var isCompleted: Bool = false
 }
 
+struct AssistanceSessionResult {
+    var completedReps: Int
+    var formAccuracy: Double?
+    var formInsights: [String]
+}
+
+struct ExerciseFormScore {
+    var accuracy: Double
+    var insights: [String]
+}
+
 // MARK: - Workout Phase State Machine
 
 enum WorkoutPhase: Equatable {
@@ -84,6 +95,7 @@ class WorkoutSessionManager {
     /// Snapshots of each exercise's sets, keyed by exercise index.
     /// Populated when transitioning away from an active exercise.
     var completedSetsArchive: [Int: [ExerciseSetEntry]] = [:]
+    var assistanceScoresByExerciseIndex: [Int: ExerciseFormScore] = [:]
     
     private let defaultRestDuration = 60
     
@@ -126,6 +138,16 @@ class WorkoutSessionManager {
         let completed = currentSets.filter(\.isCompleted).count
         let current = min(completed + 1, currentSets.count)
         return "Set \(current) of \(currentSets.count)"
+    }
+    
+    var currentActiveSetIndex: Int? {
+        currentSets.firstIndex(where: { !$0.isCompleted })
+    }
+    
+    var currentActiveSetTargetReps: Int? {
+        guard let index = currentActiveSetIndex else { return nil }
+        let entry = currentSets[index]
+        return Int(entry.reps) ?? entry.targetReps
     }
     
     func estimatedCalories(userWeightKg: Double) -> Int {
@@ -207,6 +229,38 @@ class WorkoutSessionManager {
                 self?.transitionToRest()
             }
         }
+    }
+    
+    func completeCurrentSet(with actualReps: Int) {
+        guard let index = currentActiveSetIndex else { return }
+        
+        let target = Int(currentSets[index].reps) ?? currentSets[index].targetReps
+        let clampedReps = max(0, min(actualReps, target))
+        currentSets[index].reps = "\(clampedReps)"
+        currentSets[index].isCompleted = true
+        
+        if currentSets.allSatisfy(\.isCompleted) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+                self?.transitionToRest()
+            }
+        }
+    }
+    
+    func recordAssistanceResult(_ result: AssistanceSessionResult) {
+        guard currentExercise != nil else { return }
+        
+        if let accuracy = result.formAccuracy {
+            assistanceScoresByExerciseIndex[currentIndex] = ExerciseFormScore(
+                accuracy: accuracy,
+                insights: result.formInsights
+            )
+        }
+        
+        completeCurrentSet(with: result.completedReps)
+    }
+    
+    func assistanceScore(for exerciseIndex: Int) -> ExerciseFormScore? {
+        assistanceScoresByExerciseIndex[exerciseIndex]
     }
     
     // MARK: - State Transitions
