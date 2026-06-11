@@ -19,7 +19,7 @@ struct HomeView: View {
             Tab("Profile", systemImage: "person.fill"){
                 ProfileFormView()
             }
-        }
+        }.tint(.orange)
     }
 }
 

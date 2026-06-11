@@ -31,7 +31,7 @@ struct ProfileFormView: View {
     
     var body: some View {
         @Bindable var profile = profile
-        
+        NavigationStack{
         Form {
             // MARK: Header Section
             Section {
@@ -42,11 +42,11 @@ struct ProfileFormView: View {
                         .frame(width: 85, height: 85)
                         .foregroundStyle(Color(uiColor: .systemGray4))
                     
-                VStack(spacing: 4) {
-                        Text(profile.name.isEmpty ? "Rep-Right User" : profile.name)
+                    VStack(spacing: 4) {
+                        Text(profile.name.isEmpty ? "Guest " : profile.name)
                             .font(.title2.weight(.semibold))
                         
-                        Text("Rep-Right Member")
+                        Text(profile.name.isEmpty ? "Guest User" : "Rep-Right Member")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -60,37 +60,37 @@ struct ProfileFormView: View {
             
             // MARK: Personal Information
             Section("Personal Information") {
-                HStack {
-                    Label("Name", systemImage: "person.text.rectangle.fill")
-                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .blue))
-                    Spacer()
-                    TextField("Not Set", text: $profile.name)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundStyle(isEditing ? .primary : .secondary)
-                        .autocorrectionDisabled()
-                        .disabled(!isEditing)
-                }
+                //                HStack {
+                //                    Label("Name", systemImage: "person.text.rectangle.fill")
+                //                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .blue))
+                //                    Spacer()
+                //                    TextField("Not Set", text: $profile.name)
+                //                        .multilineTextAlignment(.trailing)
+                //                        .foregroundStyle(isEditing ? .primary : .secondary)
+                //                        .autocorrectionDisabled()
+                //                        .disabled(!isEditing)
+                //                }
                 
-                Picker(selection: $profile.gender) {
-                    ForEach(Genders.allCases, id: \.self) { option in
-                        Text(option.rawValue).tag(option)
-                    }
-                } label: {
-                    Label("Gender", systemImage: "person.2.fill")
-                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .blue))
-                }
-                .disabled(!isEditing)
+                //                Picker(selection: $profile.gender) {
+                //                    ForEach(Genders.allCases, id: \.self) { option in
+                //                        Text(option.rawValue).tag(option)
+                //                    }
+                //                } label: {
+                //                    Label("Gender", systemImage: "person.2.fill")
+                //                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .blue))
+                //                }
+                //.disabled(!isEditing)
                 
-                HStack {
-                    Label("Age", systemImage: "calendar")
-                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .red))
-                    Spacer()
-                    TextField("Not Set", value: $profile.age, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundStyle(isEditing ? .primary : .secondary)
-                        .keyboardType(.numberPad)
-                        .disabled(!isEditing)
-                }
+                //                HStack {
+                //                    Label("Age", systemImage: "calendar")
+                //                        .labelStyle(SettingsIconLabelStyle(backgroundColor: .red))
+                //                    Spacer()
+                //                    TextField("Not Set", value: $profile.age, format: .number)
+                //                        .multilineTextAlignment(.trailing)
+                //                        .foregroundStyle(isEditing ? .primary : .secondary)
+                //                        .keyboardType(.numberPad)
+                //                        .disabled(!isEditing)
+                //                }
                 
                 HStack {
                     Label("Weight (\(profile.unitSystem == .metric ? "kg" : "lbs"))", systemImage: "scalemass.fill")
@@ -158,19 +158,26 @@ struct ProfileFormView: View {
             
             // MARK: Destructive Actions
             Section {
-                Button(role: .destructive, action: {
-                    // Delete sessions action
-                }) {
-                    Text("Delete Recorded Sessions")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
+//                Button(role: .destructive, action: {
+//                    // Delete sessions action
+//                }) {
+//                    Text("Delete Recorded Sessions")
+//                        .frame(maxWidth: .infinity, alignment: .center)
+//                }
                 
                 Button(role: .destructive, action: {
                     // Sign out action
                 }) {
                     Text("Sign Out")
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        
                 }
+                Button(action: {
+                    // Sign out action
+                }) {
+                    Text("Delete Profile")
+                        
+                }.buttonStyle(.plain)
+                
             }
         }
         .navigationTitle("Profile")
@@ -185,6 +192,7 @@ struct ProfileFormView: View {
                 .fontWeight(isEditing ? .bold : .regular)
             }
         }
+    }
     }
 }
 
