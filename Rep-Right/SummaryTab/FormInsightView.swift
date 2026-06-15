@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct FormInsightView: View {
-    // Fetched from SummaryDataModel: reads the latest form insight string
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var viewModel
     
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
@@ -22,8 +22,8 @@ struct FormInsightView: View {
                     .foregroundStyle(.primary)
                     .bold()
                 
-                // Fetched from SummaryDataModel: latestFormInsight computed property
-                Text(summaryManager.latestFormInsight ?? "Complete a session with AI Assistance to get personalized form insights.")
+                // Access through view model
+                Text(viewModel.latestFormInsight ?? "Complete a session with AI Assistance to get personalized form insights.")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)

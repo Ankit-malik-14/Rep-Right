@@ -1,6 +1,32 @@
 import SwiftUI
 
 struct SummaryTabView: View {
+    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    @Environment(UserProfileModel.self) private var userProfile
+    @Environment(Exercises.self) private var exercises
+
+    @State private var viewModel: SummaryDashboardViewModel?
+
+    var body: some View {
+        Group {
+            if let viewModel = viewModel {
+                SummaryTabContent()
+                    .environment(viewModel)
+            } else {
+                Color.clear
+                    .onAppear {
+                        viewModel = SummaryDashboardViewModel(
+                            summaryManager: summaryManager,
+                            userProfile: userProfile,
+                            exercises: exercises
+                        )
+                    }
+            }
+        }
+    }
+}
+
+struct SummaryTabContent: View {
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -33,13 +59,6 @@ struct SummaryTabView: View {
             }
             .navigationTitle("Summary")
             .background(Color(.systemGroupedBackground))
-//            .toolbar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    NavigationLink(value: SummaryRoute.profile) {
-//                        Image(systemName: "person.circle.fill")
-//                    }
-//                }
-//            }
         }
     }
 }

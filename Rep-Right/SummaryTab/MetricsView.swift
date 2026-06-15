@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct MetricsView: View {
-    // Fetched from SummaryDataModel: Access global summary manager
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var viewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -21,24 +21,24 @@ struct MetricsView: View {
                     MetricCard(
                         icon: "dumbbell.fill",
                         title: "Exercise",
-                        // Fetched from SummaryDataModel: total exercises this week
-                        value: "\(summaryManager.totalExercisesCurrentWeek)",
+                        // Access through view model
+                        value: "\(viewModel.totalExercisesCurrentWeek)",
                         change: ""
                     )
                     
                     MetricCard(
                         icon: "timer",
                         title: "Time",
-                        // Fetched from SummaryDataModel: total time this week in hours
-                        value: String(format: "%.1f", summaryManager.totalTimeCurrentWeekInHours),
+                        // Access through view model
+                        value: String(format: "%.1f", viewModel.totalTimeCurrentWeekInHours),
                         change: ""
                     )
                     
                     MetricCard(
                         icon: "calendar",
                         title: "Streak",
-                        // Fetched from SummaryDataModel: current active streak
-                        value: "\(summaryManager.currentStreak)",
+                        // Access through view model
+                        value: "\(viewModel.currentStreak)",
                         change: ""
                     )
                 }

@@ -8,17 +8,15 @@ struct DailyCalorie: Identifiable {
 }
 
 struct WeeklyCalorieBurnView: View {
-    // Fetched from SummaryDataModel: Access global summary manager
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var viewModel
     
     var dynamicData: [DailyCalorie] {
-        // Fetched from SummaryDataModel: Mapping weeklyCalorieChartData to DailyCalorie
-        summaryManager.weeklyCalorieChartData.map { DailyCalorie(day: $0.day, calories: $0.calories) }
+        viewModel.weeklyCalorieChartData.map { DailyCalorie(day: $0.day, calories: $0.calories) }
     }
     
     var totalCalories: Int {
-        // Fetched from SummaryDataModel: Sum of current week calories
-        dynamicData.reduce(0) { $0 + $1.calories }
+        viewModel.totalCaloriesBurnedCurrentWeek
     }
 
     var body: some View {
