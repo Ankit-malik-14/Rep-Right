@@ -9,151 +9,153 @@ import SwiftUI
 
 
 
-/* DEPRECATED: CalorieGoalViewModel is deprecated. Replaced by direct binding to WorkoutSummaryManager.dailyCalorieGoal.
 // MARK: - DATA STORE
 
 @Observable
 class CalorieGoalViewModel {
-    var dailyGoal: Int = 500
-    private let step = 50
+    private let summaryManager: WorkoutSummaryManager
+    var calorieGoal: Double = 500.0
     
-    // computed property to bridge integer goal to text strings
+    init(summaryManager: WorkoutSummaryManager) {
+        self.summaryManager = summaryManager
+        self.calorieGoal = summaryManager.dailyCalorieGoal
+    }
+    
+    // computed property to bridge double goal to text strings for the TextField
     var goalText: String {
-            get { String(dailyGoal) }
-            set {
-                // Only update if the user types a valid number
-                if let newValueInt = Int(newValue) {
-                    dailyGoal = newValueInt
-                } else if newValue.isEmpty {
-                    dailyGoal = 0
-                }
+        get { String(Int(calorieGoal)) }
+        set {
+            if let newValueInt = Int(newValue) {
+                calorieGoal = Double(newValueInt)
+            } else if newValue.isEmpty {
+                calorieGoal = 0
             }
         }
+    }
     
     func decreaseGoal() {
-        if dailyGoal >= step {
-            dailyGoal -= step
-        }else{
-            dailyGoal = 0
+        if calorieGoal >= 50 {
+            calorieGoal -= 50
+        } else {
+            calorieGoal = 0
         }
     }
     
     func increaseGoal() {
-        dailyGoal += step
+        calorieGoal += 50
+    }
+    
+    func saveGoal() {
+        summaryManager.dailyCalorieGoal = calorieGoal
     }
 }
-*/
 
 //MARK: - VIEW
-// UPDATED: Now uses WorkoutSummaryManager as the single source of truth for the calorie goal.
 struct UserCalorieIntake: View {
     @Environment(WorkoutSummaryManager.self) private var summaryManager
     @Environment(\.dismiss) private var dismiss
     
-    // computed property to bridge double goal to text strings for the TextField
-    private var goalText: Binding<String> {
-        Binding(
-            get: { String(Int(summaryManager.dailyCalorieGoal)) },
-            set: { newValue in
-                if let newValueInt = Int(newValue) {
-                    summaryManager.dailyCalorieGoal = Double(newValueInt)
-                } else if newValue.isEmpty {
-                    summaryManager.dailyCalorieGoal = 0
-                }
+    @State private var viewModel: CalorieGoalViewModel?
+    
+    var body: some View {
+        Group {
+            if let viewModel = viewModel {
+                UserCalorieIntakeContent()
+                    .environment(viewModel)
+            } else {
+                Color.clear
+                    .onAppear {
+                        viewModel = CalorieGoalViewModel(summaryManager: summaryManager)
+                    }
             }
-        )
+        }
     }
+}
 
-        var body: some View {
+struct UserCalorieIntakeContent: View {
+    @Environment(CalorieGoalViewModel.self) private var viewModel
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        @Bindable var viewModel = viewModel
+        return VStack(spacing: 0) {
+            // 1. TOP HEADER SECTION
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Daily Move Goals")
+                    .font(.largeTitle.bold())
+                
+                Text("Set a goal based on how active you are, or how active you'd like to be, each day")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    .lineSpacing(4)
+            }
+            .padding(.horizontal, 30)
+            .padding(.top, 40)
+            .frame(maxWidth: .infinity, alignment: .leading)
             
-                VStack(spacing: 0) {
-                    // 1. TOP HEADER SECTION
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Daily Move Goals")
-                            .font(.largeTitle.bold())
-                        
-                        Text("Set a goal based on how active you are, or how active you'd like to be, each day")
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
-                            .lineSpacing(4)
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(.top, 40)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Spacer()
-                    
-                    // 2. INTERACTIVE CALCULATOR SECTION
-                    VStack(spacing: 20) {
-                        HStack(spacing: 25) {
-                            // MINUS
-                            Button {
-                                if summaryManager.dailyCalorieGoal >= 50 {
-                                    summaryManager.dailyCalorieGoal -= 50
-                                } else {
-                                    summaryManager.dailyCalorieGoal = 0
-                                }
-                            } label: {
-                                ZStack{
-                                    Circle()
-                                        .frame(width: 70, height: 70)
-                                        .foregroundStyle(.orange)
-                                    Text("-")
-                                        .font(.largeTitle.bold())
-                                }
-                            }.tint(.black)
-                            // VALUE
-                            TextField("", text: goalText)
-                                .font(.system(size: 80).bold())
-                                .multilineTextAlignment(.center)
-                            // PLUS
-                            Button {
-                                summaryManager.dailyCalorieGoal += 50
-                            } label: {
-                                ZStack{
-                                    Circle()
-                                        .frame(width: 70, height: 70)
-                                        .foregroundStyle(.orange)
-                                    Text("+")
-                                        .font(.largeTitle.bold())
-                                }
-                            }.tint(.black)
-                        }.padding()
-                        
-                        Text("Calories/Day")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                    }
-                    
-                    Spacer()
-                    
+            Spacer()
+            
+            // 2. INTERACTIVE CALCULATOR SECTION
+            VStack(spacing: 20) {
+                HStack(spacing: 25) {
+                    // MINUS
                     Button {
-                        // Logic to save the data
-                        print("Saved goal: \(summaryManager.dailyCalorieGoal)")
-                        dismiss()
+                        viewModel.decreaseGoal()
                     } label: {
-                        ContinueButton()
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 20)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Text("Skip")
+                        ZStack{
+                            Circle()
+                                .frame(width: 70, height: 70)
                                 .foregroundStyle(.orange)
+                            Text("-")
+                                .font(.largeTitle.bold())
                         }
-                        
-                        .buttonStyle(.bordered)
-                        
-                    }
-                }
-
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                //.background(Color(.systemBackground))
+                    }.tint(.black)
+                    // VALUE
+                    TextField("", text: $viewModel.goalText)
+                        .font(.system(size: 80).bold())
+                        .multilineTextAlignment(.center)
+                    // PLUS
+                    Button {
+                        viewModel.increaseGoal()
+                    } label: {
+                        ZStack{
+                            Circle()
+                                .frame(width: 70, height: 70)
+                                .foregroundStyle(.orange)
+                            Text("+")
+                                .font(.largeTitle.bold())
+                        }
+                    }.tint(.black)
+                }.padding()
+                
+                Text("Calories/Day")
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
             
+            Spacer()
+            
+            Button {
+                viewModel.saveGoal()
+                dismiss()
+            } label: {
+                ContinueButton()
+            }
+            .padding(.horizontal, 30)
+            .padding(.bottom, 20)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Skip")
+                        .foregroundStyle(.orange)
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

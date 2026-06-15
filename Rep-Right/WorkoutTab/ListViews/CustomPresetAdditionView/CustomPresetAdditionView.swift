@@ -13,59 +13,35 @@ struct CustomPresetAdditionView: View {
 
     // MARK: - Environment / Dependencies
 
-    /// Injected from the environment — the single shared source of truth for custom presets.
-    @Environment(CustomPresetsDummyData.self) private var customPresets
-    @Environment(Exercises.self) private var allExercises
+    @Environment(CustomPresetsViewModel.self) private var viewModel
     @Environment(\.dismiss) private var dismiss
     @Binding var isPresented: Bool
     
-
-    //private let allExercises: [Exercise] =
-
-    @State private var presetName: String = ""
-    @State private var selectedFocusArea: FocusArea? = nil  // single selection
-    @State private var selectedExercises: Set<Exercise> = []
     @FocusState private var isNameFocused: Bool
-
-    //var onDismiss: (() -> Void)?
-
-//    init(
-//        exercises: [Exercise] = Exercises().exerciseList,
-//        isPresented: Binding<Bool> = false
-//        //onDismiss: (() -> Void)? = nil
-//    ) {
-//        self.allExercises = exercises
-//        self.isPresented = isPresented
-//        //self.onDismiss = onDismiss
-//    }
 
     // MARK: - Computed
 
     private var filteredExercises: [Exercise] {
-        guard let area = selectedFocusArea else { return [] }
-        return allExercises.exerciseList.filter { exercise in
-            exercise.targetAreas.contains { rawArea in
-                FocusArea.from(targetArea: rawArea) == area
-            }
-        }
+        viewModel.filteredExercises
     }
 
     private var canContinue: Bool {
-        !presetName.trimmingCharacters(in: .whitespaces).isEmpty && !selectedExercises.isEmpty
+        viewModel.canContinue
     }
 
     // MARK: - Body
 
     var body: some View {
-        NavigationStack {
+        @Bindable var viewModel = viewModel
+        return NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
                     nameSection
                     focusAreaSection
-                    if selectedFocusArea != nil {
+                    if viewModel.selectedFocusArea != nil {
                         exerciseSection
                     }
-                    if canContinue {
+                    if viewModel.canContinue {
                         summarySection
                     }
                     Spacer(minLength: 100)
@@ -80,13 +56,17 @@ struct CustomPresetAdditionView: View {
             .safeAreaInset(edge: .bottom) {
                 continueButton
             }
+            .onAppear {
+                viewModel.resetAdditionDraft()
+            }
         }
     }
 
     // MARK: - Name Section
 
     private var nameSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        @Bindable var viewModel = viewModel
+        return VStack(alignment: .leading, spacing: 10) {
             Label("Preset Name", systemImage: "tag.fill")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
@@ -96,14 +76,14 @@ struct CustomPresetAdditionView: View {
                     .foregroundStyle(.orange)
                     .font(.system(size: 16, weight: .medium))
 
-                TextField("e.g. Push Day, Leg Blast…", text: $presetName)
+                TextField("e.g. Push Day, Leg Blast…", text: $viewModel.presetName)
                     .focused($isNameFocused)
                     .font(.body)
                     .submitLabel(.done)
                     .onSubmit { isNameFocused = false }
 
-                if !presetName.isEmpty {
-                    Button { presetName = "" } label: {
+                if !viewModel.presetName.isEmpty {
+                    Button { viewModel.presetName = "" } label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundStyle(.tertiary)
                     }
@@ -112,7 +92,7 @@ struct CustomPresetAdditionView: View {
             }
             .padding(14)
             .background(.background, in: RoundedRectangle(cornerRadius: 14))
-            .animation(.easeInOut(duration: 0.15), value: presetName.isEmpty)
+            .animation(.easeInOut(duration: 0.15), value: viewModel.presetName.isEmpty)
         }
     }
 
@@ -129,17 +109,10 @@ struct CustomPresetAdditionView: View {
                 spacing: 10
             ) {
                 ForEach(FocusArea.allCases, id: \.self) { area in
-                    let selected = selectedFocusArea == area
+                    let selected = viewModel.selectedFocusArea == area
                     Button {
                         withAnimation(.spring(duration: 0.25)) {
-                            if selected {
-                                // Tap again to deselect
-                                selectedFocusArea = nil
-                                selectedExercises = []
-                            } else {
-                                selectedFocusArea = area
-                                selectedExercises = []  // reset exercises when switching area
-                            }
+                            viewModel.selectFocusArea(area)
                         }
                     } label: {
                         HStack(spacing: 6) {
@@ -178,8 +151,8 @@ struct CustomPresetAdditionView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
-                if !selectedExercises.isEmpty {
-                    Text("\(selectedExercises.count) selected")
+                if !viewModel.selectedExercises.isEmpty {
+                    Text("\(viewModel.selectedExercises.count) selected")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.orange)
                         .padding(.horizontal, 10)
@@ -192,14 +165,10 @@ struct CustomPresetAdditionView: View {
                 ForEach(filteredExercises) { exercise in
                     ExerciseSelectionRow(
                         exercise: exercise,
-                        isSelected: selectedExercises.contains(exercise)
+                        isSelected: viewModel.selectedExercises.contains(exercise)
                     ) {
                         withAnimation(.easeInOut(duration: 0.15)) {
-                            if selectedExercises.contains(exercise) {
-                                selectedExercises.remove(exercise)
-                            } else {
-                                selectedExercises.insert(exercise)
-                            }
+                            viewModel.toggleExercise(exercise)
                         }
                     }
                     if exercise.id != filteredExercises.last?.id {
@@ -221,13 +190,13 @@ struct CustomPresetAdditionView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Text(presetName.trimmingCharacters(in: .whitespaces))
+                    Text(viewModel.presetName.trimmingCharacters(in: .whitespaces))
                         .font(.headline)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .layoutPriority(1)
                     Spacer()
-                    Text("\(selectedExercises.count) exercises")
+                    Text("\(viewModel.selectedExercises.count) exercises")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.orange)
                         .padding(.horizontal, 10)
@@ -237,7 +206,7 @@ struct CustomPresetAdditionView: View {
 
                 Divider()
 
-                if let area = selectedFocusArea {
+                if let area = viewModel.selectedFocusArea {
                     Label(area.rawValue, systemImage: area.systemImage)
                         .font(.caption.weight(.medium))
                         .padding(.horizontal, 10)
@@ -256,7 +225,7 @@ struct CustomPresetAdditionView: View {
 
     private var continueButton: some View {
         Button {
-            savePreset()
+            viewModel.savePreset()
             dismiss()
         } label: {
             HStack(spacing: 8) {
@@ -268,40 +237,16 @@ struct CustomPresetAdditionView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .background(
-                canContinue ? Color.orange : Color(.systemFill),
+                viewModel.canContinue ? Color.orange : Color(.systemFill),
                 in: RoundedRectangle(cornerRadius: 16)
             )
-            .foregroundStyle(canContinue ? .white : .secondary)
+            .foregroundStyle(viewModel.canContinue ? .white : .secondary)
         }
-        .disabled(!canContinue)
-        .animation(.easeInOut(duration: 0.2), value: canContinue)
+        .disabled(!viewModel.canContinue)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.canContinue)
         .padding(.horizontal, 20)
         .padding(.bottom, 8)
         .background(.ultraThinMaterial)
-    }
-
-    // MARK: - Save Logic
-
-    private func savePreset() {
-        let exercises = Array(selectedExercises)
-        let equipments = Array(Set(exercises.flatMap { $0.equipments })).sorted()
-        let estTime = max(15, exercises.count * 5)
-
-        let newPreset = Preset(
-            name: presetName.trimmingCharacters(in: .whitespaces),
-            exercises: exercises,
-            isWarmpUp: false,
-            scheduledFor: nil,
-            estTime: estTime,
-            equipments: equipments,
-            calories: exercises.reduce(0) { $0 + Int($1.metValue * Double(estTime) / Double(exercises.count)) }
-        )
-
-        customPresets.customPresets.append(newPreset)
-        for i in customPresets.customPresets{
-            print(i.name)
-        }
-//        onDismiss()
     }
 }
 
@@ -413,6 +358,10 @@ private struct FlowLayout: Layout {
 
 #Preview {
     @Previewable @State var showSheet = true
-    CustomPresetAdditionView(isPresented: $showSheet)
-        .environment(CustomPresetsDummyData())
+    let customPresetsData = CustomPresetsDummyData()
+    let exercises = Exercises()
+    let viewModel = CustomPresetsViewModel(customPresetsData: customPresetsData, exercises: exercises)
+    
+    return CustomPresetAdditionView(isPresented: $showSheet)
+        .environment(viewModel)
 }

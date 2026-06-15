@@ -119,6 +119,9 @@ struct FocusAreaLoadInsight: Identifiable, Hashable {
 
 @Observable
 class WorkoutSummaryManager {
+    private let calorieCalculator = CalorieCalculatorService()
+    let recommendationService = WorkoutRecommendationService()
+
     var completedExercises: [CompletedExerciseRecord] = [] {
         didSet { PersistenceController.shared.saveSummary(from: self) }
     }
@@ -173,8 +176,7 @@ class WorkoutSummaryManager {
     ///   - weightInKg: User's weight from UserProfile (defaults to 70kg if nil/unavailable)
     /// - Returns: Calories burned as a Double
     func calculateCalories(for exercise: Exercise, durationInSeconds: TimeInterval, weightInKg: Double) -> Double {
-        let timeInHours = durationInSeconds / 3600.0
-        return exercise.metValue * weightInKg * timeInHours
+        calorieCalculator.calculateCalories(for: exercise, durationInSeconds: durationInSeconds, weightInKg: weightInKg)
     }
     
     // adds a single exercise into completedExercises array
@@ -267,35 +269,7 @@ class WorkoutSummaryManager {
         using catalog: [Exercise],
         windowHours: Double = 48
     ) -> [(muscle: String, hoursRemaining: Double)] {
-        let now = Date()
-        let windowStart = now.addingTimeInterval(-windowHours * 3600)
-
-        // All exercises done within the window
-        let recentRecords = completedExercises.filter { $0.date >= windowStart }
-
-        // Flatten to muscle groups touched recently, with their last training time
-        var lastTrained: [String: Date] = [:]
-        for record in recentRecords {
-            guard let exercise = catalog.first(where: { $0.id == record.exerciseId }) else { continue }
-            for muscle in exercise.targetAreas {
-                if let existing = lastTrained[muscle] {
-                    lastTrained[muscle] = max(existing, record.endTime)
-                } else {
-                    lastTrained[muscle] = record.endTime
-                }
-            }
-        }
-
-        // Cross-reference against the target preset's muscles
-        let presetMuscles = Set(preset.exercises.flatMap { $0.targetAreas })
-
-        return presetMuscles.compactMap { muscle in
-            guard let trainedAt = lastTrained[muscle] else { return nil }
-            let hoursElapsed = now.timeIntervalSince(trainedAt) / 3600
-            let hoursRemaining = windowHours - hoursElapsed
-            guard hoursRemaining > 0 else { return nil }
-            return (muscle: muscle, hoursRemaining: hoursRemaining)
-        }.sorted { $0.hoursRemaining > $1.hoursRemaining }
+        recommendationService.muscleRecoveryStatus(completedExercises: completedExercises, for: preset, using: catalog, windowHours: windowHours)
     }
 
     // Suggests the best preset to do today, avoiding overworked muscles
@@ -303,45 +277,19 @@ class WorkoutSummaryManager {
         from presets: [Preset],
         using catalog: [Exercise]
     ) -> Preset? {
-        recommendedPresets(from: presets, using: catalog, limit: 1).first?.preset
+        recommendationService.smartPresetRecommendation(completedExercises: completedExercises, from: presets, using: catalog)
     }
 
     func focusAreaLoadInsights(using catalog: [Exercise], now: Date = Date()) -> [FocusAreaLoadInsight] {
-        recoveryMap(using: catalog, now: now).map { snapshot in
-            FocusAreaLoadInsight(
-                focusArea: snapshot.focusArea,
-                weeklyExercises: snapshot.weeklyLoad,
-                status: snapshot.status
-            )
-        }
+        recommendationService.focusAreaLoadInsights(completedExercises: completedExercises, using: catalog, now: now)
     }
 
     func weeklyFocusAreaChartData(using catalog: [Exercise], now: Date = Date()) -> [(category: String, value: Double)] {
-        let counts = weeklyFocusAreaCounts(using: catalog, now: now)
-        return FocusArea.allCases.map { focusArea in
-            (category: focusArea.rawValue, value: Double(counts[focusArea, default: 0]))
-        }
+        recommendationService.weeklyFocusAreaChartData(completedExercises: completedExercises, using: catalog, now: now)
     }
 
     func weeklyFocusAreaCounts(using catalog: [Exercise], now: Date = Date()) -> [FocusArea: Int] {
-        let startOfWeek = weekStart.date(
-            from: weekStart.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)
-        ) ?? weekStart.startOfDay(for: now)
-
-        let weekRecords = completedExercises.filter { $0.date >= startOfWeek }
-        let catalogById = Dictionary(uniqueKeysWithValues: catalog.map { ($0.id, $0) })
-        let catalogByName = Dictionary(uniqueKeysWithValues: catalog.map { ($0.name, $0) })
-
-        var counts = Dictionary(uniqueKeysWithValues: FocusArea.allCases.map { ($0, 0) })
-
-        for record in weekRecords {
-            guard let exercise = resolvedExercise(for: record, catalogById: catalogById, catalogByName: catalogByName) else { continue }
-            if let focusArea = exercise.primaryFocusArea {
-                counts[focusArea, default: 0] += 1
-            }
-        }
-
-        return counts
+        recommendationService.weeklyFocusAreaCounts(completedExercises: completedExercises, using: catalog, now: now)
     }
 
     // MARK: - Computed Metrics for UI 

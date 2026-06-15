@@ -7,8 +7,8 @@ import SwiftUI
 
 struct MetricRingView: View {
     
-    // UPDATED: Now uses WorkoutSummaryManager
-    @Environment(WorkoutSummaryManager.self) private var data
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var data
     @State private var animatedProgress: Double = 0
     
     var body: some View {
@@ -59,20 +59,18 @@ struct MetricRingView: View {
                         color: .green
                     )
                     
-                    let totalCals = data.weeklyCalorieChartData.reduce(0) { $0 + $1.calories }
                     metricCard(
                         icon: "flame.fill",
                         title: "Calories",
-                        value: "\(totalCals)",
+                        value: "\(data.totalCaloriesBurnedCurrentWeek)",
                         target: "\(Int(data.dailyCalorieGoal * 7)) kcal goal",
                         color: .orange
                     )
                     
-                    let targetDays = data.weeklyCalorieChartData.filter { Double($0.calories) >= data.dailyCalorieGoal }.count
                     metricCard(
                         icon: "trophy.fill",
                         title: "Streak",
-                        value: "\(targetDays)",
+                        value: "\(data.hitTargetDaysCount)",
                         target: "days on target",
                         color: .yellow
                     )

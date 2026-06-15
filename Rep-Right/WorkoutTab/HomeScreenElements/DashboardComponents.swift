@@ -281,17 +281,12 @@ struct QuickActionCard: View {
 }
 
 struct SmartRecommendationCard: View {
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
-    @Environment(Presets.self) private var presets
-    @Environment(Exercises.self) private var exercises
-    @Environment(WeeklySchedules.self) private var weeklySchedules
+    @Environment(WorkoutHomeViewModel.self) private var viewModel
 
     @State private var isVisible = false
 
     var body: some View {
-        let recommendations = summaryManager.recommendedPresets(from: presets.presets, using: exercises.exerciseList)
-        
-        if let bestRecommendation = recommendations.first {
+        if let bestRecommendation = viewModel.recommendations.first {
             let bestPreset = bestRecommendation.preset
             VStack(alignment: .leading) {
                 Text("Recommended for You")
@@ -321,7 +316,6 @@ struct SmartRecommendationCard: View {
                 .opacity(isVisible ? 1 : 0)
                 .offset(y: isVisible ? 0 : 20)
                 .onAppear {
-                    seedSuggestedWorkoutIfNeeded(with: bestPreset)
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
                         isVisible = true
                     }
@@ -330,32 +324,11 @@ struct SmartRecommendationCard: View {
 
         }
     }
-
-    private func seedSuggestedWorkoutIfNeeded(with preset: Preset) {
-        guard summaryManager.completedExercises.isEmpty else { return }
-        guard let today = Weekday(rawValue: Calendar.current.component(.weekday, from: Date())) else { return }
-        guard weeklySchedules.schedules[today] == nil else { return }
-
-        var scheduledPreset = preset
-        scheduledPreset.scheduledFor = today
-        weeklySchedules.schedules[today] = scheduledPreset
-    }
 }
 
 struct SmartWeekScheduleCard: View {
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
-    @Environment(Presets.self) private var presets
-    @Environment(Exercises.self) private var exercises
+    @Environment(WorkoutHomeViewModel.self) private var viewModel
     @Environment(WeeklySchedules.self) private var weeklySchedules
-    @Environment(UserProfileModel.self) private var profile
-    
-    private var recommendedSchedule: [ScheduledPresetRecommendation] {
-        summaryManager.generatedWeeklySchedule(
-            from: presets.presets,
-            using: exercises.exerciseList,
-            trainingDays: profile.weeklyGoalDays
-        )
-    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -363,7 +336,7 @@ struct SmartWeekScheduleCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Smart Weekly Routine")
                         .font(.headline)
-                    Text("A recovery-aware plan for your next \(profile.weeklyGoalDays)-day week.")
+                    Text("A recovery-aware plan for your next \(viewModel.userProfile.weeklyGoalDays)-day week.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -371,13 +344,13 @@ struct SmartWeekScheduleCard: View {
                 Spacer()
                 
                 Button("Apply") {
-                    weeklySchedules.apply(recommendedSchedule)
+                    weeklySchedules.apply(viewModel.recommendedSchedule)
                 }
                 .buttonStyle(AppPrimaryButtonStyle())
                 .frame(maxWidth: 110)
             }
             
-            ForEach(recommendedSchedule.prefix(3)) { day in
+            ForEach(viewModel.recommendedSchedule.prefix(3)) { day in
                 HStack {
                     Text(label(for: day.weekday))
                         .font(.caption.bold())

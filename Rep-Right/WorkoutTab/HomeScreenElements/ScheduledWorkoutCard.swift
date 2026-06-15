@@ -8,20 +8,15 @@
 import SwiftUI
 
 struct ScheduledWorkoutCard: View {
-    @Environment(WeeklySchedules.self) var weeklySchedules
+    @Environment(WorkoutHomeViewModel.self) private var viewModel
     @Environment(WorkoutRouter.self) private var router
     
     private func focusPrinter(areas: [String]) -> String {
         areas.joined(separator: ", ")
     }
     
-    private var todaysSchedule: Preset? {
-        let day = Calendar.current.component(.weekday, from: Date())
-        return weeklySchedules.schedules.first(where: { $0.key.rawValue == day })?.value
-    }
-    
     var body: some View {
-        if let todaysSchedule {
+        if let todaysSchedule = viewModel.todaySchedule {
             VStack {
                 ZStack(alignment: .topLeading) {
                     Group {
