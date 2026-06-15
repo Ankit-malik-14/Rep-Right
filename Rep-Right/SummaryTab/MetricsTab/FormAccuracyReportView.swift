@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct FormAccuracyReportView: View {
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var viewModel
     
     var body: some View {
-        let latestRecord = summaryManager.latestFormAccuracyRecord
+        let latestRecord = viewModel.latestFormAccuracyRecord
         let latestAccuracy = latestRecord?.formAccuracy ?? 0
         let latestInsights = latestRecord?.formInsights ?? []
-        let averagePercent = Int(summaryManager.averageFormAccuracy * 100)
+        let averagePercent = Int(viewModel.averageFormAccuracy * 100)
         
         VStack(alignment: .leading, spacing: 20) {
             HStack(alignment: .center, spacing: 20) {
@@ -25,10 +26,10 @@ struct FormAccuracyReportView: View {
                 }
                 
                 Spacer()
-                Gauge(value: summaryManager.averageFormAccuracy, in: 0...1) {
+                Gauge(value: viewModel.averageFormAccuracy, in: 0...1) {
                     EmptyView()
                 } currentValueLabel: {
-                    Text("\(Int(summaryManager.averageFormAccuracy * 100))%")
+                    Text("\(Int(viewModel.averageFormAccuracy * 100))%")
                         .font(.callout)
                         .bold()
                 }
@@ -52,7 +53,7 @@ struct FormAccuracyReportView: View {
                             .foregroundStyle(.orange)
                     }
                     
-                    Gauge(value: summaryManager.averageFormAccuracy, in: 0...1) {
+                    Gauge(value: viewModel.averageFormAccuracy, in: 0...1) {
                         EmptyView()
                     }
                     .tint(Gradient(colors: [.red, .yellow, .green]))

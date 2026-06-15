@@ -10,18 +10,24 @@ import SwiftUI
 struct SchedulerCards: View {
     var weekday: Weekday
     var contextPreset: Preset? = nil
-    @Environment(WeeklySchedules.self) var weeklySchedules
-    @Environment(WorkoutSummaryManager.self) var summaryManager
-    @Environment(Exercises.self) var exercises
-    @Environment(Presets.self) private var presets
+    @Environment(SchedulerViewModel.self) private var viewModel
     @Environment(\.dismiss) private var dismiss
-    var preset: Preset? {weeklySchedules.schedules[weekday]}
-    @State var selectionSheet: Bool = false
-    @State var isRest = false
+    
+    @State private var selectionSheet: Bool = false
+    
     var body: some View {
-        VStack(alignment: .leading){
-            HStack(alignment: .center){
-                VStack(alignment: .leading){
+        let preset = viewModel.preset(for: weekday)
+        let isRest = preset?.isRestDay ?? false
+        let isRestBinding = Binding<Bool>(
+            get: { isRest },
+            set: { newValue in
+                viewModel.toggleRestDay(for: weekday, isRest: newValue)
+            }
+        )
+        
+        return VStack(alignment: .leading) {
+            HStack(alignment: .center) {
+                VStack(alignment: .leading) {
                     switch weekday {
                     case .sunday:
                         Text("Sunday")
@@ -46,110 +52,109 @@ struct SchedulerCards: View {
                             .font(.caption).fontWeight(.heavy).foregroundStyle(isRest ? Color.secondary: .orange)
                     }
                     
-                    
-                    if !isRest{
+                    if !isRest {
                         Text(preset?.name ?? "")
                             .font(.title2).bold()
-                    }
-                    else{
+                    } else {
                         Text("Rest Day")
                             .font(.title2).bold().foregroundStyle(.secondary)
                     }
-                    
                 }
                 Spacer()
-                Toggle(isOn: $isRest){
+                Toggle(isOn: isRestBinding) {
                     Text("Rest Day")
                         .font(.headline).bold().foregroundStyle(isRest ? .primary:.secondary)
                 }
-                    .frame(width: 140)
+                .frame(width: 140)
             }
-            if !isRest{
-                if preset != nil{
-                    HStack{
+            
+            if !isRest {
+                if let preset = preset {
+                    HStack {
                         RoundedRectangle(cornerRadius: 13)
-                            .frame(width: 58,height: 58)
+                            .frame(width: 58, height: 58)
                             .foregroundStyle(.orange)
-                            .opacity(0.4).overlay{
+                            .opacity(0.4).overlay {
                                 Image(systemName: "dumbbell.fill").foregroundStyle(.orange)
                             }
                         VStack(alignment: .leading) {
-                            HStack(alignment:.bottom ,spacing: 2){
+                            HStack(alignment: .bottom, spacing: 2) {
                                 Image(systemName: "flame.fill")
-                                Text("\(preset!.calories) Kcal")
+                                Text("\(preset.calories) Kcal")
                                 Text("•")
                                 Image(systemName: "clock")
-                                Text("\(preset!.estTime) mins")
+                                Text("\(preset.estTime) mins")
                             }.font(.caption2).foregroundStyle(.secondary)
-                            Text("Includes \(preset!.exercises.map(\.name).joined(separator: ", "))").font(.body).bold().lineLimit(2)
-                            
+                            Text("Includes \(preset.exercises.map(\.name).joined(separator: ", "))").font(.body).bold().lineLimit(2)
                         }
                         Spacer()
-                        VStack{
-                            Button(contextPreset != nil ? "Assign" : "Edit"){
+                        VStack {
+                            Button(contextPreset != nil ? "Assign" : "Edit") {
                                 if let contextPreset = contextPreset {
-                                    weeklySchedules.schedules[weekday] = contextPreset
+                                    viewModel.assignPreset(contextPreset, for: weekday)
                                     dismiss()
                                 } else {
                                     selectionSheet.toggle()
                                 }
-                            }.buttonStyle(.borderedProminent).tint(.orange)
-                                .sheet(isPresented: $selectionSheet) {
-                                    PresetSelectionView(weekday: weekday)
-                                }
+                            }
+                            .buttonStyle(.borderedProminent).tint(.orange)
+                            .sheet(isPresented: $selectionSheet) {
+                                PresetSelectionView(weekday: weekday)
+                                    .environment(viewModel)
+                            }
                         }
                     }
                     .padding()
-                    .background(.background.secondary,in: RoundedRectangle(cornerRadius: 20))
-                }
-                else{
-                    Button{
+                    .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
+                } else {
+                    Button {
                         if let contextPreset = contextPreset {
-                            weeklySchedules.schedules[weekday] = contextPreset
+                            viewModel.assignPreset(contextPreset, for: weekday)
                             dismiss()
                         } else {
                             selectionSheet.toggle()
                         }
                     } label: {
-                        VStack{
-                            ZStack{
+                        VStack {
+                            ZStack {
                                 Circle()
                                     .frame(width: 35, height: 35)
                                     .foregroundStyle(.background)
-                                    .overlay{
+                                    .overlay {
                                         Image(systemName: "plus")
                                             .bold()
                                             .foregroundStyle(.orange)
-                                        }
+                                    }
                             }
                             Text("Tap to schedule a preset")
                                 .foregroundStyle(.secondary)
-                        }.padding()
+                        }
+                        .padding()
                         .frame(maxWidth: .infinity)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
-                            .foregroundStyle(.background.secondary)
-                            .overlay{
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(style: .init(dash: [2]))
-                                    .foregroundStyle(.secondary)
-                            }
+                                .foregroundStyle(.background.secondary)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(style: .init(dash: [2]))
+                                        .foregroundStyle(.secondary)
+                                }
                         )
                         .padding(.top)
                     }
                     .buttonStyle(.plain)
-                        .sheet(isPresented: $selectionSheet) {
-                            PresetSelectionView(weekday: weekday)
-                        }
+                    .sheet(isPresented: $selectionSheet) {
+                        PresetSelectionView(weekday: weekday)
+                            .environment(viewModel)
+                    }
                 }
-            }
-            else {
+            } else {
                 VStack(alignment: .leading, spacing: 12) {
                     Label("Today's Recovery Tips", systemImage: "bolt.heart.fill")
                         .font(.headline.bold())
                         .foregroundStyle(.orange)
                     
-                    ForEach(restDayTips(for: weekday), id: \.self) { tip in
+                    ForEach(viewModel.restDayTips(for: weekday), id: \.self) { tip in
                         HStack(alignment: .top, spacing: 8) {
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                             Text(tip).font(.subheadline)
@@ -164,60 +169,27 @@ struct SchedulerCards: View {
                 )
                 .foregroundStyle(.secondary)
             }
-            
-        }.padding().background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
-            .padding(3)
-            .onAppear {
-                isRest = preset?.isRestDay ?? false
-            }
-            .onChange(of: preset?.id) { _, _ in
-                isRest = preset?.isRestDay ?? false
-            }
-            .onChange(of: isRest) { _, newValue in
-                guard newValue else { return }
-                if let recoveryPreset = weeklySchedules.schedules[weekday], recoveryPreset.isRestDay {
-                    return
-                }
-                if let activeRecovery = presets.presets.first(where: { $0.isRestDay }) {
-                    weeklySchedules.schedules[weekday] = activeRecovery
-                }
-            }
-    }
-    
-    func restDayTips(for weekday: Weekday) -> [String] {
-        let calendar = Calendar.current
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        let yesterdayRecords = summaryManager.completedExercises.filter { calendar.isDate($0.date, inSameDayAs: yesterday) }
-        
-        var trainedMuscles: Set<String> = []
-        for record in yesterdayRecords {
-            if let ex = exercises.exerciseList.first(where: { $0.id == record.exerciseId }) {
-                for area in ex.targetAreas {
-                    trainedMuscles.insert(area)
-                }
-            }
         }
-        
-        var tips = [
-            "Hydrate well to flush out metabolic waste.",
-            "Aim for 8-9 hours of sleep tonight to maximize recovery."
-        ]
-        
-        if !trainedMuscles.isEmpty {
-            let musclesStr = trainedMuscles.prefix(2).joined(separator: " and ")
-            tips.insert("Light walking is fine, but avoid heavy loading on your \(musclesStr.lowercased()) today.", at: 0)
-        } else {
-            tips.insert("A 15-minute mobility flow or stretching session is perfect for today.", at: 0)
-        }
-        
-        return tips
+        .padding().background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
+        .padding(3)
     }
 }
 
 #Preview {
-    SchedulerCards(weekday: .friday)
-        .environment(Presets())
-        .environment(WeeklySchedules())
-        .environment(WorkoutSummaryManager())
-        .environment(Exercises())
+    let schedules = WeeklySchedules()
+    let summaryManager = WorkoutSummaryManager()
+    let presets = Presets()
+    let exercises = Exercises()
+    let userProfile = UserProfileModel()
+    let viewModel = SchedulerViewModel(
+        weeklySchedules: schedules,
+        summaryManager: summaryManager,
+        presets: presets,
+        exercises: exercises,
+        userProfile: userProfile
+    )
+    
+    return SchedulerCards(weekday: .friday)
+        .environment(viewModel)
 }
+

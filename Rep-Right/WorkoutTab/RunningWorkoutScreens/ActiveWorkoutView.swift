@@ -272,7 +272,7 @@ struct ActiveWorkoutView: View {
                     .foregroundStyle(.white)
                 
                 // 2. Personal record detector
-                if let pr = detectPersonalRecord() {
+                if let pr = manager.detectPersonalRecord(using: summaryManager.completedExercises) {
                     PRBadgeView(exerciseName: pr)
                 }
 
@@ -339,7 +339,7 @@ struct ActiveWorkoutView: View {
             showSheet = false
         case .finished:
             showSheet = false
-            logSession()
+            manager.logSession(to: summaryManager, userWeight: userProfile.weight)
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 router.popToRoot()
             }
@@ -348,84 +348,6 @@ struct ActiveWorkoutView: View {
         }
     }
     
-    // UPDATED: Logs only exercises the user actually attempted (up to currentIndex),
-    // using each exercise's own archived sets, filtered to completed-only.
-    private func logSession() {
-        let weight = userProfile.weight
-        
-        // Archive the current exercise's sets before building the log
-        manager.archiveCurrentSets()
-        
-        // Only consider exercises up to (and including) the one the user was on
-        let attemptedCount = manager.currentIndex + 1
-        let attemptedExercises = Array(manager.exerciseQueue.prefix(attemptedCount))
-        let count = max(attemptedExercises.count, 1)
-        let timePerExercise = manager.elapsedTime / Double(count)
-        
-        let exerciseData: [(exerciseId: UUID, exerciseName: String, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?, formAccuracy: Double?, formInsights: [String]?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
-            // Retrieve this exercise's archived sets (not the current exercise's sets)
-            let archived = manager.completedSetsArchive[idx] ?? []
-            let completedOnly = archived.filter(\.isCompleted)
-            
-            // Skip exercises where the user completed zero sets
-            guard !completedOnly.isEmpty else { return nil }
-            
-            let cals = summaryManager.calculateCalories(
-                for: exercise,
-                durationInSeconds: timePerExercise,
-                weightInKg: weight
-            )
-            let assistanceScore = manager.assistanceScore(for: idx)
-            let setData = completedOnly.map {
-                SetData(sets: 1, reps: Int($0.reps) ?? $0.targetReps)
-            }
-            return (
-                exerciseId: exercise.id,
-                exerciseName: exercise.name,
-                actualSet: setData,
-                startTime: Date().addingTimeInterval(-manager.elapsedTime),
-                endTime: Date(),
-                caloriesBurned: Optional(cals),
-                formAccuracy: assistanceScore?.accuracy,
-                formInsights: assistanceScore?.insights
-            )
-        }
-        summaryManager.logWorkout(presetId: preset.id, exercises: exerciseData)
-    }
-    
-    // MARK: - PR Detection
-    private func detectPersonalRecord() -> String? {
-        var prExerciseName: String? = nil
-        
-        for (index, sets) in manager.completedSetsArchive {
-            guard let exercise = manager.exerciseQueue[safe: index] else { continue }
-            let completedSets = sets.filter { $0.isCompleted }
-            guard !completedSets.isEmpty else { continue }
-            
-            // Calculate current total reps (since weight isn't robustly tracked per set in the current model)
-            let currentTotalReps = completedSets.compactMap { Int($0.reps) }.reduce(0, +)
-            
-            // Get past history for this exercise
-            let pastRecords = summaryManager.completedExercises.filter {
-                $0.exerciseId == exercise.id || $0.exerciseName == exercise.name
-            }
-            
-            if pastRecords.isEmpty {
-                // If it's their first time doing it, let's treat it as a baseline, not a PR.
-                continue
-            }
-            
-            let pastMaxReps = pastRecords.map { record in
-                record.actualSet.map { $0.sets * $0.reps }.reduce(0, +)
-            }.max() ?? 0
-            
-            if currentTotalReps > pastMaxReps {
-                prExerciseName = exercise.name
-                break // Just return the first PR found for simplicity
-            }
-        }
-        return prExerciseName
-    }
 }
 
 // MARK: - Helper Extension

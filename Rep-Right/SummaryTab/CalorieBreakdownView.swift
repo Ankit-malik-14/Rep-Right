@@ -7,17 +7,15 @@ import SwiftUI
 import Charts
 
 struct CalorieBreakdownView: View {
-    // UPDATED: Use WorkoutSummaryManager
-    @Environment(WorkoutSummaryManager.self) private var data
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var data
     
     private var totalCalories: Double {
-        data.weeklyCalorieChartData.reduce(0.0) { $0 + Double($1.calories) }
+        Double(data.totalCaloriesBurnedCurrentWeek)
     }
     
-    // UPDATED: Safe average calculation
     private var averageCalories: Double {
-        let count = data.weeklyCalorieChartData.count
-        return count > 0 ? totalCalories / Double(count) : 0
+        data.averageCaloriesBurnedCurrentWeek
     }
     
     var body: some View {

@@ -8,42 +8,45 @@ struct PreWorkoutGateView: View {
     @Environment(WorkoutRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
 
-    @State private var showSkipAlert = false
+    @State private var viewModel: PreWorkoutGateViewModel?
 
-    private var recoveryWarnings: [(muscle: String, hoursRemaining: Double)] {
-        summaryManager.muscleRecoveryStatus(
-            for: preset, using: exercises.exerciseList
-        )
-    }
-    
-    private var smartPrepPreset: Preset {
-        // On-the-fly logic to generate a warmup preset based on target areas
-        let targetAreas = Set(preset.exercises.flatMap { $0.targetAreas })
-        let warmupExercises = exercises.exerciseList.filter { 
-            !Set($0.targetAreas).isDisjoint(with: targetAreas) 
+    var body: some View {
+        Group {
+            if let viewModel = viewModel {
+                PreWorkoutGateViewContent()
+                    .environment(viewModel)
+            } else {
+                Color.clear
+                    .onAppear {
+                        viewModel = PreWorkoutGateViewModel(
+                            preset: preset,
+                            summaryManager: summaryManager,
+                            exercises: exercises
+                        )
+                    }
+            }
         }
-        return Preset(
-            name: "Smart Prep: \(preset.name)",
-            exercises: Array(warmupExercises.prefix(3)),
-            isWarmpUp: true,
-            scheduledFor: nil,
-            estTime: 5,
-            equipments: ["Bodyweight"],
-            calories: 40
-        )
     }
+}
+
+struct PreWorkoutGateViewContent: View {
+    @Environment(PreWorkoutGateViewModel.self) private var viewModel
+    @Environment(WorkoutRouter.self) private var router
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var showSkipAlert = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Recovery warning section
-                if !recoveryWarnings.isEmpty {
-                    RecoveryWarningCard(warnings: recoveryWarnings)
+                if !viewModel.recoveryWarnings.isEmpty {
+                    RecoveryWarningCard(warnings: viewModel.recoveryWarnings)
                 } else {
                     AllClearCard()
                 }
                 // Smart prep section
-                SmartPrepPromptCard(preset: preset, smartPrepPreset: smartPrepPreset)
+                SmartPrepPromptCard(preset: viewModel.preset, smartPrepPreset: viewModel.smartPrepPreset)
             }
             .padding()
         }
@@ -58,7 +61,7 @@ struct PreWorkoutGateView: View {
         }
         .alert("Skip Warmup?", isPresented: $showSkipAlert) {
             Button("Start Workout", role: .destructive) {
-                router.push(.activeWorkout(preset))
+                router.push(.activeWorkout(viewModel.preset))
             }
             Button("Cancel", role: .cancel) {}
         } message: {

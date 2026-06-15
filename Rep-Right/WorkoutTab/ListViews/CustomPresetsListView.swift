@@ -8,10 +8,7 @@
 import SwiftUI
 
 struct CustomPresetsListView: View {
-    var preset: CustomPresetsDummyData
-    @State private var showAddSheet = false
-    @State private var isSelectionMode = false
-    @State private var selectedPresetIDs = Set<UUID>()
+    @Environment(CustomPresetsViewModel.self) private var viewModel
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -19,19 +16,20 @@ struct CustomPresetsListView: View {
     ]
     
     var body: some View {
-        ScrollView {
+        @Bindable var viewModel = viewModel
+        return ScrollView {
             LazyVGrid(columns: columns, spacing: 16) {
-                ForEach(preset.customPresets) { preset1 in
+                ForEach(viewModel.customPresets) { preset1 in
                     Group {
-                        if isSelectionMode {
+                        if viewModel.isSelectionMode {
                             Button {
-                                toggleSelection(for: preset1)
+                                viewModel.toggleSelection(for: preset1)
                             } label: {
                                 PresetTileViewType(
                                     preset: preset1,
                                     type: .large,
                                     showsSelection: true,
-                                    isSelected: selectedPresetIDs.contains(preset1.id)
+                                    isSelected: viewModel.selectedPresetIDs.contains(preset1.id)
                                 )
                             }
                         } else {
@@ -50,20 +48,20 @@ struct CustomPresetsListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 14) {
-                    if !preset.customPresets.isEmpty {
-                        Button(isSelectionMode ? "Cancel" : "Select") {
+                    if !viewModel.customPresets.isEmpty {
+                        Button(viewModel.isSelectionMode ? "Cancel" : "Select") {
                             withAnimation(.easeInOut(duration: 0.2)) {
-                                isSelectionMode.toggle()
-                                if !isSelectionMode {
-                                    selectedPresetIDs.removeAll()
+                                viewModel.isSelectionMode.toggle()
+                                if !viewModel.isSelectionMode {
+                                    viewModel.selectedPresetIDs.removeAll()
                                 }
                             }
                         }
                     }
                     
-                    if !isSelectionMode {
+                    if !viewModel.isSelectionMode {
                         Button {
-                            showAddSheet = true
+                            viewModel.showAddSheet = true
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -72,39 +70,31 @@ struct CustomPresetsListView: View {
             }
             
             ToolbarItem(placement: .topBarLeading) {
-                if isSelectionMode {
+                if viewModel.isSelectionMode {
                     Button(role: .destructive) {
-                        deleteSelectedPresets()
+                        viewModel.deleteSelectedPresets()
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
-                    .disabled(selectedPresetIDs.isEmpty)
+                    .disabled(viewModel.selectedPresetIDs.isEmpty)
                 }
             }
         }
-        .sheet(isPresented: $showAddSheet) {
-            CustomPresetAdditionView(isPresented: $showAddSheet)
+        .sheet(isPresented: $viewModel.showAddSheet) {
+            CustomPresetAdditionView(isPresented: $viewModel.showAddSheet)
+                .environment(viewModel)
         }
-    }
-    
-    private func toggleSelection(for preset: Preset) {
-        if selectedPresetIDs.contains(preset.id) {
-            selectedPresetIDs.remove(preset.id)
-        } else {
-            selectedPresetIDs.insert(preset.id)
-        }
-    }
-    
-    private func deleteSelectedPresets() {
-        preset.customPresets.removeAll { selectedPresetIDs.contains($0.id) }
-        selectedPresetIDs.removeAll()
-        isSelectionMode = false
     }
 }
 
 #Preview {
-    NavigationStack {
-        CustomPresetsListView(preset: CustomPresetsDummyData())
-            .environment(CustomPresetsDummyData())
+    let customPresetsData = CustomPresetsDummyData()
+    let exercises = Exercises()
+    let viewModel = CustomPresetsViewModel(customPresetsData: customPresetsData, exercises: exercises)
+    
+    return NavigationStack {
+        CustomPresetsListView()
+            .environment(viewModel)
     }
 }
+

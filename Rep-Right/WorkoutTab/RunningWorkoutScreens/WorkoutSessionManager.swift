@@ -338,7 +338,78 @@ class WorkoutSessionManager {
         restTimer = nil
     }
     
+    // MARK: - Business Logic (ViewModel duties)
+
+    func logSession(to summaryManager: WorkoutSummaryManager, userWeight: Double) {
+        archiveCurrentSets()
+        
+        let attemptedCount = currentIndex + 1
+        let attemptedExercises = Array(exerciseQueue.prefix(attemptedCount))
+        let count = max(attemptedExercises.count, 1)
+        let timePerExercise = elapsedTime / Double(count)
+        
+        let exerciseData: [(exerciseId: UUID, exerciseName: String, actualSet: [SetData], startTime: Date, endTime: Date, caloriesBurned: Double?, formAccuracy: Double?, formInsights: [String]?)] = attemptedExercises.enumerated().compactMap { idx, exercise in
+            let archived = completedSetsArchive[idx] ?? []
+            let completedOnly = archived.filter(\.isCompleted)
+            
+            guard !completedOnly.isEmpty else { return nil }
+            
+            let cals = summaryManager.calculateCalories(
+                for: exercise,
+                durationInSeconds: timePerExercise,
+                weightInKg: userWeight
+            )
+            let assistanceScore = assistanceScore(for: idx)
+            let setData = completedOnly.map {
+                SetData(sets: 1, reps: Int($0.reps) ?? $0.targetReps)
+            }
+            return (
+                exerciseId: exercise.id,
+                exerciseName: exercise.name,
+                actualSet: setData,
+                startTime: Date().addingTimeInterval(-elapsedTime),
+                endTime: Date(),
+                caloriesBurned: Optional(cals),
+                formAccuracy: assistanceScore?.accuracy,
+                formInsights: assistanceScore?.insights
+            )
+        }
+        summaryManager.logWorkout(presetId: preset.id, exercises: exerciseData)
+    }
+    
+    func detectPersonalRecord(using completedExercises: [CompletedExerciseRecord]) -> String? {
+        var prExerciseName: String? = nil
+        
+        for (index, sets) in completedSetsArchive {
+            guard exerciseQueue.indices.contains(index) else { continue }
+            let exercise = exerciseQueue[index]
+            let completedSets = sets.filter { $0.isCompleted }
+            guard !completedSets.isEmpty else { continue }
+            
+            let currentTotalReps = completedSets.compactMap { Int($0.reps) }.reduce(0, +)
+            
+            let pastRecords = completedExercises.filter {
+                $0.exerciseId == exercise.id || $0.exerciseName == exercise.name
+            }
+            
+            if pastRecords.isEmpty {
+                continue
+            }
+            
+            let pastMaxReps = pastRecords.map { record in
+                record.actualSet.map { $0.sets * $0.reps }.reduce(0, +)
+            }.max() ?? 0
+            
+            if currentTotalReps > pastMaxReps {
+                prExerciseName = exercise.name
+                break
+            }
+        }
+        return prExerciseName
+    }
+    
     deinit {
         restTimer?.invalidate()
     }
 }
+

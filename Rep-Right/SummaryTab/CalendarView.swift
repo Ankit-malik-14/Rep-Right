@@ -86,42 +86,13 @@ struct CalendarView: View {
         }
     }
 
-    // Fetched from SummaryDataModel: Access global summary manager for calendar parsing
-    @Environment(WorkoutSummaryManager.self) private var summaryManager
+    // Access the Summary tab's view model
+    @Environment(SummaryDashboardViewModel.self) private var viewModel
 
     func loadWeek() {
-        let calendar = Calendar.current
-        let today = Date()
-
-        guard let targetDate = calendar.date(byAdding: .weekOfYear, value: weekOffset, to: today),
-              let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: targetDate)) else { return }
-
-        headerTitle = targetDate.formatted(.dateTime.month(.wide).year())
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-
-        var days: [WorkoutDay] = []
-        for i in 0..<7 {
-            let date = calendar.date(byAdding: .day, value: i, to: weekStart)!
-            let name = formatter.string(from: date).uppercased()
-            let number = "\(calendar.component(.day, from: date))"
-
-            let status: String
-            if calendar.isDateInToday(date) {
-                status = "current"
-            } else if date > today {
-                status = "future"
-            } else {
-                // Fetched from SummaryDataModel: dynamically checks if the day has workout records
-                let hasWorkout = summaryManager.dailySummaries.contains(where: { calendar.isDate($0.date, inSameDayAs: date) })
-                status = hasWorkout ? "streak" : "missed"
-            }
-
-            days.append(WorkoutDay(name: name, number: number, status: status))
-        }
-
-        weekData = days
+        let result = viewModel.loadWeek(offset: weekOffset)
+        weekData = result.days
+        headerTitle = result.monthYearHeader
     }
 }
 
