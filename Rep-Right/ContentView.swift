@@ -19,7 +19,7 @@ struct ContentView: View {
                 AppNameScreenView()
                     .transition(.opacity)
             } else if !hasSeenOnboarding {
-                OnboardingScreenView(hasSeenOnboarding: $hasSeenOnboarding)
+                ActiveOnboardingView(hasSeenOnboarding: $hasSeenOnboarding)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             } else {
                 HomeView()
