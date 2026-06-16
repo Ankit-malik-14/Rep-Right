@@ -32,7 +32,7 @@ struct OnboardingScreenView4: View {
                             .foregroundStyle(.black)
                             .fixedSize(horizontal: false, vertical: true)
                         
-                        Text("These settings help Rep-Right estimate calories better and give you a clearer weekly benchmark.")
+                        Text("Set weekly benchmark for your jounrey")
                             .font(.system(size: 15))
                             .foregroundStyle(.gray)
                     }

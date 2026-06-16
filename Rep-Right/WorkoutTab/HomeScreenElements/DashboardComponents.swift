@@ -83,9 +83,9 @@ struct RecoveryMapCard: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Label("Recovery Map", systemImage: "figure.strengthtraining.traditional")
-                        .font(.subheadline.bold())
-                    Text(summaryManager.completedExercises.isEmpty ? "All six focus areas are fresh." : "Weekly muscle load and recovery readiness.")
-                        .font(.caption)
+                        .font(.headline.bold())
+                    Text(summaryManager.completedExercises.isEmpty ? "All muscle groups are fully recovered." : "Weekly training volume and recovery status.")
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
 
@@ -111,16 +111,16 @@ struct RecoveryMapCard: View {
 
             if summaryManager.completedExercises.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("No load yet", systemImage: "bolt.heart")
+                    Label("Optimal Condition", systemImage: "checkmark.circle.fill")
                         .font(.footnote.bold())
                         .foregroundStyle(.green)
-                    Text("Start any preset. Shoulder, back, chest, arms, core, and legs are all fresh right now.")
+                    Text("No muscle fatigue detected. Start any workout preset to begin tracking your training.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(12)
-                .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 16))
+                .background(Color.green.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
             } else {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(overallRecommendation(for: recoverySnapshots))
@@ -137,7 +137,7 @@ struct RecoveryMapCard: View {
                                 innerRadius: .ratio(0.7),
                                 angularInset: 2.0
                             )
-                            .foregroundStyle(by: .value("Focus Area", item.category))
+                            .foregroundStyle(by: .value("Muscle Group", item.category))
                             .cornerRadius(5)
                         }
                         .chartForegroundStyleScale(
@@ -191,19 +191,19 @@ struct RecoveryMapCard: View {
         }
 
         if !overloaded.isEmpty {
-            return "\(formattedList(overloaded)) are above the weekly 12-exercise limit. Ease off and let them recover."
+            return "Your \(formattedList(overloaded)) groups have exceeded optimal training volume. Prioritize rest for these areas."
         }
 
         if !recovering.isEmpty {
-            return "\(formattedList(recovering)) still carry short-term fatigue. Rotate to fresher focus areas for your next session."
+            return "Your \(formattedList(recovering)) groups are currently recovering. Focus on other areas for your next session."
         }
 
         if let weakestFocus = sortedByLoad.first {
             let presetText = recommendedPresetText(for: weakestFocus.focusArea)
-            return "Your \(weakestFocus.focusArea.rawValue.lowercased()) load is only \(weakestFocus.weeklyLoad) this week. A good next move is \(presetText)."
+            return "Your \(weakestFocus.focusArea.rawValue.lowercased()) training volume is low this week (\(weakestFocus.weeklyLoad) exercises). Consider scheduling \(presetText)."
         }
 
-        return "Your weekly volume is balanced. Keep rotating focus areas instead of stacking the same one again."
+        return "Your weekly training volume is well balanced. Keep rotating muscle groups to prevent fatigue build-up."
     }
 
     private func recommendedPresetText(for focusArea: FocusArea) -> String {
@@ -221,7 +221,7 @@ struct RecoveryMapCard: View {
     private func formattedList(_ values: [String]) -> String {
         switch values.count {
         case 0:
-            return "No focus areas"
+            return "No muscle groups"
         case 1:
             return values[0]
         case 2:
@@ -294,14 +294,20 @@ struct SmartRecommendationCard: View {
                     .padding(.horizontal)
 
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text(bestPreset.name)
                             .font(.title3.bold())
+                        
                         Text(bestRecommendation.headline)
-                            .font(.subheadline.weight(.semibold))
-                        Text(bestRecommendation.reason)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(.secondary)
+                        
+                        HStack(spacing: 12) {
+                            Label("\(bestPreset.estTime) mins", systemImage: "clock")
+                            Label("\(bestPreset.calories) kcal", systemImage: "flame")
+                        }
+                        .font(.caption.bold())
+                        .foregroundStyle(.orange)
                     }
                     Spacer()
                     NavigationLink(value: WorkoutRoute.presetDetail(bestPreset)){

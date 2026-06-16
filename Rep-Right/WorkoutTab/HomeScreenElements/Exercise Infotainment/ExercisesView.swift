@@ -71,7 +71,7 @@ struct ExercisesView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         
                         HStack(alignment: .top) {
-                            Text("Focus Area :")
+                            Text("Muscle Group:")
                                 .font(.footnote)
                                 .fontWeight(.bold)
                             

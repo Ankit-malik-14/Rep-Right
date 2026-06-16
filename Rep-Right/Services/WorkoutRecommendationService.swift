@@ -225,13 +225,13 @@ struct WorkoutRecommendationService {
             if overloaded.isEmpty && recovering.isEmpty {
                 let targetText = formattedFocusAreas(focusAreas)
                 headline = "Best time to train \(targetText.lowercased())"
-                reason = "These focus areas are the freshest in your recovery map, so this preset helps balance your week without stacking fatigued muscles."
+                reason = "These muscle groups are fully recovered. This workout helps balance your week without straining fatigued muscles."
             } else if !overloaded.isEmpty {
                 headline = "Use only if you want extra volume"
-                reason = "\(formattedFocusAreas(overloaded)) already carry high load. This preset is still available, but recovery-first options rank higher right now."
+                reason = "\(formattedFocusAreas(overloaded)) already have high training volume. This workout is available, but recovery-first options are recommended right now."
             } else {
                 headline = "Playable with some caution"
-                reason = "\(formattedFocusAreas(recovering)) still need a bit more recovery, but this preset has the lightest overlap among your current options."
+                reason = "\(formattedFocusAreas(recovering)) still need recovery time, but this workout has the lowest overlap with currently fatigued muscles."
             }
             
             return PresetRecommendation(

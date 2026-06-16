@@ -21,23 +21,23 @@ struct RecoveryFocusSnapshot: Identifiable, Hashable {
     var guidance: String {
         if status == .overtrained {
             if recoveryHoursRemaining > 0 {
-                return "Back off for \(Int(recoveryHoursRemaining.rounded(.up))) more hrs and rotate to fresher muscles."
+                return "Rest for \(Int(recoveryHoursRemaining.rounded(.up))) more hours and target other muscles."
             }
-            return "Weekly volume is too high. Shift away from this area for the next session."
+            return "Optimal weekly volume exceeded. Focus on other muscle groups."
         }
         
         if status == .onTrack {
             if recoveryHoursRemaining > 0 {
-                return "Progress is solid, but give it a little more recovery before loading it again."
+                return "Training target met, but allow more recovery time before working this group again."
             }
-            return "This area is in a healthy range. Keep it in rotation, not back-to-back."
+            return "Ideal training range. Keep this group in regular rotation."
         }
         
         if weeklyLoad == 0 {
-            return "Completely fresh this week. Great candidate for your next preset."
+            return "Fully recovered. Ready for your next workout."
         }
         
-        return "Lightly trained so far. You can safely add more focused work here."
+        return "Light training volume. You can safely add more exercises here."
     }
 }
 
