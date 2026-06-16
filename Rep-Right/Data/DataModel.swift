@@ -34,6 +34,7 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
     var executionSteps: [String]
     var tips: [String]
     var assistanceAvailable: Bool
+    var assistanceRuleID: Int? = nil
     var assistanceModel: AssistanceModelKind? = nil
     var assistanceRuleName: String? = nil
     var assistanceUsesStaticHold: Bool = false
@@ -53,6 +54,7 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
         executionSteps: [String],
         tips: [String],
         assistanceAvailable: Bool,
+        assistanceRuleID: Int? = nil,
         assistanceModel: AssistanceModelKind? = nil,
         assistanceRuleName: String? = nil,
         assistanceUsesStaticHold: Bool = false,
@@ -67,6 +69,7 @@ struct Exercise: Identifiable, Equatable, Hashable, Codable {
         self.executionSteps = executionSteps
         self.tips = tips
         self.assistanceAvailable = assistanceAvailable
+        self.assistanceRuleID = assistanceRuleID
         self.assistanceModel = assistanceModel
         self.assistanceRuleName = assistanceRuleName
         self.assistanceUsesStaticHold = assistanceUsesStaticHold

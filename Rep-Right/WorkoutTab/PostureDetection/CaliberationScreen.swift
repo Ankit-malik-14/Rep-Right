@@ -13,6 +13,7 @@ struct CaliberationScreen: View {
     @State private var detector = BackContourDetector()
     @State private var isFinishingSet = false
     
+    var exerciseName: String = "Bodyweight Squat"
     var targetReps: Int? = nil
     var initialElapsedSeconds: Int = 0
     var onSetFinished: ((AssistanceSessionResult) -> Void)? = nil
@@ -59,6 +60,7 @@ struct CaliberationScreen: View {
             }
         }
         .onAppear {
+            detector.configureExercise(name: exerciseName)
             detector.initialElapsedSeconds = initialElapsedSeconds
             detector.elapsedSeconds = initialElapsedSeconds
             detector.elapsedFormatted = String(format: "%02d:%02d", initialElapsedSeconds / 60, initialElapsedSeconds % 60)

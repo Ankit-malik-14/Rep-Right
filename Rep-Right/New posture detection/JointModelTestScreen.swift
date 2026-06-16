@@ -16,6 +16,7 @@ struct JointModelTestScreen: View {
     @State private var isFinishingSet = false
     
     var exerciseName: String = "Plank"
+    var exerciseRuleID: Int? = nil
     var exerciseRuleName: String? = nil
     var usesStaticHoldProgress: Bool = true
     var targetReps: Int? = nil
@@ -84,6 +85,7 @@ struct JointModelTestScreen: View {
         .onAppear {
             viewModel.configureExercise(
                 name: exerciseName,
+                preferredRuleID: exerciseRuleID,
                 preferredRuleName: exerciseRuleName,
                 usesStaticHoldProgress: usesStaticHoldProgress
             )
