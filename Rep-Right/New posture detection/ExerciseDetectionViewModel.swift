@@ -97,7 +97,7 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     private let processingQueue = DispatchQueue(label: "com.rep.processingQueue")
     
     private var exerciseRules: [ExerciseRule] = []
-    var currentExerciseId: Int = 1
+    var currentExerciseRuleID: Int? = nil
     var currentExerciseName: String = "Plank"
     var currentExerciseRuleName: String?
     var usesStaticHoldProgress: Bool = true
@@ -105,12 +105,33 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     // EMA smoothing
     private var previousJoints: [String: CGPoint] = [:]
     private let alpha: CGFloat = 0.4 // 40% new, 60% old
-    
+
     // Rep counting
-    private var baselineY: CGFloat? = nil
-    private var peakTrackedY: CGFloat? = nil
-    private var isDescending: Bool = false
-    private let repThreshold: CGFloat = 0.05
+    private enum RepPhase {
+        case idle
+        case tracking
+        case refractory
+    }
+
+    private struct RepCounterState {
+        var phase: RepPhase = .idle
+        var peakSeen: Bool = false
+        var framesInCycle: Int = 0
+        var refractoryFramesRemaining: Int = 0
+        var smoothedActivation: Double?
+        var isArmed: Bool = false
+    }
+
+    private struct RepCountingProfile {
+        let trigger: Double
+        let peak: Double
+        let reset: Double
+        let refractoryFrames: Int
+        let maxCycleFrames: Int
+        let signalProvider: ([String: CGPoint]) -> Double?
+    }
+
+    private var repCounterState = RepCounterState()
     private var feedbackCounts: [String: Int] = [:]
     
     // Elapsed set timer
@@ -176,20 +197,16 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
         analyzedFrameCount = 0
         correctFrameCount = 0
         feedbackCounts = [:]
-        baselineY = nil
-        peakTrackedY = nil
-        isDescending = false
+        repCounterState = RepCounterState()
         startElapsedTimer()
         if usesStaticHoldProgress {
             startHoldProgressTimer()
         }
     }
-    
+
     func finishSetTracking() {
         stopElapsedTimer()
-        baselineY = nil
-        peakTrackedY = nil
-        isDescending = false
+        repCounterState = RepCounterState()
     }
     
     var formAccuracyScore: Double? {
@@ -209,25 +226,11 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             .map { Self.descriptiveInsight(for: $0.key) }
     }
     
-    func configureExercise(name: String, preferredRuleName: String?, usesStaticHoldProgress: Bool) {
+    func configureExercise(name: String, preferredRuleID: Int?, preferredRuleName: String?, usesStaticHoldProgress: Bool) {
         currentExerciseName = name
+        currentExerciseRuleID = preferredRuleID
         currentExerciseRuleName = preferredRuleName
         self.usesStaticHoldProgress = usesStaticHoldProgress
-        
-        if let preferredRuleName,
-           let matched = exerciseRules.firstIndex(where: { $0.name.caseInsensitiveCompare(preferredRuleName) == .orderedSame }) {
-            currentExerciseId = matched + 1
-            return
-        }
-        
-        if let matched = exerciseRules.firstIndex(where: {
-            $0.name.caseInsensitiveCompare(name) == .orderedSame ||
-            $0.name.lowercased().contains(name.lowercased())
-        }) {
-            currentExerciseId = matched + 1
-        } else {
-            currentExerciseId = 1
-        }
     }
 
     private func loadExerciseRules() {
@@ -375,45 +378,320 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     }
     
     private func updateRepCount(using mappedJoints: [String: CGPoint]) {
-        let hipCandidates = [mappedJoints["hip"], mappedJoints["left_hip"], mappedJoints["right_hip"]]
-        let shoulderCandidates = [mappedJoints["shoulder"], mappedJoints["left_shoulder"], mappedJoints["right_shoulder"]]
-        
-        let trackedPoints = hipCandidates.compactMap { $0 }
-        let fallbackPoints = shoulderCandidates.compactMap { $0 }
-        let sourcePoints = trackedPoints.isEmpty ? fallbackPoints : trackedPoints
-        
-        guard !sourcePoints.isEmpty else { return }
-        
-        let currentY = sourcePoints.map(\.y).reduce(0, +) / CGFloat(sourcePoints.count)
-        
-        if baselineY == nil {
-            baselineY = currentY
-            peakTrackedY = currentY
+        guard let profile = repCountingProfile(for: currentExerciseName),
+              let rawActivation = profile.signalProvider(mappedJoints) else {
             return
         }
         
-        guard let baselineY else { return }
+        let activation: Double
+        if let previous = repCounterState.smoothedActivation {
+            activation = previous * 0.65 + rawActivation * 0.35
+        } else {
+            activation = rawActivation
+        }
+        repCounterState.smoothedActivation = activation
         
-        if !isDescending {
-            if currentY > baselineY + repThreshold {
-                isDescending = true
-                peakTrackedY = currentY
-            } else {
-                self.baselineY = baselineY * 0.9 + currentY * 0.1
+        switch repCounterState.phase {
+        case .idle:
+            repCounterState.framesInCycle = 0
+            if activation <= profile.reset {
+                repCounterState.isArmed = true
             }
-            return
-        }
-        
-        peakTrackedY = max(peakTrackedY ?? currentY, currentY)
-        
-        if currentY <= baselineY + repThreshold * 0.35 {
-            repCount += 1
-            isDescending = false
-            self.baselineY = currentY
-            peakTrackedY = currentY
+            repCounterState.peakSeen = activation >= profile.peak
+            if repCounterState.isArmed, activation >= profile.trigger {
+                repCounterState.phase = .tracking
+                repCounterState.framesInCycle = 1
+            }
+            
+        case .tracking:
+            repCounterState.framesInCycle += 1
+            if activation >= profile.peak {
+                repCounterState.peakSeen = true
+            }
+            
+            if repCounterState.peakSeen, activation <= profile.reset {
+                repCount += 1
+                repCounterState.phase = .refractory
+                repCounterState.refractoryFramesRemaining = profile.refractoryFrames
+                repCounterState.peakSeen = false
+                repCounterState.isArmed = false
+                repCounterState.framesInCycle = 0
+            } else if repCounterState.framesInCycle >= profile.maxCycleFrames {
+                repCounterState.phase = .idle
+                repCounterState.peakSeen = false
+                repCounterState.framesInCycle = 0
+            }
+            
+        case .refractory:
+            repCounterState.refractoryFramesRemaining -= 1
+            if repCounterState.refractoryFramesRemaining <= 0 {
+                repCounterState.phase = .idle
+                repCounterState.framesInCycle = 0
+            }
         }
     }
-    
+
+    private func repCountingProfile(for exerciseName: String) -> RepCountingProfile? {
+        let name = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        
+        switch name {
+        case "push-up":
+            return RepCountingProfile(
+                trigger: 0.18,
+                peak: 0.48,
+                reset: 0.22,
+                refractoryFrames: 10,
+                maxCycleFrames: 90,
+                signalProvider: { [weak self] joints in
+                    self?.pushUpActivation(using: joints)
+                }
+            )
+        case "crunches", "leg raise":
+            return RepCountingProfile(
+                trigger: 0.16,
+                peak: 0.44,
+                reset: 0.20,
+                refractoryFrames: 8,
+                maxCycleFrames: 80,
+                signalProvider: { [weak self] joints in
+                    self?.coreRaiseActivation(using: joints)
+                }
+            )
+        case "jumping jacks":
+            return RepCountingProfile(
+                trigger: 0.20,
+                peak: 0.55,
+                reset: 0.24,
+                refractoryFrames: 6,
+                maxCycleFrames: 70,
+                signalProvider: { [weak self] joints in
+                    self?.jumpingJackActivation(using: joints)
+                }
+            )
+        default:
+            return RepCountingProfile(
+                trigger: 0.20,
+                peak: 0.45,
+                reset: 0.24,
+                refractoryFrames: 8,
+                maxCycleFrames: 90,
+                signalProvider: { [weak self] joints in
+                    self?.genericRepActivation(using: joints)
+                }
+            )
+        }
+    }
+
+    private func pushUpActivation(using joints: [String: CGPoint]) -> Double? {
+        let leftElbow = flexionActivation(
+            shoulder: point(named: "left_shoulder", in: joints),
+            elbow: point(named: "left_elbow", in: joints),
+            wrist: point(named: "left_wrist", in: joints)
+        )
+        let rightElbow = flexionActivation(
+            shoulder: point(named: "right_shoulder", in: joints),
+            elbow: point(named: "right_elbow", in: joints),
+            wrist: point(named: "right_wrist", in: joints)
+        )
+        
+        let elbowActivation = averageOf(leftElbow, rightElbow)
+        let torsoActivation = torsoCompressionActivation(using: joints)
+        
+        switch (elbowActivation, torsoActivation) {
+        case let (lhs?, rhs?):
+            return min(1.0, lhs * 0.75 + rhs * 0.25)
+        case let (lhs?, nil):
+            return lhs
+        case let (nil, rhs?):
+            return rhs
+        default:
+            return nil
+        }
+    }
+
+    private func coreRaiseActivation(using joints: [String: CGPoint]) -> Double? {
+        let shoulderHipKneeLeft = flexionActivation(
+            shoulder: point(named: "left_shoulder", in: joints),
+            hip: point(named: "left_hip", in: joints),
+            knee: point(named: "left_knee", in: joints)
+        )
+        let shoulderHipKneeRight = flexionActivation(
+            shoulder: point(named: "right_shoulder", in: joints),
+            hip: point(named: "right_hip", in: joints),
+            knee: point(named: "right_knee", in: joints)
+        )
+        let hipFlexion = averageOf(shoulderHipKneeLeft, shoulderHipKneeRight)
+        let torsoCompression = torsoCompressionActivation(using: joints)
+        
+        switch (hipFlexion, torsoCompression) {
+        case let (lhs?, rhs?):
+            return min(1.0, lhs * 0.8 + rhs * 0.2)
+        case let (lhs?, nil):
+            return lhs
+        case let (nil, rhs?):
+            return rhs
+        default:
+            return nil
+        }
+    }
+
+    private func jumpingJackActivation(using joints: [String: CGPoint]) -> Double? {
+        let armSpread = spreadActivation(
+            a: point(named: "left_wrist", in: joints),
+            b: point(named: "right_wrist", in: joints),
+            referenceA: point(named: "left_shoulder", in: joints),
+            referenceB: point(named: "right_shoulder", in: joints),
+            scale: 0.9
+        )
+        
+        let legSpread = spreadActivation(
+            a: point(named: "left_ankle", in: joints),
+            b: point(named: "right_ankle", in: joints),
+            referenceA: point(named: "left_hip", in: joints),
+            referenceB: point(named: "right_hip", in: joints),
+            scale: 1.0
+        )
+        
+        switch (armSpread, legSpread) {
+        case let (lhs?, rhs?):
+            return min(1.0, lhs * 0.5 + rhs * 0.5)
+        case let (lhs?, nil):
+            return lhs
+        case let (nil, rhs?):
+            return rhs
+        default:
+            return nil
+        }
+    }
+
+    private func genericRepActivation(using joints: [String: CGPoint]) -> Double? {
+        let candidates: [Double?] = [
+            flexionActivation(
+                shoulder: point(named: "left_shoulder", in: joints),
+                elbow: point(named: "left_elbow", in: joints),
+                wrist: point(named: "left_wrist", in: joints)
+            ),
+            flexionActivation(
+                shoulder: point(named: "right_shoulder", in: joints),
+                elbow: point(named: "right_elbow", in: joints),
+                wrist: point(named: "right_wrist", in: joints)
+            ),
+            flexionActivation(
+                shoulder: point(named: "left_shoulder", in: joints),
+                hip: point(named: "left_hip", in: joints),
+                knee: point(named: "left_knee", in: joints)
+            ),
+            flexionActivation(
+                shoulder: point(named: "right_shoulder", in: joints),
+                hip: point(named: "right_hip", in: joints),
+                knee: point(named: "right_knee", in: joints)
+            ),
+            flexionActivation(
+                hip: point(named: "left_hip", in: joints),
+                knee: point(named: "left_knee", in: joints),
+                ankle: point(named: "left_ankle", in: joints)
+            ),
+            flexionActivation(
+                hip: point(named: "right_hip", in: joints),
+                knee: point(named: "right_knee", in: joints),
+                ankle: point(named: "right_ankle", in: joints)
+            )
+        ]
+        
+        let available = candidates.compactMap { $0 }
+        guard !available.isEmpty else { return nil }
+        return available.reduce(0, +) / Double(available.count)
+    }
+
+    private func torsoCompressionActivation(using joints: [String: CGPoint]) -> Double? {
+        let left = flexionActivation(
+            shoulder: point(named: "left_shoulder", in: joints),
+            hip: point(named: "left_hip", in: joints),
+            knee: point(named: "left_knee", in: joints)
+        )
+        let right = flexionActivation(
+            shoulder: point(named: "right_shoulder", in: joints),
+            hip: point(named: "right_hip", in: joints),
+            knee: point(named: "right_knee", in: joints)
+        )
+        return averageOf(left, right)
+    }
+
+    private func flexionActivation(
+        shoulder: CGPoint?,
+        elbow: CGPoint?,
+        wrist: CGPoint?
+    ) -> Double? {
+        guard let shoulder, let elbow, let wrist else { return nil }
+        return Self.normalizedFlexion(from: calculateAngle(a: shoulder, b: elbow, c: wrist))
+    }
+
+    private func flexionActivation(
+        shoulder: CGPoint?,
+        hip: CGPoint?,
+        knee: CGPoint?
+    ) -> Double? {
+        guard let shoulder, let hip, let knee else { return nil }
+        return Self.normalizedFlexion(from: calculateAngle(a: shoulder, b: hip, c: knee))
+    }
+
+    private func flexionActivation(
+        hip: CGPoint?,
+        knee: CGPoint?,
+        ankle: CGPoint?
+    ) -> Double? {
+        guard let hip, let knee, let ankle else { return nil }
+        return Self.normalizedFlexion(from: calculateAngle(a: hip, b: knee, c: ankle))
+    }
+
+    private func spreadActivation(
+        a: CGPoint?,
+        b: CGPoint?,
+        referenceA: CGPoint?,
+        referenceB: CGPoint?,
+        scale: Double
+    ) -> Double? {
+        guard let a, let b, let referenceA, let referenceB else { return nil }
+        let spread = hypot(Double(a.x - b.x), Double(a.y - b.y))
+        let reference = hypot(Double(referenceA.x - referenceB.x), Double(referenceA.y - referenceB.y))
+        guard reference > 0 else { return nil }
+        return Self.normalizedDistanceRatio(distance: spread, reference: reference, scale: scale)
+    }
+
+    private func point(named name: String, in joints: [String: CGPoint]) -> CGPoint? {
+        if let point = joints[name] {
+            return point
+        }
+        if !name.hasPrefix("left_") {
+            if let point = joints["left_\(name)"] {
+                return point
+            }
+        }
+        if !name.hasPrefix("right_") {
+            if let point = joints["right_\(name)"] {
+                return point
+            }
+        }
+        return nil
+    }
+
+    private func averageOf(_ values: Double?...) -> Double? {
+        let filtered = values.compactMap { $0 }
+        guard !filtered.isEmpty else { return nil }
+        return filtered.reduce(0, +) / Double(filtered.count)
+    }
+
+    private static func normalizedFlexion(from angle: Float) -> Double {
+        let value = (180.0 - Double(angle)) / 90.0
+        return min(max(value, 0), 1)
+    }
+
+    private static func normalizedDistanceRatio(distance: Double, reference: Double, scale: Double) -> Double {
+        let ratio = distance / reference
+        let value = (ratio - 1.0) / max(scale, 0.001)
+        return min(max(value, 0), 1)
+    }
+
     private static func formatElapsedTime(_ totalSeconds: Int) -> String {
         let minutes = totalSeconds / 60
         let seconds = totalSeconds % 60
@@ -444,7 +722,20 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     }
     
     private func evaluateRules(mappedJoints: [String: CGPoint]) {
-        guard let exercise = selectedExerciseRule() else { return }
+        guard let exercise = selectedExerciseRule() else {
+            let result = ExerciseAnalysisResult(
+                exerciseId: -1,
+                exerciseName: currentExerciseName,
+                isCorrect: false,
+                confidence: 0,
+                flags: ["No matching assistance rule"],
+                jointCoordinates: mappedJoints,
+                jointAngles: [:]
+            )
+            self.analysisResult = result
+            analyzedFrameCount += 1
+            return
+        }
         
         var errorFlags: [String] = []
         var computedAngles: [String: Float] = [:]
@@ -480,16 +771,23 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
     }
     
     private func selectedExerciseRule() -> ExerciseRule? {
+        if let currentExerciseRuleID,
+           let exact = exerciseRules.first(where: { $0.id == currentExerciseRuleID }) {
+            return exact
+        }
+        
         if let currentExerciseRuleName,
            let exact = exerciseRules.first(where: { $0.name.caseInsensitiveCompare(currentExerciseRuleName) == .orderedSame }) {
             return exact
         }
         
-        if currentExerciseId > 0 && currentExerciseId <= exerciseRules.count {
-            return exerciseRules[currentExerciseId - 1]
+        if let exact = exerciseRules.first(where: {
+            $0.name.caseInsensitiveCompare(currentExerciseName) == .orderedSame
+        }) {
+            return exact
         }
         
-        return exerciseRules.first
+        return nil
     }
     
     private func evaluateGenericRules(
@@ -584,12 +882,13 @@ class ExerciseDetectionViewModel: NSObject, AVCaptureVideoDataOutputSampleBuffer
             if let wrist = mappedJoints["wrist"], let shoulder = mappedJoints["shoulder"], wrist.y > shoulder.y - 0.15 {
                 appendFlag("wrists_forward")
             }
-        case "High Plank (Push-up Hold)":
-            if let torsoAngle = angle("shoulder", "hip", "knee", store: "hip_angle"), torsoAngle < 155 {
-                appendFlag("body_misaligned")
-            }
-            if let elbowAngle = angle("shoulder", "elbow", "wrist", store: "elbow_angle"), elbowAngle < 150 {
-                appendFlag("elbows_bent")
+        case "Push-Up", "High Plank (Push-up Hold)":
+            if let torsoAngle = angle("shoulder", "hip", "knee", store: "hip_angle") {
+                if !(170.0...190.0).contains(torsoAngle) {
+                    appendFlag("body_misaligned")
+                }
+            } else {
+                appendFlag("missing_hip_angle")
             }
         case "Low Plank (Forearm Plank)":
             if let torsoAngle = angle("shoulder", "hip", "knee", store: "hip_angle"), torsoAngle < 155 {

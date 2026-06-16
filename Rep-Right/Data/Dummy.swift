@@ -27,6 +27,7 @@ class Exercises {
                 "Inhale on the way down, exhale as you press up."
             ],
             assistanceAvailable: true,
+            assistanceRuleID: 7,
             assistanceModel: .joint,
             assistanceRuleName: "High Plank (Push-up Hold)",
             demoVideo: URL(string: "https://example.com/videos/pushup.mp4"),
@@ -52,6 +53,7 @@ class Exercises {
                         "Keep arms relaxed at sides or on thighs."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 2,
                     assistanceModel: .joint,
                     assistanceRuleName: "Wall Sit",
                     assistanceUsesStaticHold: true,
@@ -75,6 +77,7 @@ class Exercises {
                         "Drive through heels, not toes."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 4,
                     assistanceModel: .joint,
                     assistanceRuleName: "Glute Bridge Hold",
                     assistanceUsesStaticHold: true,
@@ -98,6 +101,7 @@ class Exercises {
                         "Keep your core slightly braced to prevent swinging."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 5,
                     assistanceModel: .joint,
                     assistanceRuleName: "Dead Hang",
                     assistanceUsesStaticHold: true,
@@ -121,6 +125,7 @@ class Exercises {
                         "Squeeze glutes to protect your lower back."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 6,
                     assistanceModel: .joint,
                     assistanceRuleName: "Overhead Hold",
                     assistanceUsesStaticHold: true,
@@ -144,6 +149,7 @@ class Exercises {
                         "Squeeze core and glutes throughout."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 8,
                     assistanceModel: .joint,
                     assistanceRuleName: "Low Plank (Forearm Plank)",
                     assistanceUsesStaticHold: true,
@@ -167,6 +173,7 @@ class Exercises {
                         "Keep your neck neutral; don't crane it up or down."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 9,
                     assistanceModel: .joint,
                     assistanceRuleName: "Side Plank",
                     assistanceUsesStaticHold: true,
@@ -190,6 +197,7 @@ class Exercises {
                         "Keep shoulders back and chest up."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 10,
                     assistanceModel: .joint,
                     assistanceRuleName: "Lunge Hold",
                     assistanceUsesStaticHold: true,
@@ -213,6 +221,7 @@ class Exercises {
                         "Focus your gaze on a fixed point to help balance."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 11,
                     assistanceModel: .joint,
                     assistanceRuleName: "Standing Hip Abduction Hold",
                     assistanceUsesStaticHold: true,
@@ -236,6 +245,7 @@ class Exercises {
                         "Tighten your core as hard as possible."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 12,
                     assistanceModel: .joint,
                     assistanceRuleName: "L-Sit Hold",
                     assistanceUsesStaticHold: true,
@@ -259,6 +269,7 @@ class Exercises {
                         "If too hard, bend your knees to reduce the lever arm."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 13,
                     assistanceModel: .joint,
                     assistanceRuleName: "Hollow Body Hold",
                     assistanceUsesStaticHold: true,
@@ -282,6 +293,7 @@ class Exercises {
                         "Focus on squeezing glutes, not just arching the back."
                     ],
                     assistanceAvailable: true,
+                    assistanceRuleID: 14,
                     assistanceModel: .joint,
                     assistanceRuleName: "Superman Hold",
                     assistanceUsesStaticHold: true,
@@ -304,6 +316,7 @@ class Exercises {
                 "Control the descent; don’t bounce at the bottom."
             ],
             assistanceAvailable: true,
+            assistanceRuleID: 1,
             assistanceModel: .contour,
             demoVideo: URL(string: "https://example.com/videos/bodyweight_squat.mp4"),
             image: "Squats",
@@ -325,6 +338,7 @@ class Exercises {
                 "Exhale as you row, inhale as you lower."
             ],
             assistanceAvailable: true,
+            assistanceRuleID: 1,
             assistanceModel: .contour,
             demoVideo: URL(string: "https://example.com/videos/dumbbell_row.mp4"),
             image: "DumbellRow",
@@ -345,6 +359,7 @@ class Exercises {
                 "Squeeze glutes lightly to stabilize pelvis."
             ],
             assistanceAvailable: true,
+            assistanceRuleID: 1,
             assistanceModel: .joint,
             assistanceRuleName: "Plank",
             assistanceUsesStaticHold: true,
@@ -383,6 +398,7 @@ class Exercises {
                     executionSteps: ["Lie back, lift shoulders off floor."],
                     tips: ["Do not pull on neck."],
                     assistanceAvailable: true,
+                    assistanceRuleID: 13,
                     assistanceModel: .joint,
                     assistanceRuleName: "Hollow Body Hold",
                     demoVideo: nil,
@@ -407,6 +423,7 @@ class Exercises {
                     executionSteps: ["Jump feet out, hands over head."],
                     tips: ["Maintain rhythm."],
                     assistanceAvailable: true,
+                    assistanceRuleID: 6,
                     assistanceModel: .joint,
                     assistanceRuleName: "Overhead Hold",
                     demoVideo: nil,
@@ -431,6 +448,7 @@ class Exercises {
                     executionSteps: ["Lift legs while lying flat."],
                     tips: ["Keep lower back pressed down."],
                     assistanceAvailable: true,
+                    assistanceRuleID: 13,
                     assistanceModel: .joint,
                     assistanceRuleName: "Hollow Body Hold",
                     demoVideo: nil,
@@ -444,6 +462,7 @@ class Exercises {
                     executionSteps: ["Pull arm across chest."],
                     tips: ["Keep shoulder down."],
                     assistanceAvailable: true,
+                    assistanceRuleID: 6,
                     assistanceModel: .joint,
                     assistanceRuleName: "Overhead Hold",
                     assistanceUsesStaticHold: true,
@@ -458,6 +477,7 @@ class Exercises {
                     executionSteps: ["Reach arm overhead to side."],
                     tips: ["Keep hips square."],
                     assistanceAvailable: true,
+                    assistanceRuleID: 9,
                     assistanceModel: .joint,
                     assistanceRuleName: "Side Plank",
                     assistanceUsesStaticHold: true,

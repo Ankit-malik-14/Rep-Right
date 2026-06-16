@@ -177,26 +177,29 @@ struct WorkoutControlsSheet: View {
         .padding(.top)
         .fullScreenCover(isPresented: $showCalibration) {
             Group {
-                if manager.currentExercise?.assistanceModel == .joint,
-                   let exercise = manager.currentExercise {
-                    JointModelTestScreen(
-                        exerciseName: exercise.name,
-                        exerciseRuleName: exercise.assistanceRuleName,
-                        usesStaticHoldProgress: exercise.assistanceUsesStaticHold,
-                        targetReps: manager.currentActiveSetTargetReps,
-                        initialElapsedSeconds: Int(manager.elapsedTime),
-                        onSetFinished: { result in
-                            manager.recordAssistanceResult(result)
-                        }
-                    )
-                } else {
-                    CaliberationScreen(
-                        targetReps: manager.currentActiveSetTargetReps,
-                        initialElapsedSeconds: Int(manager.elapsedTime),
-                        onSetFinished: { result in
-                            manager.recordAssistanceResult(result)
-                        }
-                    )
+                if let exercise = manager.currentExercise {
+                    if exercise.assistanceModel == .joint {
+                        JointModelTestScreen(
+                            exerciseName: exercise.name,
+                            exerciseRuleID: exercise.assistanceRuleID,
+                            exerciseRuleName: exercise.assistanceRuleName,
+                            usesStaticHoldProgress: exercise.assistanceUsesStaticHold,
+                            targetReps: manager.currentActiveSetTargetReps,
+                            initialElapsedSeconds: Int(manager.elapsedTime),
+                            onSetFinished: { result in
+                                manager.recordAssistanceResult(result)
+                            }
+                        )
+                    } else {
+                        CaliberationScreen(
+                            exerciseName: exercise.name,
+                            targetReps: manager.currentActiveSetTargetReps,
+                            initialElapsedSeconds: Int(manager.elapsedTime),
+                            onSetFinished: { result in
+                                manager.recordAssistanceResult(result)
+                            }
+                        )
+                    }
                 }
             }
         }

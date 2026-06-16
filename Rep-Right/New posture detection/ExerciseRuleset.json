@@ -157,7 +157,8 @@
       },
       "expected_accuracy": 0.85,
       "flags": {
-        "body_misaligned": "Body not straight. Align < 15°",
+        "body_misaligned": "Back not straight. Keep a ~180° line with a 10° tolerance",
+        "missing_hip_angle": "Hip angle could not be read. Keep your full body visible",
         "hips_sagging": "Hips sagging. Raise to shoulder level",
         "elbows_bent": "Elbows bent. Lock arms > 160°",
         "shoulders_over_wrists": "Shoulders over wrists. Keep stacked"

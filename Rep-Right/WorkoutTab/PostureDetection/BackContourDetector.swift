@@ -12,12 +12,8 @@ enum CalibrationPhase {
 @Observable
 class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     private struct ContourAnalysisState {
-        var repCount: Int = 0
         var analyzedFrameCount: Int = 0
         var correctFrameCount: Int = 0
-        var baselineY: CGFloat?
-        var lowestTrackedY: CGFloat?
-        var isDescending: Bool = false
         var feedbackCounts: [String: Int] = [:]
     }
     
@@ -27,6 +23,12 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
         var minY: CGFloat
         var maxY: CGFloat
         var isFacingLeft: Bool
+        var joints: [String: CGPoint]
+    }
+
+    private struct ContourSample {
+        var point: CGPoint
+        var progress: CGFloat
     }
     
     // Core AVFoundation
@@ -48,18 +50,21 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     var analyzedFrameCount: Int = 0
     var correctFrameCount: Int = 0
     var initialElapsedSeconds: Int = 0
+    var currentExerciseName: String = "Bodyweight Squat"
     
     // Timer state
     var timerTime: Int = 3
     private var timer: Timer?
     private var elapsedTimer: Timer?
-    
+    private var isCountdownArmed: Bool = false
+
     // Rep counting state
-    private let repThreshold: CGFloat = 0.05
+    private let repCountingQueue = DispatchQueue(label: "video.repCountingQueue", qos: .userInitiated)
+    private let jointRepCounter = JointRepCounter()
     private var analysisState = ContourAnalysisState()
     private var cachedContourPose: ContourPoseSnapshot?
     private var contourFrameIndex: Int = 0
-    private let poseRefreshInterval = 3
+    private let poseRefreshInterval = 1
     
     override init() {
         super.init()
@@ -126,9 +131,7 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                 // Adjust connection rotation if needed
                 if let connection = self.videoDataOutput.connection(with: .video) {
                     connection.videoRotationAngle = 90 // Default Portrait
-                    if self.currentCameraPosition == .front {
-                        connection.isVideoMirrored = true
-                    }
+                    connection.isVideoMirrored = (self.currentCameraPosition == .front)
                 }
             } else {
                 // Update connection mirroring for existing output
@@ -158,10 +161,12 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             }
         }
         stopElapsedTimer()
+        isCountdownArmed = false
     }
     
     func startDetectingPerson() {
         DispatchQueue.main.async {
+            self.isCountdownArmed = false
             self.phase = .detectingPerson
             if self.detectionFeedback == "" || self.detectionFeedback == "Analyzing..." {
                 self.detectionFeedback = "Please stand sideways in the frame"
@@ -171,7 +176,8 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     
     func startTimer() {
         DispatchQueue.main.async {
-            guard self.phase == .detectingPerson else { return }
+            guard self.phase == .detectingPerson, !self.isCountdownArmed else { return }
+            self.isCountdownArmed = true
             self.phase = .timer
             self.timerTime = 3
             self.timer?.invalidate()
@@ -188,6 +194,7 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     }
     
     func beginAnalyzingPhase() {
+        isCountdownArmed = false
         resetSetMetrics()
         phase = .analyzing
         detectionFeedback = "Analyzing..."
@@ -197,16 +204,22 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     func finishSet() {
         timer?.invalidate()
         stopElapsedTimer()
+        isCountdownArmed = false
         phase = .infoSheet
     }
     
     private func resetSetMetrics() {
+        let exerciseName = currentExerciseName
         repCount = 0
         elapsedSeconds = initialElapsedSeconds
         elapsedFormatted = Self.formatElapsedTime(initialElapsedSeconds)
         analyzedFrameCount = 0
         correctFrameCount = 0
         analysisState = ContourAnalysisState()
+        repCountingQueue.async { [weak self] in
+            guard let self else { return }
+            self.jointRepCounter.configure(exerciseName: exerciseName)
+        }
     }
     
     private func startElapsedTimer() {
@@ -226,6 +239,41 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     }
     
     private func makeContourPoseSnapshot(from observation: VNHumanBodyPoseObservation) -> ContourPoseSnapshot? {
+        let allJoints: [VNHumanBodyPoseObservation.JointName] = [
+            .nose, .neck, .rightShoulder, .leftShoulder, .rightElbow, .leftElbow,
+            .rightWrist, .leftWrist, .rightHip, .leftHip, .rightKnee, .leftKnee,
+            .rightAnkle, .leftAnkle
+        ]
+
+        var joints: [String: CGPoint] = [:]
+
+        func addJoint(_ visionJoint: VNHumanBodyPoseObservation.JointName, name: String, point: VNRecognizedPoint) {
+            let normalized = CGPoint(x: point.location.x, y: 1.0 - point.location.y)
+            joints[name] = normalized
+        }
+
+        for visionJoint in allJoints {
+            guard let pt = try? observation.recognizedPoint(visionJoint), pt.confidence > 0.3 else { continue }
+            switch visionJoint {
+            case .nose: addJoint(visionJoint, name: "nose", point: pt)
+            case .neck: addJoint(visionJoint, name: "neck", point: pt)
+            case .rightShoulder: addJoint(visionJoint, name: "right_shoulder", point: pt)
+            case .leftShoulder: addJoint(visionJoint, name: "left_shoulder", point: pt)
+            case .rightElbow: addJoint(visionJoint, name: "right_elbow", point: pt)
+            case .leftElbow: addJoint(visionJoint, name: "left_elbow", point: pt)
+            case .rightWrist: addJoint(visionJoint, name: "right_wrist", point: pt)
+            case .leftWrist: addJoint(visionJoint, name: "left_wrist", point: pt)
+            case .rightHip: addJoint(visionJoint, name: "right_hip", point: pt)
+            case .leftHip: addJoint(visionJoint, name: "left_hip", point: pt)
+            case .rightKnee: addJoint(visionJoint, name: "right_knee", point: pt)
+            case .leftKnee: addJoint(visionJoint, name: "left_knee", point: pt)
+            case .rightAnkle: addJoint(visionJoint, name: "right_ankle", point: pt)
+            case .leftAnkle: addJoint(visionJoint, name: "left_ankle", point: pt)
+            default:
+                break
+            }
+        }
+
         guard let neckPoint = try? observation.recognizedPoint(.neck),
               neckPoint.confidence > 0.3,
               let rootPoint = try? observation.recognizedPoint(.root),
@@ -257,37 +305,257 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             root: root,
             minY: minY,
             maxY: maxY,
-            isFacingLeft: isFacingLeft
+            isFacingLeft: isFacingLeft,
+            joints: joints
         )
     }
-    
-    private func updateRepCount(with currentY: CGFloat, state: inout ContourAnalysisState) {
-        if state.baselineY == nil {
-            state.baselineY = currentY
-            state.lowestTrackedY = currentY
-            return
+
+    func configureExercise(name: String) {
+        currentExerciseName = name
+        let configuredName = name
+        repCountingQueue.async { [weak self] in
+            guard let self else { return }
+            self.jointRepCounter.configure(exerciseName: configuredName)
         }
-        
-        guard let baselineY = state.baselineY else { return }
-        
-        if !state.isDescending {
-            if currentY > baselineY + repThreshold {
-                state.isDescending = true
-                state.lowestTrackedY = currentY
-            } else {
-                state.baselineY = baselineY * 0.9 + currentY * 0.1
-            }
-            return
+    }
+
+    private func currentRepStyle() -> ContourRepCounter.ExerciseStyle {
+        let normalized = currentExerciseName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if normalized.contains("squat") || normalized.contains("lunge") || normalized.contains("deadlift") {
+            return .squatLike
         }
-        
-        state.lowestTrackedY = max(state.lowestTrackedY ?? currentY, currentY)
-        
-        if currentY <= baselineY + repThreshold * 0.35 {
-            state.repCount += 1
-            state.isDescending = false
-            state.baselineY = currentY
-            state.lowestTrackedY = currentY
+        if normalized.contains("row") || normalized.contains("pull") {
+            return .rowLike
         }
+        return .generic
+    }
+
+    private func makeContourRepMeasurement(
+        from samples: [ContourSample],
+        poseSnapshot: ContourPoseSnapshot,
+        style: ContourRepCounter.ExerciseStyle
+    ) -> ContourRepMeasurement? {
+        let contour = contourMotion(from: samples, poseSnapshot: poseSnapshot, style: style)
+        let joint = jointMotion(from: poseSnapshot, style: style)
+
+        guard contour.motion != nil || joint.motion != nil else { return nil }
+        return ContourRepMeasurement(
+            contourMotion: contour.motion,
+            contourConfidence: contour.confidence,
+            jointMotion: joint.motion,
+            jointConfidence: joint.confidence
+        )
+    }
+
+    private func contourMotion(
+        from samples: [ContourSample],
+        poseSnapshot: ContourPoseSnapshot,
+        style: ContourRepCounter.ExerciseStyle
+    ) -> (motion: Double?, confidence: Double) {
+        guard !samples.isEmpty else { return (nil, 0) }
+
+        let targetRange: ClosedRange<CGFloat>
+        switch style {
+        case .squatLike:
+            targetRange = 0.55...1.0
+        case .rowLike:
+            targetRange = 0.12...0.65
+        case .generic:
+            targetRange = 0.20...0.85
+        }
+
+        let band = samples.filter { targetRange.contains($0.progress) }
+        guard !band.isEmpty else { return (nil, 0) }
+
+        let bodyVectorX = poseSnapshot.root.x - poseSnapshot.neck.x
+        let bodyVectorY = poseSnapshot.root.y - poseSnapshot.neck.y
+        let bodyLength = max(0.001, hypot(bodyVectorX, bodyVectorY))
+        let normalX = -bodyVectorY / bodyLength
+        let normalY = bodyVectorX / bodyLength
+
+        let depths = band.map { sample -> Double in
+            let relativeX = sample.point.x - poseSnapshot.neck.x
+            let relativeY = sample.point.y - poseSnapshot.neck.y
+            return abs(Double(relativeX * normalX + relativeY * normalY)) / Double(bodyLength)
+        }
+
+        guard !depths.isEmpty else { return (nil, 0) }
+        let average = depths.reduce(0, +) / Double(depths.count)
+        let peak = depths.max() ?? average
+        let motion = (average * 0.2 + peak * 0.8) * 2.0
+        let confidence = min(1.0, Double(band.count) / 14.0)
+        return (motion, confidence)
+    }
+
+    private func jointMotion(
+        from poseSnapshot: ContourPoseSnapshot,
+        style: ContourRepCounter.ExerciseStyle
+    ) -> (motion: Double?, confidence: Double) {
+        let joints = poseSnapshot.joints
+
+        switch style {
+        case .squatLike:
+            let hipDrop = midpointProjection(
+                upperA: point(named: "left_shoulder", in: joints),
+                upperB: point(named: "right_shoulder", in: joints),
+                lowerA: point(named: "left_ankle", in: joints),
+                lowerB: point(named: "right_ankle", in: joints),
+                centerA: point(named: "left_hip", in: joints),
+                centerB: point(named: "right_hip", in: joints),
+                fallbackUpperA: poseSnapshot.neck,
+                fallbackLowerA: poseSnapshot.root
+            )
+            let kneeFlexion = averageOf(
+                flexionActivation(
+                    hip: point(named: "left_hip", in: joints),
+                    knee: point(named: "left_knee", in: joints),
+                    ankle: point(named: "left_ankle", in: joints)
+                ),
+                flexionActivation(
+                    hip: point(named: "right_hip", in: joints),
+                    knee: point(named: "right_knee", in: joints),
+                    ankle: point(named: "right_ankle", in: joints)
+                )
+            )
+
+            let available = [hipDrop, kneeFlexion].compactMap { $0 }
+            guard !available.isEmpty else { return (nil, 0) }
+            return (available.reduce(0, +) / Double(available.count), min(1.0, Double(available.count) / 2.0))
+
+        case .rowLike:
+            let elbowFlexion = averageOf(
+                flexionActivation(
+                    shoulder: point(named: "left_shoulder", in: joints),
+                    elbow: point(named: "left_elbow", in: joints),
+                    wrist: point(named: "left_wrist", in: joints)
+                ),
+                flexionActivation(
+                    shoulder: point(named: "right_shoulder", in: joints),
+                    elbow: point(named: "right_elbow", in: joints),
+                    wrist: point(named: "right_wrist", in: joints)
+                )
+            )
+            let torsoCompression = averageOf(
+                flexionActivation(
+                    shoulder: point(named: "left_shoulder", in: joints),
+                    hip: point(named: "left_hip", in: joints),
+                    knee: point(named: "left_knee", in: joints)
+                ),
+                flexionActivation(
+                    shoulder: point(named: "right_shoulder", in: joints),
+                    hip: point(named: "right_hip", in: joints),
+                    knee: point(named: "right_knee", in: joints)
+                )
+            )
+
+            let available = [elbowFlexion, torsoCompression].compactMap { $0 }
+            guard !available.isEmpty else { return (nil, 0) }
+            return (available.reduce(0, +) / Double(available.count), min(1.0, Double(available.count) / 2.0))
+
+        case .generic:
+            let candidates: [Double?] = [
+                flexionActivation(
+                    shoulder: point(named: "left_shoulder", in: joints),
+                    elbow: point(named: "left_elbow", in: joints),
+                    wrist: point(named: "left_wrist", in: joints)
+                ),
+                flexionActivation(
+                    shoulder: point(named: "right_shoulder", in: joints),
+                    elbow: point(named: "right_elbow", in: joints),
+                    wrist: point(named: "right_wrist", in: joints)
+                ),
+                flexionActivation(
+                    shoulder: point(named: "left_shoulder", in: joints),
+                    hip: point(named: "left_hip", in: joints),
+                    knee: point(named: "left_knee", in: joints)
+                ),
+                flexionActivation(
+                    shoulder: point(named: "right_shoulder", in: joints),
+                    hip: point(named: "right_hip", in: joints),
+                    knee: point(named: "right_knee", in: joints)
+                )
+            ]
+            let available = candidates.compactMap { $0 }
+            guard !available.isEmpty else { return (nil, 0) }
+            return (available.reduce(0, +) / Double(available.count), min(1.0, Double(available.count) / 4.0))
+        }
+    }
+
+    private func midpointProjection(
+        upperA: CGPoint?,
+        upperB: CGPoint?,
+        lowerA: CGPoint?,
+        lowerB: CGPoint?,
+        centerA: CGPoint?,
+        centerB: CGPoint?,
+        fallbackUpperA: CGPoint,
+        fallbackLowerA: CGPoint
+    ) -> Double? {
+        let upper = midpoint(upperA, upperB) ?? fallbackUpperA
+        let lower = midpoint(lowerA, lowerB) ?? fallbackLowerA
+        let center = midpoint(centerA, centerB)
+        guard let center else { return nil }
+
+        let axisX = lower.x - upper.x
+        let axisY = lower.y - upper.y
+        let length = max(0.001, hypot(axisX, axisY))
+        let unitX = axisX / length
+        let unitY = axisY / length
+        let projection = (center.x - upper.x) * unitX + (center.y - upper.y) * unitY
+        return max(0, Double(projection))
+    }
+
+    private func flexionActivation(shoulder: CGPoint?, elbow: CGPoint?, wrist: CGPoint?) -> Double? {
+        guard let shoulder, let elbow, let wrist else { return nil }
+        return normalizedFlexion(from: Self.calculateAngle(a: shoulder, b: elbow, c: wrist))
+    }
+
+    private func flexionActivation(shoulder: CGPoint?, hip: CGPoint?, knee: CGPoint?) -> Double? {
+        guard let shoulder, let hip, let knee else { return nil }
+        return normalizedFlexion(from: Self.calculateAngle(a: shoulder, b: hip, c: knee))
+    }
+
+    private func flexionActivation(hip: CGPoint?, knee: CGPoint?, ankle: CGPoint?) -> Double? {
+        guard let hip, let knee, let ankle else { return nil }
+        return normalizedFlexion(from: Self.calculateAngle(a: hip, b: knee, c: ankle))
+    }
+
+    private func midpoint(_ a: CGPoint?, _ b: CGPoint?) -> CGPoint? {
+        guard let a, let b else { return nil }
+        return CGPoint(x: (a.x + b.x) * 0.5, y: (a.y + b.y) * 0.5)
+    }
+
+    private func point(named name: String, in joints: [String: CGPoint]) -> CGPoint? {
+        if let point = joints[name] {
+            return point
+        }
+        if !name.hasPrefix("left_"), let point = joints["left_\(name)"] {
+            return point
+        }
+        if !name.hasPrefix("right_"), let point = joints["right_\(name)"] {
+            return point
+        }
+        return nil
+    }
+
+    private func averageOf(_ values: Double?...) -> Double? {
+        let filtered = values.compactMap { $0 }
+        guard !filtered.isEmpty else { return nil }
+        return filtered.reduce(0, +) / Double(filtered.count)
+    }
+
+    private func normalizedFlexion(from angle: Float) -> Double {
+        let value = (180.0 - Double(angle)) / 90.0
+        return min(max(value, 0), 1)
+    }
+
+    private static func calculateAngle(a: CGPoint, b: CGPoint, c: CGPoint) -> Float {
+        let ab = CGPoint(x: a.x - b.x, y: a.y - b.y)
+        let cb = CGPoint(x: c.x - b.x, y: c.y - b.y)
+        let dot = ab.x * cb.x + ab.y * cb.y
+        let cross = ab.x * cb.y - ab.y * cb.x
+        let angle = atan2(cross, dot) * 180 / .pi
+        return Float(abs(angle))
     }
     
     var formAccuracyScore: Double? {
@@ -419,6 +687,7 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             let bufferPointer = baseAddress.assumingMemoryBound(to: UInt8.self)
             
             var edgePoints: [CGPoint] = []
+            var contourSamples: [ContourSample] = []
 
             let neck = poseSnapshot.neck
             let root = poseSnapshot.root
@@ -477,12 +746,19 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                 
                 if foundEdge {
                     edgePoints.append(lastValid)
+                    contourSamples.append(
+                        ContourSample(
+                            point: lastValid,
+                            progress: min(max(t, 0), 1)
+                        )
+                    )
                 }
             }
             
             // Apply Moving Average Smoothing to reduce contour noise
             if edgePoints.count > 4 {
                 var smoothed: [CGPoint] = []
+                var smoothedSamples: [ContourSample] = []
                 let window = 2
                 for i in 0..<edgePoints.count {
                     let start = max(0, i - window)
@@ -495,11 +771,16 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                     }
                     let count = CGFloat(end - start + 1)
                     smoothed.append(CGPoint(x: sumX / count, y: sumY / count))
+                    smoothedSamples.append(
+                        ContourSample(
+                            point: CGPoint(x: sumX / count, y: sumY / count),
+                            progress: contourSamples[i].progress
+                        )
+                    )
                 }
                 edgePoints = smoothed
+                contourSamples = smoothedSamples
             }
-            
-            let headY = edgePoints.map(\.y).min()
             
             // Curve analysis
             var straight = true
@@ -548,12 +829,17 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             } else {
                 state.feedbackCounts[msg, default: 0] += 1
             }
-            if let headY {
-                updateRepCount(with: headY, state: &state)
-            }
             analysisState = state
-            
-            let nextRepCount = state.repCount
+
+            let jointsSnapshot = poseSnapshot.joints
+            repCountingQueue.async { [weak self] in
+                guard let self else { return }
+                let nextRepCount = self.jointRepCounter.update(with: jointsSnapshot)
+                DispatchQueue.main.async {
+                    self.repCount = nextRepCount
+                }
+            }
+
             let nextAnalyzedFrameCount = state.analyzedFrameCount
             let nextCorrectFrameCount = state.correctFrameCount
             
@@ -561,7 +847,6 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
                 self.contourPoints = edgePoints
                 self.isBackStraight = straight
                 self.detectionFeedback = straight ? "Good Form" : msg
-                self.repCount = nextRepCount
                 self.analyzedFrameCount = nextAnalyzedFrameCount
                 self.correctFrameCount = nextCorrectFrameCount
             }
