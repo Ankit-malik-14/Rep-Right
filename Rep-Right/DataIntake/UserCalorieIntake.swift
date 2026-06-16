@@ -112,7 +112,7 @@ struct UserCalorieIntakeContent: View {
                     }.tint(.black)
                     // VALUE
                     TextField("", text: $viewModel.goalText)
-                        .font(.system(size: 80).bold())
+                        .font(.system(size: 70).bold())
                         .multilineTextAlignment(.center)
                     // PLUS
                     Button {
@@ -152,7 +152,7 @@ struct UserCalorieIntakeContent: View {
                     Text("Skip")
                         .foregroundStyle(.orange)
                 }
-                .buttonStyle(.bordered)
+                //.buttonStyle(.bordered)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
