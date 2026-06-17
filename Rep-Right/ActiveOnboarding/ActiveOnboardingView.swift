@@ -131,9 +131,9 @@ struct ActiveOnboardingMeasurementsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Baseline Metrics")
+                    Text("A Little About You")
                         .font(.system(.title, design: .rounded, weight: .bold))
-                    Text("Enter your height and weight to establish baseline metabolic and calorie estimates.")
+                    Text("Enter your weight and height to establish baseline metabolic and calorie estimates.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -214,9 +214,9 @@ struct ActiveOnboardingGoalsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Training Targets")
+                    Text("Your Weekly Motivation")
                         .font(.system(.title, design: .rounded, weight: .bold))
-                    Text("Define your training plan. Your weekly calorie target scales dynamically with your active days.")
+                    Text("Set a comfortable starting point to keep yourself motivated. Your weekly goals will naturally adjust based on your active days.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -226,7 +226,7 @@ struct ActiveOnboardingGoalsView: View {
                     // Stepper: Active Days
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Weekly Workout Target")
+                            Text("Weekly Target")
                                 .font(.body.bold())
                             Text("Days per week you aim to train")
                                 .font(.caption)
@@ -299,7 +299,7 @@ struct ActiveOnboardingTutorialView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Schedule Monday")
                         .font(.system(.title, design: .rounded, weight: .bold))
-                    Text("Rep-Right rotates muscle groups dynamically. Schedule your first workout on Monday to learn the layout.")
+                    Text("Rep-Right rotates muscle groups smartly. Schedule your first workout on Monday to learn the layout.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
