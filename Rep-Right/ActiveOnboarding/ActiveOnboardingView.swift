@@ -21,12 +21,16 @@ struct ActiveOnboardingView: View {
         @Bindable var viewModel = viewModel
         NavigationStack {
             VStack(spacing: 0) {
-                // Progress Bar
-                progressHeader
+                // Progress Bar (hidden on welcome screen)
+                if viewModel.currentStep != .welcome {
+                    progressHeader
+                }
                 
                 // Active Screen content
                 ZStack {
                     switch viewModel.currentStep {
+                    case .welcome:
+                        ActiveOnboardingWelcomeView()
                     case .measurements:
                         ActiveOnboardingMeasurementsView()
                             .environment(viewModel)
@@ -48,11 +52,11 @@ struct ActiveOnboardingView: View {
                 bottomBar
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Welcome")
+            .navigationTitle(viewModel.currentStep == .welcome ? "" : "Welcome")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if viewModel.currentStep != .measurements {
+                    if viewModel.currentStep != .welcome {
                         Button {
                             withAnimation(.easeInOut(duration: 0.25)) {
                                 if let prev = ActiveOnboardingViewModel.OnboardingStep(rawValue: viewModel.currentStep.rawValue - 1) {
@@ -72,7 +76,7 @@ struct ActiveOnboardingView: View {
     
     private var progressHeader: some View {
         HStack(spacing: 6) {
-            ForEach(ActiveOnboardingViewModel.OnboardingStep.allCases, id: \.self) { step in
+            ForEach(ActiveOnboardingViewModel.OnboardingStep.allCases.filter { $0 != .welcome }, id: \.self) { step in
                 Capsule()
                     .fill(step.rawValue <= viewModel.currentStep.rawValue ? Color.orange : Color.orange.opacity(0.18))
                     .frame(height: 6)
@@ -109,6 +113,8 @@ struct ActiveOnboardingView: View {
     
     private var isStepValid: Bool {
         switch viewModel.currentStep {
+        case .welcome:
+            return true
         case .measurements:
             return viewModel.isMeasurementsValid
         case .goals:
@@ -131,9 +137,9 @@ struct ActiveOnboardingMeasurementsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Baseline Metrics")
+                    Text("A Little About You")
                         .font(.system(.title, design: .rounded, weight: .bold))
-                    Text("Enter your height and weight to establish baseline metabolic and calorie estimates.")
+                    Text("Enter your weight and height to establish baseline metabolic and calorie estimates.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -214,9 +220,9 @@ struct ActiveOnboardingGoalsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Training Targets")
+                    Text("Your Weekly Motivation")
                         .font(.system(.title, design: .rounded, weight: .bold))
-                    Text("Define your training plan. Your weekly calorie target scales dynamically with your active days.")
+                    Text("Set a comfortable starting point to keep yourself motivated. Your weekly goals will naturally adjust based on your active days.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -226,7 +232,7 @@ struct ActiveOnboardingGoalsView: View {
                     // Stepper: Active Days
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Weekly Workout Target")
+                            Text("Weekly Target")
                                 .font(.body.bold())
                             Text("Days per week you aim to train")
                                 .font(.caption)
@@ -299,7 +305,7 @@ struct ActiveOnboardingTutorialView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Schedule Monday")
                         .font(.system(.title, design: .rounded, weight: .bold))
-                    Text("Rep-Right rotates muscle groups dynamically. Schedule your first workout on Monday to learn the layout.")
+                    Text("Rep-Right rotates muscle groups smartly. Schedule your first workout on Monday to learn the layout.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -528,6 +534,83 @@ struct ActiveOnboardingSuccessView: View {
             Text(value)
                 .bold()
                 .foregroundStyle(.primary)
+        }
+    }
+}
+
+// MARK: - Welcome / Features View
+struct ActiveOnboardingWelcomeView: View {
+    struct Feature {
+        let icon: String
+        let title: String
+        let description: String
+    }
+
+    let features: [Feature] = [
+        Feature(
+            icon: "figure.strengthtraining.traditional",
+            title: "Your Personal AI Coach",
+            description: "Get real-time feedback and custom workout plans tailored to your body and goals."
+        ),
+        Feature(
+            icon: "camera.viewfinder",
+            title: "Perfect Your Form",
+            description: "Helps reduce risk of injuries with instant alerts when your posture needs adjustment."
+        ),
+        Feature(
+            icon: "chart.line.uptrend.xyaxis",
+            title: "Track Your Progress",
+            description: "See detailed metrics, streaks, and performance summaries after every session."
+        ),
+        Feature(
+            icon: "calendar.badge.checkmark",
+            title: "Plan Your Success",
+            description: "Schedule your splits and track your consistency with detailed summaries."
+        )
+    ]
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                // Header
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Welcome to")
+                        .font(.system(size: 36, weight: .bold))
+                        .foregroundStyle(.primary)
+                    Text("Rep-Right")
+                        .font(.system(size: 36, weight: .bold))
+                        .foregroundStyle(.orange)
+                }
+                .padding(.top, 40)
+                .padding(.horizontal, 4)
+                .padding(.bottom, 40)
+
+                // Feature rows
+                VStack(alignment: .leading, spacing: 28) {
+                    ForEach(features, id: \.title) { feature in
+                        HStack(alignment: .top, spacing: 20) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.orange.opacity(0.12))
+                                    .frame(width: 52, height: 52)
+                                Image(systemName: feature.icon)
+                                    .font(.system(size: 22, weight: .semibold))
+                                    .foregroundStyle(.orange)
+                            }
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(feature.title)
+                                    .font(.system(size: 17, weight: .bold))
+                                    .foregroundStyle(.primary)
+                                Text(feature.description)
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
         }
     }
 }

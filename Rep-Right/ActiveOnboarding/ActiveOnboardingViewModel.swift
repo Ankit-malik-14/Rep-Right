@@ -11,13 +11,14 @@ import Observation
 @Observable
 class ActiveOnboardingViewModel {
     // Current step
-    var currentStep: OnboardingStep = .measurements
+    var currentStep: OnboardingStep = .welcome
     
     enum OnboardingStep: Int, CaseIterable {
-        case measurements = 0
-        case goals = 1
-        case tutorial = 2
-        case success = 3
+        case welcome = 0
+        case measurements = 1
+        case goals = 2
+        case tutorial = 3
+        case success = 4
     }
     
     // Step 1: Baseline Measurements

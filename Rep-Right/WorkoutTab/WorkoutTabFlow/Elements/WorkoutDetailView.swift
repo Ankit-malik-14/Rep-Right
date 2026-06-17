@@ -22,12 +22,12 @@ struct WorkoutDetailView: View {
                 .padding(.horizontal)
                 
                 // 2. Warmup Section (value-based, type-safe)
-                WarmUpCardView()
-                    .padding(.horizontal)
+//                WarmUpCardView()
+//                    .padding(.horizontal)
                 
                 // 3. Start Workout Button — pushes PreWorkoutGate via router
                 Button {
-                    router.push(.preWorkoutGate(preset))
+                    router.push(.activeWorkout(preset))
                 } label: {
                     HStack {
                         Image(systemName: "play.fill")
