@@ -78,7 +78,7 @@ struct ScheduledWorkoutCard: View {
                                 Spacer(minLength: 12)
                                 
                                 Button {
-                                    router.push(.preWorkoutGate(todaysSchedule))
+                                    router.push(.activeWorkout(todaysSchedule))
                                 } label: {
                                     Text("Start Workout")
                                         .font(.headline)
