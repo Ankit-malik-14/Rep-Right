@@ -27,6 +27,22 @@ The app uses Apple's Vision framework (`VNDetectHumanBodyPoseRequest` and `VNGen
   4. Scans the mask horizontally to plot the contour of the user's back.
   5. Calculates the maximum deviation of the contour from a straight line. If the deviation exceeds 3% of the screen width, it flags "Mistake: Back not straight".
 
+### C. Active-Passive Gate (`BackContourDetector.swift`)
+- **Purpose**: Prevent neutral standing from being treated as exercise posture.
+- **States**:
+  - `idle`: no useful pose has been detected yet.
+  - `passive`: the person is standing neutrally and should not be evaluated.
+  - `active`: the person is in an exercise-ready posture and should be analyzed.
+- **Intended flow**:
+  1. Keep the detector in `passive` when the user is just standing.
+  2. Skip heavy contour posture checks and rep logic while `passive`.
+  3. Move to `active` only after several frames show an intentional workout stance.
+  4. Return to `passive` if the user relaxes back into a neutral standing posture.
+- **Why it matters**:
+  - Reduces false positives from natural standing posture.
+  - Stops mild shoulder rounding from being treated as incorrect form.
+  - Saves compute by avoiding unnecessary analysis while idle.
+
 ---
 
 ## 2. Active Workout Session Model (`WorkoutSessionManager.swift`)
