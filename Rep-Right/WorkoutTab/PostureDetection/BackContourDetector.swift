@@ -9,6 +9,12 @@ enum CalibrationPhase {
     case analyzing
 }
 
+enum ActivePassiveState {
+    case idle
+    case passive
+    case active
+}
+
 @Observable
 class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     private struct ContourAnalysisState {
@@ -51,6 +57,11 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     var correctFrameCount: Int = 0
     var initialElapsedSeconds: Int = 0
     var currentExerciseName: String = "Bodyweight Squat"
+    
+    // Active-Passive Gate State
+    var activePassiveState: ActivePassiveState = .idle
+    private var activeStateTriggerFrames = 0
+    private var passiveStateTriggerFrames = 0
     
     // Timer state
     var timerTime: Int = 3
@@ -216,6 +227,9 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
         analyzedFrameCount = 0
         correctFrameCount = 0
         analysisState = ContourAnalysisState()
+        activePassiveState = .idle
+        activeStateTriggerFrames = 0
+        passiveStateTriggerFrames = 0
         repCountingQueue.async { [weak self] in
             guard let self else { return }
             self.jointRepCounter.configure(exerciseName: exerciseName)
@@ -525,6 +539,79 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
         return CGPoint(x: (a.x + b.x) * 0.5, y: (a.y + b.y) * 0.5)
     }
 
+    private func normalizedSpineCurveStatus(from edgePoints: [CGPoint], isFacingLeft: Bool) -> (isStraight: Bool, message: String) {
+        guard edgePoints.count > 5 else {
+            return (true, "Straight")
+        }
+
+        let top = edgePoints.first!
+        let bottom = edgePoints.last!
+        let spineLength = max(0.001, hypot(bottom.x - top.x, bottom.y - top.y))
+        let lineA = bottom.y - top.y
+        let lineB = top.x - bottom.x
+        let lineC = bottom.x * top.y - top.x * bottom.y
+        let lineDenominator = max(0.001, sqrt(lineA * lineA + lineB * lineB))
+
+        var weightedDeviationSum: Double = 0
+        var weightedSampleCount: Double = 0
+        var peakDeviation: Double = 0
+        var upperBackPeak: Double = 0
+
+        let sampleCount = max(1, edgePoints.count - 1)
+        for (index, point) in edgePoints.enumerated() {
+            let signedDistance = ((lineA * point.x) + (lineB * point.y) + lineC) / lineDenominator
+
+            // Only treat the side of the body facing outward as a true forward curve.
+            let cross = (bottom.x - top.x) * (point.y - top.y) - (bottom.y - top.y) * (point.x - top.x)
+            let isForwardCurve = isFacingLeft ? (cross < 0) : (cross > 0)
+            guard isForwardCurve else { continue }
+
+            let normalizedDeviation = Double(abs(signedDistance)) / Double(spineLength)
+            let progress = Double(index) / Double(sampleCount)
+            let weight = curveWeight(for: progress)
+
+            weightedDeviationSum += normalizedDeviation * weight
+            weightedSampleCount += weight
+            peakDeviation = max(peakDeviation, normalizedDeviation)
+
+            if progress < 0.4 {
+                upperBackPeak = max(upperBackPeak, normalizedDeviation)
+            }
+        }
+
+        let curveScore = weightedSampleCount > 0 ? (weightedDeviationSum / weightedSampleCount) : 0
+
+        // Mild shoulder rounding and neutral standing should remain inside the acceptable range.
+        let normalUpperBound = 0.045
+        let forwardCurveThreshold = 0.065
+
+        if peakDeviation >= forwardCurveThreshold || curveScore >= forwardCurveThreshold {
+            if upperBackPeak >= 0.05 {
+                return (false, "Upper back curving forward")
+            }
+            return (false, "Back curving forward")
+        }
+
+        if peakDeviation >= normalUpperBound || curveScore >= normalUpperBound {
+            return (true, "Normal spine curve")
+        }
+
+        return (true, "Straight")
+    }
+
+    private func curveWeight(for progress: Double) -> Double {
+        if progress < 0.15 {
+            return 0.25
+        }
+        if progress < 0.45 {
+            return 1.0
+        }
+        if progress < 0.8 {
+            return 0.8
+        }
+        return 0.45
+    }
+
     private func point(named name: String, in joints: [String: CGPoint]) -> CGPoint? {
         if let point = joints[name] {
             return point
@@ -588,7 +675,15 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
         if normalized.contains("upper back rounded") {
             return "Your upper back started rounding during the set. Keep your chest lifted, engage your core, and think about lengthening through the spine on every rep."
         }
-        
+
+        if normalized.contains("back curving forward") {
+            return "Your back is bending forward more than a normal spine curve. Reduce the load or slow the movement so your torso stays stacked and controlled."
+        }
+
+        if normalized.contains("normal spine curve") {
+            return "Your spine stayed within a normal curve range."
+        }
+
         if normalized.contains("back not straight") {
             return "Your back drifted out of a neutral position during the movement. Slow the rep down slightly and brace through the midsection so your torso stays more stable."
         }
@@ -783,51 +878,51 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             }
             
             // Curve analysis
-            var straight = true
-            var msg = "Straight"
-            if edgePoints.count > 5 {
-                let top = edgePoints.first!
-                let bottom = edgePoints.last!
-                
-                var maxDev: CGFloat = 0
-                var isUpperBackIssue = false
-                
-                for (index, p) in edgePoints.enumerated() {
-                    let A = bottom.y - top.y
-                    let B = top.x - bottom.x
-                    let C = bottom.x * top.y - top.x * bottom.y
-                    
-                    let dist = abs(A * p.x + B * p.y + C) / max(0.001, sqrt(A*A + B*B))
-                    
-                    // Robust 2D cross-product to determine side (avoids division by zero for horizontal backs)
-                    let cross = (bottom.x - top.x) * (p.y - top.y) - (bottom.y - top.y) * (p.x - top.x)
-                    let isOutward = poseSnapshot.isFacingLeft ? (cross < 0) : (cross > 0)
-                    
-                    if isOutward {
-                        let isUpper = CGFloat(index) / CGFloat(edgePoints.count) < 0.4
-                        let threshold: CGFloat = isUpper ? 0.02 : 0.03
-                        
-                        if dist > threshold && dist > maxDev {
-                            maxDev = dist
-                            straight = false
-                            if isUpper {
-                                isUpperBackIssue = true
-                            }
-                        }
+            let curveResult = normalizedSpineCurveStatus(from: edgePoints, isFacingLeft: poseSnapshot.isFacingLeft)
+            let straight = curveResult.isStraight
+            let msg = curveResult.message
+            
+            let jointMotionResult = jointMotion(from: poseSnapshot, style: currentRepStyle())
+            let activation = jointMotionResult.motion ?? 0.0
+            
+            if activePassiveState == .idle {
+                activePassiveState = .passive
+            }
+            
+            if activePassiveState == .passive {
+                if activation > 0.15 {
+                    activeStateTriggerFrames += 1
+                    passiveStateTriggerFrames = 0
+                    if activeStateTriggerFrames >= 5 {
+                        activePassiveState = .active
+                        activeStateTriggerFrames = 0
                     }
+                } else {
+                    activeStateTriggerFrames = 0
                 }
-                
-                if !straight {
-                    msg = isUpperBackIssue ? "Upper back rounded" : "Mistake: Back not straight"
+            } else if activePassiveState == .active {
+                if activation < 0.08 {
+                    passiveStateTriggerFrames += 1
+                    activeStateTriggerFrames = 0
+                    if passiveStateTriggerFrames >= 15 {
+                        activePassiveState = .passive
+                        passiveStateTriggerFrames = 0
+                    }
+                } else {
+                    passiveStateTriggerFrames = 0
                 }
             }
             
             var state = analysisState
-            state.analyzedFrameCount += 1
-            if straight {
-                state.correctFrameCount += 1
-            } else {
-                state.feedbackCounts[msg, default: 0] += 1
+            let isEvaluating = (activePassiveState == .active)
+            
+            if isEvaluating {
+                state.analyzedFrameCount += 1
+                if straight {
+                    state.correctFrameCount += 1
+                } else {
+                    state.feedbackCounts[msg, default: 0] += 1
+                }
             }
             analysisState = state
 
@@ -845,8 +940,13 @@ class BackContourDetector: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
             
             DispatchQueue.main.async {
                 self.contourPoints = edgePoints
-                self.isBackStraight = straight
-                self.detectionFeedback = straight ? "Good Form" : msg
+                if isEvaluating {
+                    self.isBackStraight = straight
+                    self.detectionFeedback = straight ? "Good Form" : msg
+                } else {
+                    self.isBackStraight = true
+                    self.detectionFeedback = ""
+                }
                 self.analyzedFrameCount = nextAnalyzedFrameCount
                 self.correctFrameCount = nextCorrectFrameCount
             }
