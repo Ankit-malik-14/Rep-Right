@@ -26,43 +26,68 @@ struct WorkoutScreen: View {
             Group {
                 if let viewModel = viewModel, let customPresetsViewModel = customPresetsViewModel {
                     ScrollView(.vertical, showsIndicators: false) {
-                        VStack(alignment: .leading){
+                        VStack(alignment: .leading, spacing: 32) {
+                            // 1. Hero: Today's Workout
                             ScheduledWorkoutCard()
+                                .padding(.horizontal)
+                                .padding(.top, 16)
                             
-                            QuickActionRow()
-                                .padding(.vertical, 8)
+                            // 2. Recovery & Insights
+                            VStack(alignment: .leading, spacing: 16) {
+                                QuickActionRow()
+                                    .padding(.horizontal)
+                            }
                             
-                            SmartRecommendationCard()
-                                .padding(.bottom, 8)
+                            // 3. Smart Suggestions
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Text("Smart Suggestions")
+                                        .font(.title2.weight(.bold))
+                                        .foregroundStyle(Color(.label))
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 16) {
+                                        SmartRecommendationCard()
+                                            .frame(width: 320)
+                                        SmartWeekScheduleCard()
+                                            .frame(width: 320)
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
                             
-                            SmartWeekScheduleCard()
-                                .padding(.bottom, 8)
-                            
-                            // Fetched from DataModel: User's custom presets data model
+                            // 4. Custom Presets
                             CustomPreset()
                             
-                            // Fetched from DataModel: Main default presets data model
+                            // 5. Default Presets
                             DefaultPresets(preset: preset)
                             
-                            HStack{
-                                NavigationLink(value: WorkoutRoute.exerciseList) {
-                                    HStack{
-                                        Text("Exercises")
-                                            .font(.title)
-                                            .fontWeight(.bold)
-                                            .foregroundStyle(.black)
-                                        Image(systemName: "chevron.right")
-                                            .font(.title3)
-                                            .padding(.top,4)
-                                            .tint(.orange)
+                            // 6. Exercise Library
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    NavigationLink(value: WorkoutRoute.exerciseList) {
+                                        HStack {
+                                            Text("Exercise Library")
+                                                .font(.title2.weight(.bold))
+                                                .foregroundStyle(Color(.label))
+                                            Image(systemName: "chevron.right")
+                                                .font(.body.weight(.semibold))
+                                                .foregroundStyle(Color.accentColor)
+                                        }
                                     }
+                                    Spacer()
                                 }
-                                Spacer()
+                                .padding(.horizontal)
+                                
+                                ExerciseDisclosedListView()
                             }
-                            .padding(.horizontal)
-                            ExerciseDisclosedListView()
+                            .padding(.bottom, 32)
                         }
                     }
+                    .background(Color(.systemGroupedBackground).ignoresSafeArea())
                     .environment(viewModel)
                     .environment(customPresetsViewModel)
                     // MARK: - Single navigation destination for the entire Workout tab

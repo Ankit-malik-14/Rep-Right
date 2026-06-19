@@ -15,13 +15,11 @@ struct DefaultPresets: View {
                 NavigationLink(value: WorkoutRoute.defaultPresetsList) {
                     HStack{
                         Text("Presets")
-                            .font(.title)
-                            .foregroundStyle(.black)
-                            .bold()
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(Color(.label))
                         Image(systemName: "chevron.right")
-                            .font(.title3)
-                            .tint(.orange)
-                            .padding(.top,4)
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(Color.accentColor)
                     }
                 }
                 Spacer()

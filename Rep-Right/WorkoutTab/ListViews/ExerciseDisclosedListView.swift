@@ -14,37 +14,55 @@ import SwiftUI
 struct ExerciseDisclosedListView: View {
     @Environment(Exercises.self) var exercises
     var body: some View {
-        VStack(alignment: .leading){
-            ScrollView(.vertical){
-                ForEach(exercises.exerciseList.prefix(4)){ exercise in
-                    NavigationLink(value: WorkoutRoute.exerciseDetail(exercise)) {
-                        HStack(alignment: .center){
-                           
-                            Image(exercise.image ?? "Placeholder")
-                                    .resizable().clipShape(RoundedRectangle(cornerRadius: 16))
-                                    .frame(width: 67, height: 64)
-                                    .shadow(radius: 100)
-                                    .foregroundStyle(.background.tertiary)
-                                    .padding(6)
-                            
-                            VStack(alignment: .leading){
-                                Text(exercise.name)
-                                    .font(.headline)
-                                Text(exercise.primaryFocusArea?.rawValue ?? exercise.targetAreas[0])
-                                    .font(.footnote)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if exercise.assistanceAvailable{
-                                assisstanceAvailablityTag(type: .icon).padding(.horizontal)
-                            }
-                            
-                        }.background(RoundedRectangle(cornerRadius: 20).foregroundStyle(.background.secondary)).padding(.horizontal)
-                    }.buttonStyle(.plain)
-                    
+        VStack(spacing: 0) {
+            ForEach(Array(exercises.exerciseList.prefix(4).enumerated()), id: \.element.id) { index, exercise in
+                NavigationLink(value: WorkoutRoute.exerciseDetail(exercise)) {
+                    HStack(alignment: .center, spacing: 12) {
+                        if let img = exercise.image {
+                            Image(img)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        } else {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(.tertiarySystemFill))
+                                .frame(width: 50, height: 50)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(exercise.name)
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(Color(.label))
+                            Text(exercise.primaryFocusArea?.rawValue ?? exercise.targetAreas.first ?? "")
+                                .font(.footnote)
+                                .foregroundStyle(Color(.secondaryLabel))
+                        }
+                        
+                        Spacer()
+                        
+                        if exercise.assistanceAvailable {
+                            assisstanceAvailablityTag(type: .icon)
+                        }
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(Color(.tertiaryLabel))
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 16)
+                    .background(Color(UIColor.secondarySystemBackground))
+                }
+                .buttonStyle(.plain)
+                
+                if index < 3 { // Assuming prefix(4), the last index is 3
+                    Divider()
+                        .padding(.leading, 78)
                 }
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .padding(.horizontal)
     }
 }
 

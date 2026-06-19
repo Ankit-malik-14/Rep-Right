@@ -82,11 +82,17 @@ struct RecoveryMapCard: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Label("Recovery Map", systemImage: "figure.strengthtraining.traditional")
-                        .font(.headline.bold())
+                    HStack(spacing: 6) {
+                        Image(systemName: "figure.strengthtraining.traditional")
+                            .foregroundStyle(.orange)
+                        Text("Recovery Map")
+                    }
+                    .font(.title3.weight(.bold))
+                    .foregroundStyle(Color(.label))
+                    
                     Text(summaryManager.completedExercises.isEmpty ? "All muscle groups are fully recovered." : "Weekly training volume and recovery status.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
 
                 Spacer()
@@ -177,7 +183,6 @@ struct RecoveryMapCard: View {
         }
         .padding(16)
         .appCardStyle()
-        .padding(.horizontal)
     }
 
     private func overallRecommendation(for insights: [RecoveryFocusSnapshot]) -> String {
@@ -283,51 +288,45 @@ struct QuickActionCard: View {
 struct SmartRecommendationCard: View {
     @Environment(WorkoutHomeViewModel.self) private var viewModel
 
-    @State private var isVisible = false
-
     var body: some View {
         if let bestRecommendation = viewModel.recommendations.first {
             let bestPreset = bestRecommendation.preset
-            VStack(alignment: .leading) {
-                Text("Recommended for You")
-                    .font(.headline)
-                    .padding(.horizontal)
-
-                HStack {
-                    VStack(alignment: .leading, spacing: 8) {
+            NavigationLink(value: WorkoutRoute.presetDetail(bestPreset)) {
+                ZStack(alignment: .bottomLeading) {
+                    // Background Image or Gradient
+                    if let imageName = bestPreset.image {
+                        Image(imageName)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        Rectangle()
+                            .fill(LinearGradient(colors: [Color.orange.opacity(0.8), Color.orange.opacity(0.4)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    }
+                    
+                    LinearGradient(colors: [.clear, .black.opacity(0.85)], startPoint: .top, endPoint: .bottom)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("RECOMMENDED")
+                            .font(.caption.weight(.heavy))
+                            .foregroundStyle(.white.opacity(0.8))
+                        
                         Text(bestPreset.name)
-                            .font(.title3.bold())
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
                         
                         Text(bestRecommendation.headline)
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(.secondary)
-                        
-                        HStack(spacing: 12) {
-                            Label("\(bestPreset.estTime) mins", systemImage: "clock")
-                            Label("\(bestPreset.calories) kcal", systemImage: "flame")
-                        }
-                        .font(.caption.bold())
-                        .foregroundStyle(.orange)
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.9))
+                            .lineLimit(2)
+                            .padding(.top, 2)
                     }
-                    Spacer()
-                    NavigationLink(value: WorkoutRoute.presetDetail(bestPreset)){
-                        Image(systemName: "chevron.right.circle.fill")
-                            .foregroundColor(.orange)
-                            .font(.title)
-                    }
+                    .padding(20)
                 }
-                .padding()
-                .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .padding(.horizontal)
-                .opacity(isVisible ? 1 : 0)
-                .offset(y: isVisible ? 0 : 20)
-                .onAppear {
-                    withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
-                        isVisible = true
-                    }
-                }
+                .frame(width: 320, height: 220)
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
             }
-
+            .buttonStyle(.plain)
         }
     }
 }
@@ -337,14 +336,15 @@ struct SmartWeekScheduleCard: View {
     @Environment(WeeklySchedules.self) private var weeklySchedules
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Smart Weekly Routine")
-                        .font(.headline)
-                    Text("A recovery-aware plan for your next \(viewModel.userProfile.weeklyGoalDays)-day week.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Text("Your Next 3 Days")
+                        .font(.title3.weight(.bold))
+                        .foregroundStyle(Color(.label))
+                    Text("Recovery-aware plan")
+                        .font(.subheadline)
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
                 
                 Spacer()
@@ -352,28 +352,42 @@ struct SmartWeekScheduleCard: View {
                 Button("Apply") {
                     weeklySchedules.apply(viewModel.recommendedSchedule)
                 }
-                .buttonStyle(AppPrimaryButtonStyle())
-                .frame(maxWidth: 110)
+                .font(.footnote.weight(.bold))
+                .buttonStyle(.borderedProminent)
+                .tint(.orange)
+                .buttonBorderShape(.capsule)
             }
             
-            ForEach(viewModel.recommendedSchedule.prefix(3)) { day in
-                HStack {
-                    Text(label(for: day.weekday))
-                        .font(.caption.bold())
-                        .frame(width: 34, alignment: .leading)
-                        .foregroundStyle(.secondary)
-                    Text(day.preset.name)
-                        .font(.subheadline.weight(.semibold))
-                    Spacer()
-                    Text(day.preset.isRestDay ? "Recover" : "\(day.preset.estTime) min")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            VStack(spacing: 12) {
+                ForEach(Array(viewModel.recommendedSchedule.prefix(3).enumerated()), id: \.element.id) { index, day in
+                    HStack(spacing: 12) {
+                        VStack {
+                            Text(label(for: day.weekday).prefix(3).uppercased())
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(Color(.secondaryLabel))
+                        }
+                        .frame(width: 36)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(day.preset.name)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(Color(.label))
+                            Text(day.preset.isRestDay ? "Recovery" : "\(day.preset.estTime) min")
+                                .font(.caption)
+                                .foregroundStyle(Color(.secondaryLabel))
+                        }
+                        Spacer()
+                    }
+                    if index < 2 {
+                        Divider().padding(.leading, 48)
+                    }
                 }
             }
+            Spacer(minLength: 0)
         }
-        .padding()
-        .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .padding(.horizontal)
+        .padding(20)
+        .frame(width: 320, height: 220)
+        .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
     
     private func label(for weekday: Weekday) -> String {

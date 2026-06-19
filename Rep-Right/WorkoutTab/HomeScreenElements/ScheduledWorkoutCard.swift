@@ -96,7 +96,6 @@ struct ScheduledWorkoutCard: View {
                 .frame(height: 255)
                 .appCardStyle()
             }
-            .padding(.horizontal)
         }
     }
 }

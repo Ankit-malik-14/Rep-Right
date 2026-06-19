@@ -18,9 +18,8 @@ struct CustomPreset: View {
                 // Text Content
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Create custom presets")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.primary)
+                        .font(.title2.weight(.bold))
+                        .foregroundStyle(Color(.label))
                     
                     Text("You can create a custom workout preset as per your needs.")
                         .font(.caption)
@@ -59,14 +58,12 @@ struct CustomPreset: View {
                     NavigationLink(value: WorkoutRoute.customPresetsList) {
                         HStack {
                             Text("Custom Presets")
-                                .foregroundStyle(.black)
-                                .font(.title)
-                                .fontWeight(.bold)
+                                .font(.title2.weight(.bold))
+                                .foregroundStyle(Color(.label))
                             
                             Image(systemName: "chevron.right")
-                                .font(.title3)
-                                .tint(.orange)
-                                .padding(.top, 4)
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(Color.accentColor)
                         }
                     }
                     Spacer()
